@@ -483,6 +483,220 @@ body:has(.home-hero) .md-content {
 }
 
 /* =============================================================================
+   Design-audit component skin
+   -----------------------------------------------------------------------------
+   Skins Material's built-in components (headings, admonitions, sidebar, TOC,
+   breadcrumb, search, header icons, tables) to match the bespoke design mockup,
+   and adds content-level helpers (.dg-figure, .dg-chip, .dg-cards, .dg-links)
+   pages can opt into. Everything is scheme-aware.
+   ============================================================================= */
+
+/* Short aliases used by hand-authored HTML/SVG figures. */
+:root {
+  --acc: var(--accent-default);
+  --bg: var(--color-bg);
+  --surface: var(--color-surface);
+  --surface2: var(--color-surface-secondary);
+  --ink: var(--color-text-primary);
+  --ink2: var(--color-text-secondary);
+  --ink3: var(--color-text-tertiary);
+  --border: var(--color-border);
+  --border2: var(--color-border-strong);
+  --pad: 12px 15px;
+}
+
+/* --- Typography: sans-serif headings, mockup scale ---------------------- */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  font-family: var(--md-text-font);
+}
+.md-typeset h1 {
+  font-weight: 700;
+  font-size: 2.1rem;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+  margin: 0 0 0.9rem;
+}
+.md-typeset h2 {
+  font-weight: 700;
+  font-size: 1.35rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 2.2rem 0 0.6rem;
+}
+.md-typeset h3 {
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  margin: 1.5rem 0 0.5rem;
+}
+.md-typeset p,
+.md-typeset li { line-height: 1.7; }
+
+/* --- Breadcrumb --------------------------------------------------------- */
+.md-path {
+  font-family: var(--md-code-font);
+  font-size: 0.66rem;
+  color: var(--color-text-tertiary);
+}
+.md-path__link { color: var(--color-text-tertiary); }
+.md-path__link:hover { color: var(--color-text-secondary); }
+
+/* --- Left sidebar (primary nav) ----------------------------------------- */
+.md-sidebar--primary .md-nav__title {
+  font-family: var(--md-code-font);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+.md-nav--primary .md-nav__link {
+  border-radius: 7px;
+  padding: 0.3rem 0.6rem;
+  margin: 1px 0;
+  font-size: 0.76rem;
+  color: var(--color-text-secondary);
+}
+.md-nav--primary .md-nav__link:hover {
+  background: var(--color-surface-secondary);
+  color: var(--color-text-primary);
+}
+.md-nav--primary .md-nav__link--active {
+  background: var(--color-surface-secondary);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* --- Right TOC (secondary nav) ------------------------------------------ */
+.md-sidebar--secondary .md-nav__title {
+  font-family: var(--md-code-font);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+.md-nav--secondary .md-nav__list { border-left: 1px solid var(--color-border); }
+.md-nav--secondary .md-nav__item .md-nav__link {
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  padding-left: 0.85rem;
+  font-size: 0.72rem;
+  color: var(--color-text-secondary);
+}
+.md-nav--secondary .md-nav__link--active {
+  border-left-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* --- Search bar (pill) -------------------------------------------------- */
+.md-search__form {
+  height: 34px;
+  border-radius: 999px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  box-shadow: none;
+}
+.md-search__form:hover { background: var(--color-bg); opacity: 0.9; }
+.md-search__input { color: var(--color-text-secondary); }
+.md-search__input::placeholder { color: var(--color-text-tertiary); }
+.md-search__icon { color: var(--color-text-tertiary); }
+
+/* --- Header icon buttons ------------------------------------------------ */
+.md-header__button {
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+}
+.md-header__button:hover {
+  background: var(--color-surface-secondary);
+  color: var(--color-text-primary);
+  opacity: 1;
+}
+
+/* --- Admonitions / callouts (scheme-aware, accent-bordered) ------------- */
+.md-typeset .admonition,
+.md-typeset details {
+  font-size: 0.76rem;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--accent-default);
+  border-radius: 10px;
+  background: var(--color-surface);
+  box-shadow: none;
+  color: var(--color-text-secondary);
+}
+.md-typeset .admonition-title,
+.md-typeset summary {
+  background: transparent !important;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  margin: 0;
+}
+.md-typeset .admonition.note { border-left-color: var(--dg-people); }
+.md-typeset .admonition.note > .admonition-title::before { background-color: var(--dg-people); }
+.md-typeset .admonition.warning { border-left-color: var(--warning); }
+.md-typeset .admonition.warning > .admonition-title::before { background-color: var(--warning); }
+.md-typeset .admonition.tip { border-left-color: var(--success); }
+.md-typeset .admonition.tip > .admonition-title::before { background-color: var(--success); }
+
+/* --- Tables (mockup density) -------------------------------------------- */
+.md-typeset table:not([class]) {
+  border-radius: 14px;
+  font-size: 0.78rem;
+}
+.md-typeset table:not([class]) th,
+.md-typeset table:not([class]) td { padding: 0.6rem 0.9rem; }
+
+/* --- Content helpers: figures, chips, cards, link lists ----------------- */
+.md-typeset .dg-figure {
+  display: block;
+  width: 100%;
+  margin: 1.4rem 0 1rem;
+  padding: 1.4rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 12px 32px -12px rgba(16, 24, 40, 0.08);
+  overflow: hidden;
+  text-align: left;
+}
+.md-typeset .dg-figcaption {
+  display: flex; align-items: center; gap: 8px; margin: 0 0 0.4rem;
+  font-family: var(--md-code-font); font-size: 0.66rem; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-tertiary);
+}
+.md-typeset .dg-figcaption .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--accent-default); }
+.md-typeset .dg-chip {
+  display: inline-block; margin-left: 0.45rem; padding: 3px 8px; border-radius: 6px;
+  font-family: var(--md-code-font); font-size: 0.62rem; font-weight: 500; vertical-align: middle;
+  color: var(--chip, var(--accent-default));
+  background: color-mix(in srgb, var(--chip, var(--accent-default)) 12%, transparent);
+}
+.md-typeset .dg-cards {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; margin: 1rem 0 1.6rem;
+}
+.md-typeset .dg-card {
+  padding: 0.9rem 1rem; border: 1px solid var(--color-border); border-radius: 12px; background: var(--color-surface);
+}
+.md-typeset .dg-card b, .md-typeset .dg-card strong {
+  display: block; font-family: var(--md-code-font); font-size: 0.76rem; color: var(--color-text-primary); margin-bottom: 0.3rem;
+}
+.md-typeset .dg-links { display: flex; flex-direction: column; gap: 2px; }
+.md-typeset .dg-links a {
+  display: flex; align-items: center; gap: 10px; padding: 0.5rem 0.7rem; border-radius: 9px;
+  font-size: 0.82rem; color: var(--color-text-secondary); text-decoration: none;
+}
+.md-typeset .dg-links a::before {
+  content: ""; width: 5px; height: 5px; border-radius: 999px; background: var(--accent-default); flex: 0 0 auto;
+}
+.md-typeset .dg-links a:hover { background: var(--color-surface-secondary); color: var(--accent-default); }
+@media screen and (max-width: 60em) { .md-typeset .dg-cards { grid-template-columns: 1fr; } }
+
+/* =============================================================================
    Mermaid diagrams
    -----------------------------------------------------------------------------
    Two layers of styling:
