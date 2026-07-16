@@ -6,11 +6,6 @@ in-app browser for `.dot` apps. This page describes the client tier across
 mobile and desktop, how apps run inside it through the Host API, and how the app
 decides which network it is talking to.
 
-!!! note
-    This documents a public developer preview. Devnet tokens have no real value, and
-    the flows described here may change. Never share your recovery phrase or private
-    keys with anyone.
-
 ## What the client tier helps you do
 
 The client tier gives users one place to hold keys, manage identity, use CASH,
@@ -26,13 +21,9 @@ The product surface is shared across native clients:
 | [Polkadot iOS](https://github.com/Polkadot-Community-Foundation/polkadot-ios-community) | Mobile app with the same product surface for iOS users |
 | [Polkadot Desktop/Web](https://github.com/Polkadot-Community-Foundation/polkadot-desktop-community) | Desktop app and web client for the same account and Product flows |
 
-You can install the app from the following locations. The Desktop build also runs as a
-web application, and the same product suite is reachable through the web gateway at
-[https://dev-dot.li](https://dev-dot.li).
-
-- Android APK: <https://get.polkadotcommunity.foundation/android/latest.apk>
-- iOS TestFlight: <https://testflight.apple.com/join/VvC8SHVE>
-- Desktop: <https://polkadotcommunity.foundation/desktop/>
+The Desktop build also runs as a web application, and the same product suite is
+reachable through the web gateway at [dev-dot.li](https://dev-dot.li). Download
+links are in [More resources](../reference/resources.md).
 
 ## Wallet and account management
 
@@ -135,11 +126,6 @@ environment.
 
 ## Learn more
 
-- Polkadot Desktop (source): <https://github.com/Polkadot-Community-Foundation/polkadot-desktop-community>
-- Polkadot Android (source): <https://github.com/Polkadot-Community-Foundation/polkadot-android-community>
-- Polkadot iOS (source): <https://github.com/Polkadot-Community-Foundation/polkadot-ios-community>
-- `host-api-test-sdk` (source): <https://github.com/paritytech/host-api-test-sdk>
-- `@novasamatech/host-api` on npm: <https://www.npmjs.com/package/@novasamatech/host-api>
-- `@novasamatech/host-container` on npm: <https://www.npmjs.com/package/@novasamatech/host-container>
-- DotNS name resolution: [../architecture/naming.md](../architecture/naming.md)
-- Polkadot developer docs: <https://docs.polkadot.com>
+- Client source: [Android](https://github.com/Polkadot-Community-Foundation/polkadot-android-community) · [iOS](https://github.com/Polkadot-Community-Foundation/polkadot-ios-community) · [Desktop](https://github.com/Polkadot-Community-Foundation/polkadot-desktop-community)
+- [host-api-test-sdk](https://github.com/paritytech/host-api-test-sdk) — drive a Product against a real host in CI
+- [Naming (DotNS)](naming.md) — how the browser resolves a `.dot` domain

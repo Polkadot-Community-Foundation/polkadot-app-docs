@@ -1,23 +1,18 @@
 # Messaging & calls
 
-The Polkadot app includes end-to-end encrypted chat and one-to-one voice/video
+The Polkadot app includes encrypted chat and one-to-one voice/video
 calls. Both are built without a dedicated messaging or signaling server: text
 messages and call-setup signals travel over the same on-chain channel, media
 attachments are stored on a separate content chain, and the live audio/video
 stream flows peer-to-peer over WebRTC. This page describes how those pieces fit
 together and what users or Product developers should expect.
 
-!!! note
-    This is the Polkadot Products Devnet, a developer preview.
-    Devnet tokens have no real value and flows may change. See
-    [The Polkadot app](client.md) for how the client tier is structured.
-
 ## Transport: the statement store
 
 Text messages are neither stored on a server nor sent directly between devices.
-Each message is end-to-end encrypted and published to the **statement store on
-the People chain**. Recipients subscribe to that store and decrypt messages
-locally.
+Each message is encrypted on the sending device and published to the **statement
+store on the People chain**. Recipients subscribe to that store and decrypt
+messages locally.
 
 The same channel carries text, reactions, replies, contact events, and call
 setup signals. That shared transport is why chat and calls are part of the same
@@ -83,7 +78,7 @@ flowchart TD
   BC["Bulletin-backed attachment storage"]
   TURN["STUN / TURN"]
 
-  A1 -- "E2E-encrypted statements<br/>(text + SDP/ICE call signals)" --> SS
+  A1 -- "Encrypted statements<br/>(text + SDP/ICE call signals)" --> SS
   SS -- subscription --> B1
   A1 -- "chunked AES media" --> BC
   BC -- "fetch by HopTicket" --> B1
@@ -112,7 +107,5 @@ chat and sync, but calling stays on the mobile app.
 
 ## Learn more
 
-- [Polkadot Android (source)](https://github.com/Polkadot-Community-Foundation/polkadot-android-community)
-- [Polkadot Desktop (source)](https://github.com/Polkadot-Community-Foundation/polkadot-desktop-community)
-- [The network](network.md) · [The Polkadot app](client.md)
-- [Polkadot developer docs](https://docs.polkadot.com)
+- [Polkadot Android](https://github.com/Polkadot-Community-Foundation/polkadot-android-community) — source for the chat engine and call stack
+- [Messaging & calls](../guides/messaging-and-calls.md) — the user-facing flow

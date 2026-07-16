@@ -11,14 +11,9 @@ template: home.html
 
 <p class="home-eyebrow">Polkadot Products Devnet</p>
 
-<h1>Build Products for People.</h1>
+<h1>Build Products<br>for People.</h1>
 
 </div>
-
-!!! warning "Public devnet"
-    Tokens on this network have **no real value**, chains and services may be
-    reset, and flows can change between builds. Use it to learn and test, not to
-    hold anything valuable.
 
 ## Choose a path
 

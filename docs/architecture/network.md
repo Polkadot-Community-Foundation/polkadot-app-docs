@@ -6,11 +6,6 @@ parachains. Applications are built against three of those chains — **Asset Hub
 **People**, and **Bulletin**. This page maps what each chain is responsible for
 and how they fit together when a Product is deployed and opened.
 
-!!! note
-    This is a devnet. Tokens have no real value, and flows may still change.
-    Never paste secrets (mnemonics, seed phrases, private keys) into any tool or
-    page.
-
 ## Topology
 
 The relay chain is the root of trust. Product flows mostly touch three system
@@ -94,10 +89,9 @@ Concrete addresses, endpoints, and CIDs for a given deployment are recorded in t
 register, not hard-coded in this documentation. Treat that register, plus the
 tooling address books, as the source of truth for live Devnet addresses.
 
-Command-line tools select a network preset (`--env <network>` for `pad` and
-`dotns`, `-n/--name <network>` for CDM); the concrete name for a given
-deployment is provided by the team operating that network. Read addresses and
-CIDs from the register files rather than assuming them.
+Command-line tools select a network preset — `--env devnet` for `pad` and
+`dotns`, `-n devnet` for CDM. Read addresses and CIDs from the register files
+rather than assuming them.
 
 ## Deploy and serve flow
 
@@ -144,9 +138,6 @@ For how contracts and naming fit together, see the
 
 ## Learn more
 
-- [paseo-network/runtimes — chain runtimes](https://github.com/paseo-network/runtimes)
-- [summit-net-deployments — deployments register](https://github.com/paritytech/summit-net-deployments)
-- [pallet-revive (contracts / PolkaVM)](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/revive)
-- [pallet-assets ERC-20 precompiles](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/assets/precompiles)
-- [Polkadot developer documentation](https://docs.polkadot.com)
-- [Web gateway (public developer preview)](https://dev-dot.li)
+- [paseo-network/runtimes](https://github.com/paseo-network/runtimes) — the chain runtimes
+- [summit-net-deployments](https://github.com/paritytech/summit-net-deployments) — the deployments register
+- [pallet-revive](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/revive) — the PolkaVM contract environment

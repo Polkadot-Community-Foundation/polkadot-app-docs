@@ -338,37 +338,51 @@ body:has(.home-hero) .md-content__inner > *:not(.home-hero) {
 /* Keep the hero full width even though its siblings are constrained. */
 body:has(.home-hero) .home-hero { max-width: none; }
 
+/* Image-backed hero (chrome / datamosh). Always dark, with a left-to-right dark
+   gradient over the image so the left-aligned title stays legible. Drop the
+   background into material-overrides/assets/images/hero-chrome.png (or swap the
+   url below for hero-datamosh.png). If the image is absent, the accent glow +
+   dark base render as a graceful fallback. */
 .home-hero {
-  min-height: 420px;
+  position: relative;
+  min-height: 23rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  margin: -1.5rem 0 2rem;
-  padding: 5rem 1.5rem 4rem;
-  border-bottom: 1px solid var(--color-border);
+  margin: 0.25rem 0 2.5rem;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  border: 1px solid var(--grey-800);
+  border-radius: 16px;
+  overflow: hidden;
+  color: var(--grey-50);
   background:
-    radial-gradient(circle at 50% 22%, var(--accent-soft), transparent 34rem),
-    linear-gradient(180deg, var(--color-surface), var(--color-bg));
-  text-align: center;
+    linear-gradient(90deg, var(--grey-950) 0%, color-mix(in srgb, var(--grey-950) 55%, transparent) 44%, transparent 74%),
+    url("../images/hero-chrome.png") center / cover no-repeat,
+    radial-gradient(55rem 40rem at 80% 15%, color-mix(in srgb, var(--accent-default) 22%, transparent), transparent 60%),
+    radial-gradient(45rem 35rem at 96% 96%, color-mix(in srgb, var(--dg-assethub) 16%, transparent), transparent 55%),
+    var(--grey-950);
 }
 
 .md-typeset .home-eyebrow {
-  margin: 0 0 1rem;
+  margin: 0 0 1.1rem;
   color: var(--accent-default);
-  font-size: 0.78rem;
+  font-family: var(--md-code-font);
+  font-size: 0.66rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .md-typeset .home-hero h1 {
-  max-width: 72rem;
-  margin: 0 auto 1rem;
-  color: var(--color-text-primary);
-  font-size: clamp(2.35rem, 6.5vw, 4.6rem);
-  line-height: 1.04;
-  letter-spacing: 0;
+  max-width: 40rem;
+  margin: 0;
+  color: #fff;
+  font-family: "DM Serif Display", "DM Sans", serif;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 6vw, 3.7rem);
+  line-height: 1.03;
+  letter-spacing: -0.01em;
 }
 
 .md-typeset .home-tagline {
@@ -379,13 +393,16 @@ body:has(.home-hero) .home-hero { max-width: none; }
   line-height: 1.6;
 }
 
-.home-actions {
+/* Centred call-to-action row. Not home-specific — works in any md-content
+   column. Wrap the buttons in <div class="dg-actions" markdown="1">. */
+.dg-actions {
   display: flex;
   justify-content: center;
   width: 100%;
+  margin: 2rem 0 0;
 }
 
-.md-typeset .home-actions p {
+.md-typeset .dg-actions p {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
@@ -459,12 +476,12 @@ body:has(.home-hero) .home-hero { max-width: none; }
     font-size: 1rem;
   }
 
-  .md-typeset .home-actions p {
+  .md-typeset .dg-actions p {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .home-actions .md-button {
+  .dg-actions .md-button {
     width: 100%;
     text-align: center;
   }
@@ -937,4 +954,30 @@ body:has(.home-hero) .home-hero { max-width: none; }
 .md-typeset .mermaid .userNode > path {
   fill: color-mix(in srgb, var(--dg-user) 14%, var(--color-surface)) !important;
   stroke: color-mix(in srgb, var(--dg-user) 55%, var(--color-border)) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Site-wide devnet banner (material-overrides/main.html).
+
+   The devnet caveat is stated here once for the whole site so page bodies do
+   not have to repeat it. Kept quiet on purpose: it is standing context, not a
+   per-page alarm, and it must not out-shout the in-page admonitions that carry
+   a real consequence.
+   --------------------------------------------------------------------------- */
+.md-banner {
+  background-color: var(--color-surface-secondary);
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dg-announce {
+  font-size: 0.7rem;
+  line-height: 1.5;
+  text-align: center;
+  padding: 0.3rem 0.8rem;
+}
+
+.dg-announce strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
 }

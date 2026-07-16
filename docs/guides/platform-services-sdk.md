@@ -4,12 +4,6 @@ Use the **Product SDK** (`@parity/product-sdk`) from app code to reach the
 platform services most apps need first: chain access, cloud storage,
 smart-contract calls, and a user's identity / proof-of-personhood status.
 
-!!! note "This is a devnet"
-    The Polkadot Products Devnet is a public developer preview. Tokens have no
-    real value and APIs may change. Never hardcode a seed phrase or private key
-    into your app — the SDK signs through the host wallet, not from key material
-    you supply.
-
 ## Before you start
 
 Install the SDK into your app:
@@ -45,8 +39,7 @@ and let the SDK load the right descriptors for you:
 ```ts
 import { getChainAPI } from "@parity/product-sdk/chain";
 
-// The concrete env name is supplied by the network operator.
-const client = await getChainAPI(env);
+const client = await getChainAPI("devnet");
 
 // Typed queries per chain:
 await client.assetHub.query; /* ... */
@@ -200,11 +193,6 @@ and proxies chain RPC over WebSocket. A control API (`getSigningLog`,
 
 ## Learn more
 
-- Product SDK on npm: <https://www.npmjs.com/package/@parity/product-sdk>
-- Product SDK source: <https://github.com/paritytech/product-sdk>
-- host-api-test-sdk on npm: <https://www.npmjs.com/package/@parity/host-api-test-sdk>
-- [Build & publish a dApp](build-and-publish.md)
-- [Deploy & register contracts (CDM)](deploy-contracts-cdm.md)
-- [Identity & personhood architecture](../architecture/identity.md)
-- [Packages & tools reference](../reference/packages.md)
-- Polkadot developer docs: <https://docs.polkadot.com>
+- [product-sdk](https://github.com/paritytech/product-sdk) — SDK source
+- [Deploy & register contracts (CDM)](deploy-contracts-cdm.md) — resolve a contract by name
+- [Identity & personhood](../architecture/identity.md) — the model behind the precompile

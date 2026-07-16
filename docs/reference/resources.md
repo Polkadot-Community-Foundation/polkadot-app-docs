@@ -1,112 +1,61 @@
 # More resources
 
-Use this page when you know what you want to do next and need the right link:
-install the app, open a reference Product, install developer tools, read source,
-or fall back to the official Polkadot documentation.
+Where to go next: install the app, open a reference Product, or read the source.
 
-!!! note
-    The Polkadot Products Devnet is a public developer preview. Devnet
-    tokens have no real value, and the flows described here may change. Never
-    print or share seed phrases or private keys.
+For what to `npm install` and why, see [Packages & tools](packages.md). For
+chains, endpoints, and the network preset, see
+[Networks & endpoints](networks.md).
 
-## If you want to try the app
+## Get the app
 
-The Polkadot app is the end-user host for Products. It is available on mobile
-and desktop; a web gateway is also available for quick access.
+The Polkadot app is the end-user host for Products, on mobile and desktop. The
+web gateway works in any browser when you only want to look around.
 
-| Platform | Link |
-| --- | --- |
-| Web gateway | <https://dev-dot.li> |
-| Android (direct APK) | <https://get.polkadotcommunity.foundation/android/latest.apk> |
-| iOS (TestFlight) | <https://testflight.apple.com/join/VvC8SHVE> |
-| Desktop | <https://polkadotcommunity.foundation/desktop/> |
+--8<-- "install-app.md"
 
 !!! tip "Possible blocker"
-    If an account cannot submit a transaction, it may need Devnet funds. Use the
-    faucet at <https://faucet.polkadot.io>.
+    If an account cannot submit a transaction, it probably needs devnet funds.
+    Use the [faucet](https://faucet.polkadot.io).
 
-## If you want examples to open
+## Reference Products to open
 
-These reference Products are useful when you want to see the platform from a
-user's point of view before reading code. They are public developer-preview
-examples, not audited production applications.
+These run on the Devnet and are the fastest way to see the platform from a
+user's point of view. They are developer-preview examples, not audited
+production applications.
 
-| App | Live URL | What it shows |
-| --- | --- | --- |
-| Browse | <https://browse.dev-dot.li> | Directory of published Products |
-| DotNS UI | <https://dotns.dev-dot.li> | `.dot` domain registration and lookup |
-| CDM Frontend | <https://contracts.dev-dot.li> | CDM contract registry frontend |
-| Playground template | <https://playground-template.dev-dot.li> | Minimal fork-and-go scaffold |
-| Playground | <https://playground.dev-dot.li> | Guided environment to build a sample app |
-| Simple Survey | <https://survey.dev-dot.li> | Storage app indexed by a contract |
-| Mercado | <https://mercado.dev-dot.li> | Community marketplace |
-| localdot | <https://localmarket.dev-dot.li> | Local peer-to-peer marketplace |
-
-## If you want to build
-
-Install the SDK for Product code, then add the CLIs for the task you are doing:
-managing names, publishing an app bundle, or working with contracts.
-
-### Libraries
-
-```bash
-# Product SDK — build a Product that runs inside the Host
-npm i @parity/product-sdk
-
-# Host API — talk to the Polkadot Host from your app
-npm i @novasamatech/host-api
-
-# CDM environment library
-npm i @polkadot-community-foundation/cdm-env
-```
-
-### Command-line tools
-
-```bash
-# DotNS CLI — register and manage .dot domains
-npm i -g @polkadot-community-foundation/dotns-cli
-
-# Deploy CLI (bin: pad) — publish a built app to a .dot domain
-npm i -g @parity/polkadot-app-deploy
-
-# CDM CLI (bin: cdm) — register contracts in a CDM registry
-npm i -g @polkadot-community-foundation/cdm-cli
-```
-
-!!! note
-    Use the `devnet` preset for this environment. `pad` and `dotns` select it
-    with `--env devnet`; CDM uses `-n devnet`.
+--8<-- "reference-apps.md"
 
 ## Source repositories
 
-Source code is the place to go when you need details that these docs intentionally
-do not duplicate. Product and tooling repositories are linked under
-`paritytech`. App client repositories keep their app-specific source links.
+Source is the place to go for detail these docs intentionally do not duplicate.
 
-Reference Product repositories:
+**Platform and tooling**
 
-- [Rock-Paper-Scissors](https://github.com/paritytech/Rock-Paper-Scissors)
+- [product-sdk](https://github.com/paritytech/product-sdk) — the Product SDK
+- [triangle-js-sdks](https://github.com/paritytech/triangle-js-sdks) — Host API and host-side stack
+- [polkadot-app-deploy](https://github.com/paritytech/polkadot-app-deploy) — the `pad` deploy CLI
+- [dotns](https://github.com/paritytech/dotns) · [dotns-sdk](https://github.com/paritytech/dotns-sdk) — naming contracts, CLI, and UI
+- [contract-dependency-manager](https://github.com/paritytech/contract-dependency-manager) — CDM
+- [browse](https://github.com/paritytech/browse) — the discovery directory
+- [dotli-community](https://github.com/paritytech/dotli-community) — the web gateway
+- [paseo-network/runtimes](https://github.com/paseo-network/runtimes) — chain runtimes
+
+**Polkadot app clients**
+
+- [Android](https://github.com/Polkadot-Community-Foundation/polkadot-android-community)
+  · [iOS](https://github.com/Polkadot-Community-Foundation/polkadot-ios-community)
+  · [Desktop](https://github.com/Polkadot-Community-Foundation/polkadot-desktop-community)
+
+**Reference Products**
+
 - [simple-survey](https://github.com/paritytech/simple-survey)
-- [feedback-board](https://github.com/paritytech/feedback-board)
-- [mercado-community](https://github.com/paritytech/mercado-community)
-- [localdot-community](https://github.com/paritytech/localdot-community)
-- [w3spay](https://github.com/paritytech/w3spay)
-- [festival](https://github.com/paritytech/festival)
-- [t3rminal](https://github.com/paritytech/t3rminal)
-- [playground-app-template](https://github.com/paritytech/playground-app-template)
-- [playground-tutorial](https://github.com/paritytech/playground-tutorial)
+  · [Rock-Paper-Scissors](https://github.com/paritytech/Rock-Paper-Scissors)
+  · [feedback-board](https://github.com/paritytech/feedback-board)
+  · [mercado-community](https://github.com/paritytech/mercado-community)
+  · [localdot-community](https://github.com/paritytech/localdot-community)
+  · [playground-app-template](https://github.com/paritytech/playground-app-template)
 
-## If you need protocol background
+## Protocol background
 
-For the underlying protocol, tooling, and network concepts, see the official
-Polkadot developer documentation:
-
-- <https://docs.polkadot.com>
-
-## Quick links
-
-- Polkadot developer docs — <https://docs.polkadot.com>
-- Web gateway — <https://dev-dot.li>
-- Browse directory — <https://browse.dev-dot.li>
-- Faucet — <https://faucet.polkadot.io>
-- Source org — <https://github.com/paritytech>
+For the underlying Polkadot protocol, tooling, and network concepts, see the
+official [Polkadot developer documentation](https://docs.polkadot.com).

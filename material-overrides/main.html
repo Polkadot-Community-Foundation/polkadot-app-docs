@@ -1,0 +1,17 @@
+{#-
+  Site-wide devnet banner.
+
+  The devnet caveat is stated here, once, for every page. Do not re-state it in
+  page bodies: when every page opens with a disclaimer, readers learn to skip
+  admonitions — and the admonitions that carry a real consequence (Bulletin
+  authorization expiry, the "+" vs "Get CASH" trap) are the ones that get lost.
+  Page-level admonitions are for page-specific consequences only.
+-#}
+{% extends "base.html" %}
+
+{% block announce %}
+  <div class="dg-announce">
+    <strong>Public devnet.</strong> Tokens have no real value, chains and
+    services may be reset, and flows can change between builds.
+  </div>
+{% endblock %}

@@ -10,31 +10,10 @@ Short and reserved names have extra gates; ordinary app names follow the normal
 registration path. The same reads and lookups are available from the
 [DotNS reference UI](https://dotns.dev-dot.li).
 
-!!! note
-    This is a public developer preview. Devnet tokens have no real value, and flows
-    may change. Never paste a real mainnet secret into a devnet tool.
-
-## How naming works
-
-DotNS is a set of PolkaVM (pallet-revive) contracts. A name such as `alice.dot` is
-hashed to a *node* using ENS-style namehashing, an ERC-721 token records ownership,
-and per-node resolvers hold the address, content, reverse, and personhood records.
-Binding a name to an app means writing an IPFS content hash into the content resolver;
-a client then reads that record and fetches the bundle from the network's IPFS / dev-dot.li
-gateway.
-
-```mermaid
-flowchart TD
-  A["name.dot"] --> B["node = namehash(name.dot)"]
-  B --> C["DotnsRegistry.owner(node)"]
-  C -->|registered| D["DotnsContentResolver.contenthash(node)"]
-  D --> E["decode -> IPFS CID"]
-  E --> F["fetch bundle via IPFS / dev-dot.li gateway"]
-  C -->|not registered| G["resolve fails / empty"]
-```
-
-For the full contract topology, see the [dotns](https://github.com/paritytech/dotns)
-and [dotns-sdk](https://github.com/paritytech/dotns-sdk) repositories.
+Owning a name means owning an ERC-721 token; binding it to an app means writing
+an IPFS content hash into its resolver, which clients then read to fetch your
+bundle. For the resolution path and contract topology, see
+[Naming (DotNS)](../architecture/naming.md).
 
 ## Install the CLI
 
@@ -43,12 +22,8 @@ npm i -g @polkadot-community-foundation/dotns-cli
 # provides the `dotns` command
 ```
 
-Every command takes a network via `--env <network>` (or the `DOTNS_ENV` environment
-variable). The concrete network name is provided by the team operating the network. The
-examples below use `--env devnet`; substitute the value you were given.
-
-The exact subcommands and flags shown below are indicative — run `dotns --help` (or
-`dotns <command> --help`) for the current surface of the CLI you installed.
+Every command takes a network via `--env devnet` (or the `DOTNS_ENV` environment
+variable).
 
 ## Set up an account
 
@@ -161,9 +136,6 @@ dotns register subname --env devnet
 
 ## Learn more
 
-- [dotns contracts](https://github.com/paritytech/dotns)
-- [dotns-sdk — CLI and UI](https://github.com/paritytech/dotns-sdk)
-- [@polkadot-community-foundation/dotns-cli on npm](https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli)
-- [DotNS reference UI (devnet)](https://dotns.dev-dot.li)
-- [Web gateway](https://dev-dot.li)
-- [Polkadot developer docs](https://docs.polkadot.com)
+- [Naming (DotNS)](../architecture/naming.md) — resolution, contract topology, and the naming rules
+- [DotNS UI](https://dotns.dev-dot.li) — the same lookups in a browser
+- [Build & publish a dApp](build-and-publish.md) — bind the name to a bundle

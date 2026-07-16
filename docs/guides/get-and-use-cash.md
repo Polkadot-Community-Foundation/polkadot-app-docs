@@ -4,12 +4,6 @@ CASH is the spendable balance you see inside the Polkadot app on the Polkadot
 Products Devnet. It has no real-world value, but it lets you try the real user
 flow: receive funds, see a balance, and send value to another account.
 
-!!! warning "Devnet only"
-    This is a public developer preview. CASH on the devnet is play money —
-    it has no monetary value and cannot be redeemed for anything. Balances,
-    amounts, and flows may change as the platform evolves. Never treat devnet
-    funds, addresses, or backup phrases as if they were real.
-
 ## Before you start
 
 To follow this guide without hitting a wall, have these ready first:
@@ -45,20 +39,12 @@ On devnet builds the app can top your account up directly. This is the fastest
 path. The desktop app has no CASH card and no top-up flow — fund your account on
 the mobile app.
 
-1. Open the Polkadot app on mobile
-   ([Android APK](https://get.polkadotcommunity.foundation/android/latest.apk) or
-   [iOS TestFlight](https://testflight.apple.com/join/VvC8SHVE)).
+1. Open the Polkadot app on mobile (Android or iOS).
 2. Open your Pocket, go to the CASH card, and tap the **"+"** (top-up) button
    next to **Get CASH**. (The **"+"** top-up button appears only on
    non-production / devnet builds.)
 3. The app requests a devnet top-up and prepares the funds for spending.
 4. Once the deposit settles, your CASH balance updates. You can now spend it.
-
-!!! note "‘Get CASH’ is not the same as ‘+’"
-    The labelled **Get CASH** button is different from the **"+"** top-up: it
-    opens a flow to *convert* an asset you already hold into CASH (on iOS, via a
-    payment card), which can take time — it is not the instant faucet. For a
-    brand-new empty account, the **"+"** top-up button is the one to use.
 
 !!! tip "You fund your account yourself"
     New accounts are not funded automatically. Tap the **"+"** top-up on the CASH
@@ -116,9 +102,4 @@ sequenceDiagram
 ## Learn more
 
 - [Create an account & get funds](create-account.md)
-- [Discover & open apps](discover-and-open-apps.md)
-- [Polkadot faucet](https://faucet.polkadot.io)
-- [Polkadot app — Android APK](https://get.polkadotcommunity.foundation/android/latest.apk)
-- [Individuality runtimes (Coinage / Score / Airdrop pallets)](https://github.com/paseo-network/runtimes)
-- [Polkadot Android](https://github.com/Polkadot-Community-Foundation/polkadot-android-community)
-- [Polkadot developer docs](https://docs.polkadot.com)
+- [Money (CASH & funding)](../architecture/money.md) — why CASH and PAS are separate

@@ -5,13 +5,10 @@ Devnet: a chain ID, asset ID, registry address, or contract address. The tables
 below are meant to help you orient quickly, then point you back to the current
 source of truth before you build anything around a fixed value.
 
-!!! warning
-    This is a public developer preview. Devnet tokens have no real value, and
-    every address on this page is **network-specific** and may change when a
-    network is redeployed. Treat the concrete addresses here as a snapshot of the
-    current Devnet (gateway [dev-dot.li](https://dev-dot.li)); before you
-    hard-code anything, read it back from the deployments register or from the
-    tooling address book for the network you are targeting.
+!!! warning "Every address here is a snapshot"
+    Addresses are **network-specific** and change when a network is redeployed.
+    Before you hard-code one, read it back from the deployments register or the
+    tooling address book for the network you target.
 
 !!! note
     Only public identifiers appear here: parachain IDs, asset IDs, and contract
@@ -183,11 +180,6 @@ register rather than assuming it.
 
 ## Sources
 
-- Deployments register (authoritative): <https://github.com/paritytech/summit-net-deployments>
-- Chain runtimes (parachains, assets, precompiles): <https://github.com/paseo-network/runtimes>
-- DotNS contracts and SDK: <https://github.com/paritytech/dotns> · <https://github.com/paritytech/dotns-sdk>
-- CDM (`ContractRegistry`): <https://github.com/paritytech/contract-dependency-manager>
-- Browse (`Publisher`): <https://github.com/paritytech/browse>
-- Attestation protocol: <https://github.com/paritytech/attestation-protocol>
-- Devnet faucet: <https://faucet.polkadot.io>
-- Polkadot developer documentation: <https://docs.polkadot.com>
+- [summit-net-deployments](https://github.com/paritytech/summit-net-deployments) — the authoritative register
+- [paseo-network/runtimes](https://github.com/paseo-network/runtimes) — parachains, assets, precompiles
+- Contract source: [dotns](https://github.com/paritytech/dotns) · [CDM](https://github.com/paritytech/contract-dependency-manager) · [browse](https://github.com/paritytech/browse) · [attestation-protocol](https://github.com/paritytech/attestation-protocol)

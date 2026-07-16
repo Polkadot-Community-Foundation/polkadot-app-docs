@@ -34,19 +34,21 @@ flowchart TD
 
 The deploy CLI is [`@parity/polkadot-app-deploy`](https://www.npmjs.com/package/@parity/polkadot-app-deploy),
 which ships the `pad` binary (alongside `polkadot-app-deploy` and
-`polkadot-app-bootstrap`). `pad` selects a network with `--env <network>`; the
-concrete preset name is provided by the team operating the network. After
+`polkadot-app-bootstrap`). `pad` selects a network with `--env devnet`. After
 building your frontend, a publish is a single invocation over the output
 directory:
 
 ```bash
 npm i -g @parity/polkadot-app-deploy
-pad ./dist my-app.dot --env <network>
+pad ./dist my-app.dot --env devnet
 ```
 
-The CLI prepares the static bundle, uploads the content, and binds the resulting
-content identifier to the `.dot` domain. Re-publishing the same app updates that
-name to point at the new content.
+The CLI merkleizes the build directory into a content-addressed DAG-PB archive,
+chunks it (~2 MiB) and uploads the blocks to Bulletin via
+`TransactionStorage.store_with_cid_config`, then writes the resulting root CID
+as an ENS-style `contenthash` (`0xe301` + CIDv1) into the DotNS
+`ContentResolver` on Asset Hub. Re-publishing the same app skips unchanged
+blocks and updates the name to point at the new content.
 
 ### Bulletin storage and upload authorization
 
@@ -117,11 +119,6 @@ Polkadot app it is `<label>.dot`.
 
 ## Learn more
 
-- [`@parity/polkadot-app-deploy` on npm](https://www.npmjs.com/package/@parity/polkadot-app-deploy)
-- [polkadot-app-deploy source](https://github.com/paritytech/polkadot-app-deploy)
-- [dotli-community — the gateway loader](https://github.com/paritytech/dotli-community)
-- [dotli-starter — reference app template](https://github.com/paritytech/dotli-starter)
-- [polkadot-bulletin-chain (upstream)](https://github.com/paritytech/polkadot-bulletin-chain)
-- [Naming (DotNS)](naming.md) · [The network](network.md) · [Smart contracts & CDM](contracts.md)
-- [Guide: build and publish a dApp](../guides/build-and-publish.md)
-- [Polkadot developer docs](https://docs.polkadot.com)
+- [polkadot-app-deploy](https://github.com/paritytech/polkadot-app-deploy) — source for the `pad` CLI
+- [dotli-community](https://github.com/paritytech/dotli-community) — the gateway loader
+- [Build & publish a dApp](../guides/build-and-publish.md) — do it

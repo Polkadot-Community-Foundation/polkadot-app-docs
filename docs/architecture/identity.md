@@ -6,9 +6,6 @@ person?* The first is the username flow; the second is proof of personhood. Apps
 can use both signals without holding the user's keys or learning a user's
 cross-application activity.
 
-!!! note
-    This is a public developer preview. Devnet tokens have no real value, and the flows described here may change. No page in these docs prints secrets; the account addresses that operate the backend and bots are supplied at runtime and are intentionally not published here.
-
 ## The moving parts
 
 Identity spans a small number of independently deployed components. The main
@@ -128,5 +125,3 @@ that are not the same thing as username or personhood status.
 - [identity-backend-community](https://github.com/paritytech/identity-backend-community) — the BFF, its routes, and `CONCEPTS.md`
 - [individuality-community](https://github.com/paritytech/individuality-community) — `people-lite`, `proof-of-ink`, and the `personhood` precompile
 - [attestation-protocol](https://github.com/paritytech/attestation-protocol) — `SchemaRegistry` and `AttestationService`
-- [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) and [`@novasamatech/host-api`](https://www.npmjs.com/package/@novasamatech/host-api) — how apps read identity in-app
-- [Polkadot developer docs](https://docs.polkadot.com)

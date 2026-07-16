@@ -3,10 +3,6 @@
 Find Products on the Polkadot Products Devnet and open them from the app, from
 Browse, or from a `dev-dot.li` link.
 
-!!! note "This is a devnet"
-    The Polkadot Products Devnet is a public developer preview. Any tokens you
-    hold here have no real value, and flows may change as the platform evolves.
-
 ## Ways to reach a Product
 
 There are three practical entry points:
@@ -60,15 +56,7 @@ name: `https://survey.dev-dot.li`.
 
 These apps are deployed on the devnet and are a good starting point:
 
-| App | Link |
-| --- | --- |
-| DotNS UI (manage `.dot` domains) | <https://dotns.dev-dot.li> |
-| Simple Survey | <https://survey.dev-dot.li> |
-| Playground template | <https://playground-template.dev-dot.li> |
-| CDM Frontend (contracts) | <https://contracts.dev-dot.li> |
-| Playground | <https://playground.dev-dot.li> |
-| Mercado marketplace | <https://mercado.dev-dot.li> |
-| localdot marketplace | <https://localmarket.dev-dot.li> |
+--8<-- "reference-apps.md"
 
 ## What happens when you open an app
 
@@ -100,9 +88,5 @@ Two properties matter for you as a user:
 
 ## Learn more
 
-- [Discovery architecture](../architecture/discovery.md)
-- [Naming architecture (DotNS)](../architecture/naming.md)
-- [App delivery architecture](../architecture/app-delivery.md)
-- [Create an account & get funds](create-account.md)
-- Browse source: <https://github.com/paritytech/browse>
-- Polkadot developer docs: <https://docs.polkadot.com>
+- [App discovery (Browse)](../architecture/discovery.md) — how the directory is built
+- [Create an account & get funds](create-account.md) — needed before most apps do anything

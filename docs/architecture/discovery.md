@@ -10,9 +10,8 @@ The reference directory runs at [browse.dev-dot.li](https://browse.dev-dot.li). 
 lives in the source repository
 [paritytech/browse](https://github.com/paritytech/browse).
 
-!!! note
-    This is a public developer preview. Devnet tokens have no real value, and the
-    contracts described here are prototype code that has not been audited. Flows may change.
+!!! note "Unaudited"
+    The contracts described here are prototype code that has not been audited.
 
 ## What discovery helps you do
 
@@ -124,9 +123,6 @@ flowchart LR
 
 ## Learn more
 
-- [Browse repository](https://github.com/paritytech/browse)
-- [`@parity/polkadot-app-deploy`](https://www.npmjs.com/package/@parity/polkadot-app-deploy) — the `pad` CLI (`--publish`)
-- [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) — build an app that gets listed
-- [Delivery: how apps ship](./app-delivery.md) — the deploy pipeline that writes the contenthash and manifest
-- [Naming with DotNS](./naming.md) — how `.dot` labels, contenthash, and text records work
-- [Polkadot developer docs](https://docs.polkadot.com)
+- [browse](https://github.com/paritytech/browse) — source for the directory and its client
+- [App delivery](./app-delivery.md) — the pipeline that writes the contenthash and manifest
+- [List your app in Browse](../guides/list-in-browse.md) — do it

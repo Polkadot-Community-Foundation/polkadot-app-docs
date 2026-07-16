@@ -4,11 +4,6 @@ This page explains the money model used by the Polkadot Products Devnet: what
 **CASH** means in the app, why it is different from the native token used for
 fees, and how funds move through the user-facing flows.
 
-!!! warning "Devnet only"
-    The Polkadot Products Devnet is a public developer preview. Tokens have no
-    real value, and flows may change. Never treat CASH, PAS, or any devnet
-    balance as money.
-
 ## The two balances to understand
 
 Users see **CASH** in the Polkadot app. CASH is the app-facing name for a devnet
@@ -109,7 +104,5 @@ addresses are supplied by the Devnet operators.
 
 ## Learn more
 
-- [Get & use CASH](../guides/get-and-use-cash.md)
-- [Create an account & get funds](../guides/create-account.md)
-- [Networks & endpoints](../reference/networks.md)
-- [paseo-network/runtimes](https://github.com/paseo-network/runtimes)
+- [paseo-network/runtimes](https://github.com/paseo-network/runtimes) — the Coinage pallet and asset definitions
+- [Get & use CASH](../guides/get-and-use-cash.md) — do it

@@ -29,6 +29,7 @@ exclude_docs: |
   AGENTS.md
   README.md
   AUTHORING-diagrams.md
+  _snippets/
 
 theme:
   name: material
@@ -82,7 +83,12 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.keys
-  - pymdownx.snippets
+  # Single-source blocks live in docs/_snippets/ and are pulled in with `--8<--`.
+  # Facts that appear on more than one page belong there, not in a second copy.
+  - pymdownx.snippets:
+      base_path:
+        - docs/_snippets
+      check_paths: true
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.superfences:
@@ -105,7 +111,6 @@ nav:
   - Home: index.md
   - Introduction: introduction.md
   - Getting started:
-      - getting-started/index.md
       - For users: getting-started/users.md
       - For developers: getting-started/developers.md
   - Guides:

@@ -5,11 +5,6 @@ Claim a human-readable **username** in the Polkadot app and understand the
 certain `.dot` domains or using apps that allow only one action per person, need
 that signal before they can treat an account as a distinct human.
 
-!!! note "This is a devnet"
-    The Polkadot Products Devnet is a public developer preview. Tokens here
-    have no real value, and flows may change. Never reuse a recovery phrase from
-    a real, value-bearing wallet on a devnet.
-
 ## What a username and personhood are
 
 A **username** is a short, readable name that stands in for your account's long
@@ -38,11 +33,7 @@ whether you have no personhood, Lite personhood, or Full personhood.
 You need an account with a small amount of devnet funds. If you have not set
 one up yet, follow [Create an account & get funds](create-account.md) first.
 
-- Get the app: Android (direct APK)
-  <https://get.polkadotcommunity.foundation/android/latest.apk>,
-  iOS <https://testflight.apple.com/join/VvC8SHVE>,
-  Desktop <https://polkadotcommunity.foundation/desktop/>,
-  or the web gateway <https://dev-dot.li>.
+Download links for the app are in [More resources](../reference/resources.md).
 
 ## Claim a username
 
@@ -111,7 +102,7 @@ how naming works, see
 - **The name is unavailable.** Try another base name or accept the suffix the app
   proposes.
 - **The registration does not finalize.** Check that your account has enough PAS
-  for fees and that you are connected to the Devnet.
+  for fees.
 - **Full personhood is not offered.** Lite is the expected tier for most current
   flows; Full depends on which personhood flows are active in the current build.
 - **An app does not recognize your status yet.** Wait for the on-chain update to
@@ -119,9 +110,5 @@ how naming works, see
 
 ## Learn more
 
-- [Identity & personhood architecture](../architecture/identity.md)
-- [Naming (DotNS) architecture](../architecture/naming.md)
-- [Register a .dot domain](register-a-dot-name.md)
-- Personhood source: <https://github.com/paritytech/individuality-community>
-- Identity backend source: <https://github.com/paritytech/identity-backend-community>
-- Polkadot developer docs: <https://docs.polkadot.com>
+- [Identity & personhood](../architecture/identity.md) — tiers, aliases, and the precompile
+- [Register a .dot domain](register-a-dot-name.md) — what a tier unlocks
