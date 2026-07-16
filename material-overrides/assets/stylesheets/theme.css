@@ -358,7 +358,7 @@ body:has(.home-hero) .home-hero { max-width: none; }
   color: var(--grey-50);
   background:
     linear-gradient(90deg, var(--grey-950) 0%, color-mix(in srgb, var(--grey-950) 55%, transparent) 44%, transparent 74%),
-    url("../images/hero-chrome.png") center / cover no-repeat,
+    url("../images/hero-datamosh.webp") center / cover no-repeat,
     radial-gradient(55rem 40rem at 80% 15%, color-mix(in srgb, var(--accent-default) 22%, transparent), transparent 60%),
     radial-gradient(45rem 35rem at 96% 96%, color-mix(in srgb, var(--dg-assethub) 16%, transparent), transparent 55%),
     var(--grey-950);

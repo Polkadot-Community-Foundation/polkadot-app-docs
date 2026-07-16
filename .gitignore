@@ -37,3 +37,6 @@ pnpm-debug.log*
 .vscode/
 *.swp
 *.swo
+
+# Design source artifacts (large; the served hero image is committed as a webp)
+previews/

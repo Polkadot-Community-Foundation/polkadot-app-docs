@@ -101,10 +101,10 @@ plugins:
   - search
 
 extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/paritytech
-      name: GitHub
+  # No `social:` block on purpose. The header already carries a GitHub link (to
+  # this repo, via repo_url); a second one in the footer pointing at a different
+  # org is noise. Source links for individual projects live in
+  # docs/reference/resources.md.
   generator: false
 
 nav:
