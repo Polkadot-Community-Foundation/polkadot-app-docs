@@ -1,0 +1,98 @@
+# Get & use CASH
+
+CASH is the spendable balance you see inside the Polkadot app on the Polkadot
+Products Devnet. It has no real-world value, but it lets you try the real user
+flow: receive funds, see a balance, and send value to another account.
+
+!!! warning "Devnet only"
+    This is a public developer preview. CASH on the devnet is play money —
+    it has no monetary value and cannot be redeemed for anything. Balances,
+    amounts, and flows may change as the platform evolves. Never treat devnet
+    funds, addresses, or backup phrases as if they were real.
+
+## What CASH is
+
+"CASH" is the name the app uses for the Devnet digital-dollar balance. The app
+presents it as a simple spendable balance, while the platform handles the
+chain-specific work behind the scenes.
+
+For developers, the useful detail is that CASH is spent through **Coinage** on
+the People chain, and the same logical asset can also be represented on Asset
+Hub with asset id `50000413`. For users, the important rule is simpler: if the
+CASH card shows a balance, you can use it in app payment flows.
+
+## Get CASH
+
+You have a few ways to acquire CASH on the devnet.
+
+### 1. The in-app "Get CASH" button
+
+On devnet builds the app can top your account up directly. This is the fastest
+path.
+
+1. Open the Polkadot app ([Android](https://play.google.com/store/apps/details?id=io.pcf.polkadotapp),
+   [iOS TestFlight](https://testflight.apple.com/join/VvC8SHVE), or
+   [Desktop](https://polkadotcommunity.foundation/desktop/)).
+2. Go to your CASH card and tap **Get CASH**. (This option is available only on
+   non-production builds.)
+3. The app requests a devnet top-up and prepares the funds for spending.
+4. When the flow completes, your CASH card balance updates. You can now spend
+   it.
+
+!!! tip "Some builds fund you automatically"
+    On certain devnet builds new accounts are topped up without any action from
+    you. If you already see a CASH balance after creating an account, you can
+    skip the button.
+
+### 2. The public faucet
+
+You can also request devnet funds from the shared Polkadot faucet at
+<https://faucet.polkadot.io>. This is useful for topping up native devnet
+tokens for fees alongside your CASH.
+
+### 3. Earn it
+
+CASH can also be earned through Devnet reward flows, such as games, judgements,
+invitations, or prize events. When rewards are paid out, they appear in the same
+CASH balance as funds from the top-up flow.
+
+## Send & use CASH
+
+Once you hold CASH you can send it to another user.
+
+1. Open your CASH card and choose **Send CASH**.
+2. Enter the recipient and the amount.
+3. Review and confirm the action. The app prepares the transfer, asks for your
+   approval, submits it, and waits for settlement before reporting success.
+
+Because CASH transfers move value, always check the recipient and amount before
+you approve.
+
+```mermaid
+sequenceDiagram
+  participant U as You
+  participant App as Polkadot app
+  participant P as People chain
+  U->>App: Tap "Get CASH" (devnet only)
+  App->>P: Request devnet funds
+  App->>App: Prepare funds for spending
+  App-->>U: CASH balance shown
+  U->>App: Send CASH to a recipient
+  App->>P: Submit CASH transfer
+  P-->>App: Transfer complete
+```
+
+!!! note "Where the value lives"
+    Spending CASH is separate from the native token used for fees. Keep a small
+    amount of native devnet funds available so your account can stay active and
+    pay transaction fees.
+
+## Learn more
+
+- [Create an account & get funds](create-account.md)
+- [Discover & open apps](discover-and-open-apps.md)
+- [Polkadot faucet](https://faucet.polkadot.io)
+- [Polkadot app on Google Play](https://play.google.com/store/apps/details?id=io.pcf.polkadotapp)
+- [Individuality runtimes (Coinage / Score / Airdrop pallets)](https://github.com/paseo-network/runtimes)
+- [Polkadot Android](https://github.com/Polkadot-Community-Foundation/polkadot-android-community)
+- [Polkadot developer docs](https://docs.polkadot.com)
