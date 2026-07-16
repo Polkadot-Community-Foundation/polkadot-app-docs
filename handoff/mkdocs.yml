@@ -33,7 +33,6 @@ validation:
 exclude_docs: |
   AGENTS.md
   README.md
-  AUTHORING-diagrams.md
 
 theme:
   name: material
@@ -134,7 +133,7 @@ nav:
           - Discover & open apps: guides/discover-and-open-apps.md
       - For developers:
           - Build & publish a dApp: guides/build-and-publish.md
-          - Register a .dot domain: guides/register-a-dot-name.md
+          - Register a .dot name: guides/register-a-dot-name.md
           - Deploy & register contracts: guides/deploy-contracts-cdm.md
           - Use platform services from the SDK: guides/platform-services-sdk.md
           - List your app in Browse: guides/list-in-browse.md

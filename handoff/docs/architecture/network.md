@@ -65,7 +65,7 @@ Substrate storage details.
 
 ### DotNS gateway
 
-The DotNS gateway connects `.dot` domains to the contract environment. For how
+The DotNS gateway connects `.dot` names to the contract environment. For how
 names resolve to app bundles, see [Naming](./naming.md).
 
 ### Personhood precompile
@@ -109,7 +109,7 @@ The three chains combine into a single application lifecycle:
 graph LR
   Dev["App developer"]
   Revive["pallet-revive on Asset Hub<br/>(PolkaVM/EVM contract)"]
-  DotNS["DotNS<br/>.dot domain + resolver"]
+  DotNS["DotNS<br/>.dot name + resolver"]
   Store["Bulletin transaction storage<br/>(auth-gated, CID)"]
   GW["Gateway dev-dot.li"]
   User["Polkadot app / web user"]
