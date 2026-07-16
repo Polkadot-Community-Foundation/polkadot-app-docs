@@ -21,7 +21,7 @@ the web gateway at [dev-dot.li](https://dev-dot.li).
 - [Username & proof of personhood](username-and-personhood.md) — claim a
   People Chain username and establish personhood.
 - [Discover & open apps](discover-and-open-apps.md) — find apps in
-  [Browse](https://browse.dev-dot.li) and open them by their `.dot` name.
+  [Browse](https://browse.dev-dot.li) and open them by their `.dot` domain.
 
 ## For developers
 
@@ -31,7 +31,7 @@ work with a static web app, the Product SDK, and a few CLIs:
 ```bash
 npm i @parity/product-sdk
 npm i -g @parity/polkadot-app-deploy   # deploy CLI (bin: pad)
-npm i -g @parity/dotns-cli             # DotNS CLI
+npm i -g @polkadot-community-foundation/dotns-cli             # DotNS CLI
 npm i -g @polkadot-community-foundation/cdm-cli               # contract manifest CLI (bin: cdm)
 ```
 
@@ -42,8 +42,8 @@ npm i -g @polkadot-community-foundation/cdm-cli               # contract manifes
 
 - [Build & publish a dApp](build-and-publish.md) — scaffold an app on the
   Product SDK and publish it with the `pad` deploy CLI.
-- [Register a .dot name](register-a-dot-name.md) — reserve and configure a
-  DotNS name with the `@parity/dotns-cli`.
+- [Register a .dot domain](register-a-dot-name.md) — reserve and configure a
+  DotNS name with the `@polkadot-community-foundation/dotns-cli`.
 - [Deploy & register contracts](deploy-contracts-cdm.md) — deploy PolkaVM
   contracts and register them in a CDM manifest with the `cdm` CLI.
 - [Use platform services from the SDK](platform-services-sdk.md) — call chain,

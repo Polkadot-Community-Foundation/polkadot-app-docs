@@ -17,7 +17,7 @@ lives in the source repository
 ## What discovery helps you do
 
 Users use Browse to find apps. Developers use it to make a published app
-visible after the app already has a `.dot` name and a bundle. Browse is not a
+visible after the app already has a `.dot` domain and a bundle. Browse is not a
 replacement for DotNS or app delivery; it sits on top of them.
 
 The system has three responsibilities:
@@ -54,7 +54,7 @@ A valid manifest needs a display name, description, and icon:
 
 Who is allowed to list an app is enforced on-chain:
 
-1. You must own the `.dot` name.
+1. You must own the `.dot` domain.
 2. You need the required personhood status for the publish action.
 3. You must be under the publish rate limit for your personhood tier.
 
@@ -68,7 +68,7 @@ Unpublishing is simpler: if you own the name, you can remove it from Browse.
 
 ```mermaid
 flowchart TD
-  A[Publish label] --> B{Own the .dot name?}
+  A[Publish label] --> B{Own the .dot domain?}
   B -- no --> E1[Cannot publish]
   B -- yes --> C{Enough personhood?}
   C -- no --> E2[Complete personhood flow]
@@ -96,7 +96,7 @@ The client builds the directory from the registry every time it loads:
 
 Discovery reads do not need a signer and do not send transactions. Opening an
 app is a handoff: inside the Polkadot app, Browse asks the host to navigate to
-the `.dot` name; in a browser, it opens the web gateway.
+the `.dot` domain; in a browser, it opens the web gateway.
 
 ```mermaid
 flowchart LR
@@ -119,7 +119,7 @@ flowchart LR
   Use `pad --publish` or publish the label through Browse tooling.
 - **The app has no card metadata.** Update the DotNS manifest record with a
   display name, description, and icon.
-- **The publish call fails.** Check that the signer owns the `.dot` name and has
+- **The publish call fails.** Check that the signer owns the `.dot` domain and has
   enough personhood for the current rate limit.
 
 ## Learn more

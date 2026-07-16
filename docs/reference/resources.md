@@ -17,15 +17,13 @@ and desktop; a web gateway is also available for quick access.
 | Platform | Link |
 | --- | --- |
 | Web gateway | <https://dev-dot.li> |
-| Android (Google Play) | <https://play.google.com/store/apps/details?id=io.pcf.polkadotapp> |
 | Android (direct APK) | <https://get.polkadotcommunity.foundation/android/latest.apk> |
 | iOS (TestFlight) | <https://testflight.apple.com/join/VvC8SHVE> |
 | Desktop | <https://polkadotcommunity.foundation/desktop/> |
 
 !!! tip "Possible blocker"
     If an account cannot submit a transaction, it may need Devnet funds. Use the
-    faucet at <https://faucet.polkadot.io>. Some Devnet builds also auto-fund
-    new accounts.
+    faucet at <https://faucet.polkadot.io>.
 
 ## If you want examples to open
 
@@ -36,10 +34,13 @@ examples, not audited production applications.
 | App | Live URL | What it shows |
 | --- | --- | --- |
 | Browse | <https://browse.dev-dot.li> | Directory of published Products |
-| DotNS UI | <https://dotns.dev-dot.li> | `.dot` name registration and lookup |
+| DotNS UI | <https://dotns.dev-dot.li> | `.dot` domain registration and lookup |
 | CDM Frontend | <https://contracts.dev-dot.li> | CDM contract registry frontend |
 | Playground template | <https://playground-template.dev-dot.li> | Minimal fork-and-go scaffold |
+| Playground | <https://playground.dev-dot.li> | Guided environment to build a sample app |
 | Simple Survey | <https://survey.dev-dot.li> | Storage app indexed by a contract |
+| Mercado | <https://mercado.dev-dot.li> | Community marketplace |
+| localdot | <https://localmarket.dev-dot.li> | Local peer-to-peer marketplace |
 
 ## If you want to build
 
@@ -62,8 +63,8 @@ npm i @polkadot-community-foundation/cdm-env
 ### Command-line tools
 
 ```bash
-# DotNS CLI — register and manage .dot names
-npm i -g @parity/dotns-cli
+# DotNS CLI — register and manage .dot domains
+npm i -g @polkadot-community-foundation/dotns-cli
 
 # Deploy CLI (bin: pad) — publish a built app to a .dot domain
 npm i -g @parity/polkadot-app-deploy

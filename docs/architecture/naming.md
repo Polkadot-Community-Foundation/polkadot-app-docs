@@ -20,7 +20,7 @@ the new target.
 
 ## The name model
 
-Each `.dot` name has two important pieces of state:
+Each `.dot` domain has two important pieces of state:
 
 - **Owner** — the account or contract that controls the name.
 - **Resolver records** — the data attached to the name, including the content
@@ -81,7 +81,7 @@ flowchart TD
   Resolver --> Gateway["Gateway / app clients"]
 ```
 
-- **Registrar** records who owns a `.dot` name.
+- **Registrar** records who owns a `.dot` domain.
 - **Registry** connects the name to its resolver.
 - **Resolvers** hold the records that clients read, including the content hash
   for an app bundle.
@@ -130,7 +130,7 @@ contracts directly.
 
 - DotNS contracts: <https://github.com/paritytech/dotns>
 - DotNS SDK — CLI and reference UI: <https://github.com/paritytech/dotns-sdk>
-- `@parity/dotns-cli` on npm: <https://www.npmjs.com/package/@parity/dotns-cli>
+- `@polkadot-community-foundation/dotns-cli` on npm: <https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli>
 - DotNS reference UI (devnet): <https://dotns.dev-dot.li>
 - Web gateway: <https://dev-dot.li>
 - Polkadot developer docs: <https://docs.polkadot.com>

@@ -25,24 +25,31 @@ CASH card shows a balance, you can use it in app payment flows.
 
 You have a few ways to acquire CASH on the devnet.
 
-### 1. The in-app "Get CASH" button
+### 1. The in-app "+" top-up button (mobile)
 
 On devnet builds the app can top your account up directly. This is the fastest
-path.
+path. The desktop app has no CASH card and no top-up flow — fund your account on
+the mobile app.
 
-1. Open the Polkadot app ([Android](https://play.google.com/store/apps/details?id=io.pcf.polkadotapp),
-   [iOS TestFlight](https://testflight.apple.com/join/VvC8SHVE), or
-   [Desktop](https://polkadotcommunity.foundation/desktop/)).
-2. Go to your CASH card and tap **Get CASH**. (This option is available only on
-   non-production builds.)
+1. Open the Polkadot app on mobile
+   ([Android APK](https://get.polkadotcommunity.foundation/android/latest.apk) or
+   [iOS TestFlight](https://testflight.apple.com/join/VvC8SHVE)).
+2. Open your Pocket, go to the CASH card, and tap the **"+"** (top-up) button
+   next to **Get CASH**. (The **"+"** top-up button appears only on
+   non-production / devnet builds.)
 3. The app requests a devnet top-up and prepares the funds for spending.
-4. When the flow completes, your CASH card balance updates. You can now spend
-   it.
+4. Once the deposit settles, your CASH balance updates. You can now spend it.
 
-!!! tip "Some builds fund you automatically"
-    On certain devnet builds new accounts are topped up without any action from
-    you. If you already see a CASH balance after creating an account, you can
-    skip the button.
+!!! note "‘Get CASH’ is not the same as ‘+’"
+    The labelled **Get CASH** button is different from the **"+"** top-up: it
+    opens a flow to *convert* an asset you already hold into CASH (on iOS, via a
+    payment card), which can take time — it is not the instant faucet. For a
+    brand-new empty account, the **"+"** top-up button is the one to use.
+
+!!! tip "You fund your account yourself"
+    New accounts are not funded automatically. Tap the **"+"** top-up on the CASH
+    card (devnet builds) to add test CASH, or use the faucet for native tokens to
+    pay fees.
 
 ### 2. The public faucet
 
@@ -68,12 +75,17 @@ Once you hold CASH you can send it to another user.
 Because CASH transfers move value, always check the recipient and amount before
 you approve.
 
+!!! note "On desktop, CASH lives in chat"
+    The desktop app has no CASH card or **Get CASH** button. On desktop you send
+    and receive CASH inside chat conversations, not from a card. Fund your
+    account on the mobile app first.
+
 ```mermaid
 sequenceDiagram
   participant U as You
   participant App as Polkadot app
   participant P as People chain
-  U->>App: Tap "Get CASH" (devnet only)
+  U->>App: Tap "+" top-up (devnet only)
   App->>P: Request devnet funds
   App->>App: Prepare funds for spending
   App-->>U: CASH balance shown
@@ -92,7 +104,7 @@ sequenceDiagram
 - [Create an account & get funds](create-account.md)
 - [Discover & open apps](discover-and-open-apps.md)
 - [Polkadot faucet](https://faucet.polkadot.io)
-- [Polkadot app on Google Play](https://play.google.com/store/apps/details?id=io.pcf.polkadotapp)
+- [Polkadot app — Android APK](https://get.polkadotcommunity.foundation/android/latest.apk)
 - [Individuality runtimes (Coinage / Score / Airdrop pallets)](https://github.com/paseo-network/runtimes)
 - [Polkadot Android](https://github.com/Polkadot-Community-Foundation/polkadot-android-community)
 - [Polkadot developer docs](https://docs.polkadot.com)

@@ -47,8 +47,7 @@ bytes.
     ```
 
 2. Have a funded account on the devnet Asset Hub. You can request tokens from
-   the [faucet](https://faucet.polkadot.io); some devnet builds also auto-fund
-   new accounts.
+   the [faucet](https://faucet.polkadot.io).
 
 3. Know the network preset name for the devnet you are targeting. Every CDM
    command selects a network with `-n <name>` (also spelled `--name`); the

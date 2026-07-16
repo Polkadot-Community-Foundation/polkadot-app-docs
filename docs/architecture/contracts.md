@@ -83,8 +83,7 @@ To deploy your own contracts:
 
 !!! tip
     Never print or commit signing seeds. Use the network faucet at
-    <https://faucet.polkadot.io> to fund a deploy account; some devnet builds
-    also auto-fund new accounts.
+    <https://faucet.polkadot.io> to fund a deploy account.
 
 ## Consuming a contract: `cdm install`
 

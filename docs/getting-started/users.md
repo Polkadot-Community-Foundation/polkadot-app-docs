@@ -2,7 +2,7 @@
 
 This path is for trying the Polkadot app as an end user. You will install a
 client or use the web gateway, create or import a devnet account, get no-value
-funds, and open your first Product by its `.dot` name.
+funds, and open your first Product by its `.dot` domain.
 
 !!! warning "This is a devnet"
     The Polkadot Products Devnet is a preview environment. Devnet tokens have
@@ -35,7 +35,6 @@ Choose the client for your platform.
 
 | Platform | Where to get it |
 | --- | --- |
-| Android (Google Play) | [play.google.com/store/apps/details?id=io.pcf.polkadotapp](https://play.google.com/store/apps/details?id=io.pcf.polkadotapp) |
 | Android (direct APK) | [get.polkadotcommunity.foundation/android/latest.apk](https://get.polkadotcommunity.foundation/android/latest.apk) |
 | iOS (TestFlight) | [testflight.apple.com/join/VvC8SHVE](https://testflight.apple.com/join/VvC8SHVE) |
 | Desktop (macOS / Windows / Linux) | [polkadotcommunity.foundation/desktop/](https://polkadotcommunity.foundation/desktop/) |
@@ -74,24 +73,28 @@ obtain it.
 
 ### In-app top-up
 
-On devnet builds, the app can top up your account directly. Open the CASH card
-and tap **Get CASH**. Once the transfer settles, the CASH card updates and you
-can spend the balance inside the app.
+On devnet builds, the app can fund your account directly. Open your **Pocket**,
+go to the CASH card, and tap the **+** (top-up) button next to **Get CASH**. The
+app tops you up with test CASH; once the deposit settles, your balance updates and
+you can spend it inside the app.
 
-!!! note "Devnet-only convenience"
-    The **Get CASH** button is available only on non-production networks. See
-    [Money (CASH & funding)](../architecture/money.md) for the model behind the
-    balance.
+!!! note "Two different buttons"
+    The **+** top-up button appears only on devnet (non-production) builds — it is
+    the quickest way to fund a new account. The **Get CASH** button beside it does
+    something different: it opens a flow to *convert* an asset you already hold into
+    CASH. For a brand-new account, use the **+** button. See
+    [Money (CASH & funding)](../architecture/money.md) for the model behind the balance.
 
 ### Faucet
 
 You can also request funds from the public faucet at
-[https://faucet.polkadot.io](https://faucet.polkadot.io). This is especially
-useful when you need native devnet funds for fees.
+[https://faucet.polkadot.io](https://faucet.polkadot.io). The faucet provides
+**native devnet tokens** for transaction fees — not CASH. Use the in-app top-up
+above to get CASH.
 
 ## 4. Open your first app
 
-Devnet apps are addressed by human-readable **`.dot` names**, for example
+Devnet apps are addressed by human-readable **`.dot` domains**, for example
 `survey.dot`. There are two practical ways to open one.
 
 ### From Browse
@@ -103,8 +106,9 @@ published on-chain and lets you open one with a tap.
 - In a web browser, visit [https://browse.dev-dot.li](https://browse.dev-dot.li).
 
 When you select an app inside the Polkadot app, it opens in the app host so it
-can ask for approvals and use platform services. In a plain web browser, the
-same app opens through the `.dot.li` gateway.
+can ask for approvals and use platform services. Opening an app from Browse in a
+plain web browser currently routes through the production `.dot.li` gateway; to
+stay on the devnet, open the app's `<name>.dev-dot.li` address directly.
 
 ```mermaid
 flowchart LR
@@ -117,8 +121,10 @@ flowchart LR
 
 If you already know an app's name, you can open it directly:
 
-- In the Polkadot app, type the `.dot` name (for example `survey.dot`) into the
-  browser address bar.
+- On the **desktop** Polkadot app, type the `.dot` domain (for example `survey.dot`)
+  into the address bar.
+- On **mobile**, open apps from Browse or by following a `.dot` / `.dot.li` link —
+  the mobile app does not have a general address bar.
 - In a web browser, use the web gateway, e.g. `https://survey.dev-dot.li`.
 
 Some reference apps you can try on the devnet:
@@ -127,7 +133,10 @@ Some reference apps you can try on the devnet:
 | --- | --- |
 | Browse (app directory) | [browse.dev-dot.li](https://browse.dev-dot.li) |
 | DotNS (naming) UI | [dotns.dev-dot.li](https://dotns.dev-dot.li) |
+| Playground (build a sample app) | [playground.dev-dot.li](https://playground.dev-dot.li) |
 | Simple Survey | [survey.dev-dot.li](https://survey.dev-dot.li) |
+| Mercado (marketplace) | [mercado.dev-dot.li](https://mercado.dev-dot.li) |
+| localdot (local marketplace) | [localmarket.dev-dot.li](https://localmarket.dev-dot.li) |
 | CDM Frontend (contracts) | [contracts.dev-dot.li](https://contracts.dev-dot.li) |
 
 ## Where to go next

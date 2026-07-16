@@ -16,7 +16,7 @@ source repositories are available under [github.com/paritytech](https://github.c
 
 | Component | Role | Source |
 | --- | --- | --- |
-| `identity-backend` | Stateless HTTP backend-for-frontend (BFF) for the Polkadot app. Issues JWT sessions, registers usernames, manages invitation tickets. Holds no user keys. | [identity-backend-community](https://github.com/paritytech/identity-backend-community) |
+| `identity-backend` | Stateful HTTP backend-for-frontend (BFF) for the Polkadot app, backed by Postgres (usernames, single-use/revocable refresh tokens, a registration queue, device attestations, and invitation tickets). Issues JWT sessions, registers usernames, manages invitation tickets. Holds no user keys. | [identity-backend-community](https://github.com/paritytech/identity-backend-community) |
 | `people-lite` pallet | On-chain registry of *Lite* people (attested usernames) on the People chain. | [individuality-community](https://github.com/paritytech/individuality-community) |
 | `proof-of-ink` pallet | On-chain *Full* personhood: applications, invitations, and evidence judging. | [individuality-community](https://github.com/paritytech/individuality-community) |
 | `personhood` precompile | A pallet-revive precompile that lets any PolkaVM contract read an account's personhood tier and a per-app alias. | [individuality-community](https://github.com/paritytech/individuality-community) |
@@ -37,9 +37,14 @@ before the backend accepts identity actions from it.
 
 A **Lite** person is an account with an attested, human-readable username. The
 client asks for a base name, the backend allocates an available suffixed name,
-and the user signs the registration. The backend then writes the attestation to
-the People chain; it does not take custody of the user's keys or sign as the
-user.
+and the user signs the registration. The backend accepts and queues the request
+(returning `202 Accepted`), and a separate worker submits the attestation to the
+People chain asynchronously; it does not take custody of the user's keys or sign
+as the user.
+
+Registration is not unconditional. On iOS, Apple DeviceCheck limits the number
+of free registrations per device: a device that has already registered gets a
+`PAYMENT_REQUIRED` response on further attempts.
 
 Each new username can also be reflected into the `.dot` naming system, so the
 same human-readable identity works across the app and app-discovery flows. That
@@ -50,13 +55,15 @@ do not interact with it directly.
 sequenceDiagram
     participant App as Polkadot app (device)
     participant BFF as identity-backend (BFF)
+    participant Worker as Registration worker
     participant People as People chain (people-lite)
     participant AH as Asset Hub (dotns-gateway)
     App->>BFF: POST /auth/token (App Attest / Play Integrity + Challenge)
     BFF-->>App: JWT
     App->>BFF: POST /usernames (base name + signed proof)
-    BFF->>People: Register Lite username attestation
-    People-->>BFF: finalized (Lite person registered)
+    BFF-->>App: 202 Accepted (registration queued)
+    Worker->>People: Register Lite username attestation (async)
+    People-->>Worker: finalized (Lite person registered)
     People-->>AH: username can be mirrored into .dot naming
 ```
 

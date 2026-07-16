@@ -20,8 +20,8 @@ Most projects only need a few direct dependencies:
 |---------|---------|---------|-----|
 | [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) | `npm i @parity/product-sdk` | TypeScript SDK for building apps: multi-chain access, transactions, signing, contract calls, cloud storage, and identity. | — |
 | [`@novasamatech/host-api`](https://www.npmjs.com/package/@novasamatech/host-api) | `npm i @novasamatech/host-api` | Host↔product transport protocol and typed business methods used by apps running inside the Polkadot app. | — |
-| [`@parity/dotns-cli`](https://www.npmjs.com/package/@parity/dotns-cli) | `npm i -g @parity/dotns-cli` | CLI for the `.dot` naming system: register names, set content/address records, manage reverse names and stores. | `dotns` |
-| [`@parity/polkadot-app-deploy`](https://www.npmjs.com/package/@parity/polkadot-app-deploy) | `npm i -g @parity/polkadot-app-deploy` | Deploy CLI: uploads a built static bundle to Bulletin, binds it to a `.dot` name, and optionally lists it. | `pad` |
+| [`@polkadot-community-foundation/dotns-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli) | `npm i -g @polkadot-community-foundation/dotns-cli` | CLI for the `.dot` naming system: register names, set content/address records, manage reverse names and stores. | `dotns` |
+| [`@parity/polkadot-app-deploy`](https://www.npmjs.com/package/@parity/polkadot-app-deploy) | `npm i -g @parity/polkadot-app-deploy` | Deploy CLI: uploads a built static bundle to Bulletin, binds it to a `.dot` domain, and optionally lists it. | `pad` |
 | [`@polkadot-community-foundation/cdm-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-cli) | `npm i -g @polkadot-community-foundation/cdm-cli` | Contract Dependency Manager: build, deploy, publish, register, and install PolkaVM contracts. | `cdm` |
 | [`@polkadot-community-foundation/cdm-env`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-env) | `npm i @polkadot-community-foundation/cdm-env` | Maps a network name to its Asset Hub / Bulletin RPCs, IPFS gateway, and CDM registry address. | — |
 
@@ -85,8 +85,8 @@ The host-side stack and shared libraries live in the
 
 | CLI | Package | Bin | What it does |
 |-----|---------|-----|--------------|
-| Deploy | `@parity/polkadot-app-deploy` | `pad` | Publishes a built static bundle, stores it on Bulletin, and points a `.dot` name at it. |
-| DotNS | `@parity/dotns-cli` | `dotns` | Registers and manages `.dot` names: `register`, `lookup`, `content`, `primary`, `transfer`, `store`, `pop`, and more. |
+| Deploy | `@parity/polkadot-app-deploy` | `pad` | Publishes a built static bundle, stores it on Bulletin, and points a `.dot` domain at it. |
+| DotNS | `@polkadot-community-foundation/dotns-cli` | `dotns` | Registers and manages `.dot` domains: `register`, `lookup`, `content`, `primary`, `transfer`, `store`, `pop`, and more. |
 | CDM | `@polkadot-community-foundation/cdm-cli` | `cdm` | Builds, deploys, publishes, and registers PolkaVM contracts. |
 
 A typical deploy invocation binds a built bundle to a name on a chosen network:
@@ -118,16 +118,11 @@ are the environment your app runs in.
 
 | Entry point | Link |
 |-------------|------|
-| Polkadot app — Android (Play) | <https://play.google.com/store/apps/details?id=io.pcf.polkadotapp> |
 | Polkadot app — Android APK | <https://get.polkadotcommunity.foundation/android/latest.apk> |
 | Polkadot app — iOS TestFlight | <https://testflight.apple.com/join/VvC8SHVE> |
 | Polkadot app — Desktop | <https://polkadotcommunity.foundation/desktop/> |
 | Web gateway | <https://dev-dot.li> |
 | Devnet faucet | <https://faucet.polkadot.io> |
-
-!!! note
-    Some Devnet builds also auto-fund newly created accounts, so you may not
-    need the faucet for a first run.
 
 ## Reference apps
 
@@ -140,7 +135,10 @@ the packages above.
 | DotNS UI | <https://dotns.dev-dot.li> |
 | CDM Frontend | <https://contracts.dev-dot.li> |
 | Playground template | <https://playground-template.dev-dot.li> |
+| Playground | <https://playground.dev-dot.li> |
 | Simple Survey | <https://survey.dev-dot.li> |
+| Mercado (marketplace) | <https://mercado.dev-dot.li> |
+| localdot (local marketplace) | <https://localmarket.dev-dot.li> |
 
 ## Source repositories
 
@@ -156,5 +154,5 @@ for this reference page. Product and tooling repositories are linked under
 - DotNS contracts and SDK: <https://github.com/paritytech/dotns> · <https://github.com/paritytech/dotns-sdk>
 - Deploy CLI source: <https://github.com/paritytech/polkadot-app-deploy>
 - CDM source: <https://github.com/paritytech/contract-dependency-manager>
-- npm: [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) · [`@novasamatech/host-api`](https://www.npmjs.com/package/@novasamatech/host-api) · [`@parity/dotns-cli`](https://www.npmjs.com/package/@parity/dotns-cli) · [`@parity/polkadot-app-deploy`](https://www.npmjs.com/package/@parity/polkadot-app-deploy) · [`@polkadot-community-foundation/cdm-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-cli) · [`@polkadot-community-foundation/cdm-env`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-env)
+- npm: [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) · [`@novasamatech/host-api`](https://www.npmjs.com/package/@novasamatech/host-api) · [`@polkadot-community-foundation/dotns-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli) · [`@parity/polkadot-app-deploy`](https://www.npmjs.com/package/@parity/polkadot-app-deploy) · [`@polkadot-community-foundation/cdm-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-cli) · [`@polkadot-community-foundation/cdm-env`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-env)
 - Official Polkadot developer docs: <https://docs.polkadot.com>

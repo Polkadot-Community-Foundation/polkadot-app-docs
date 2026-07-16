@@ -2,7 +2,7 @@
 
 Claim a human-readable **username** in the Polkadot app and understand the
 **proof-of-personhood** tier attached to it. Some features, such as reserving
-certain `.dot` names or using apps that allow only one action per person, need
+certain `.dot` domains or using apps that allow only one action per person, need
 that signal before they can treat an account as a distinct human.
 
 !!! note "This is a devnet"
@@ -38,8 +38,8 @@ whether you have no personhood, Lite personhood, or Full personhood.
 You need an account with a small amount of devnet funds. If you have not set
 one up yet, follow [Create an account & get funds](create-account.md) first.
 
-- Get the app: Android
-  <https://play.google.com/store/apps/details?id=io.pcf.polkadotapp>,
+- Get the app: Android (direct APK)
+  <https://get.polkadotcommunity.foundation/android/latest.apk>,
   iOS <https://testflight.apple.com/join/VvC8SHVE>,
   Desktop <https://polkadotcommunity.foundation/desktop/>,
   or the web gateway <https://dev-dot.li>.
@@ -51,28 +51,34 @@ one up yet, follow [Create an account & get funds](create-account.md) first.
 2. Enter a base name. The app validates it for you and will tell you if the
    name is unavailable or does not meet the network's formatting rules.
 3. The app pairs your base name with a two-digit suffix (for example,
-   `alice.07`). The suffix `00` is never used, and the app skips digits that are
-   already taken, so distinct people can share the same base name.
+   `alicia.07`). The suffix `00` is never used, and the app skips digits that are
+   already taken, so distinct people can share the same base name. Base names
+   need at least six lowercase letters.
 4. Confirm. The app signs the registration request **on your device** — your
-   keys never leave it — and submits it. Nothing is sent to a server to sign on
-   your behalf.
+   keys never leave it. It does not submit the registration directly: instead it
+   sends the signed request to the network's attester service (the identity
+   backend), which vouches for you and submits it to the People chain on your
+   behalf.
 5. Wait for the registration to finalize on-chain. Once it does, you are a
    **lite person** and your username is live.
 
-Behind the scenes, the app records your username on the People chain. Your
-username can also be reflected into `.dot` naming so it works across app and
-discovery flows.
+Behind the scenes, the app sends your signed request to the attester service,
+which records your username on the People chain. Your username can also be
+reflected into `.dot` naming so it works across app and discovery flows.
 
 ```mermaid
 sequenceDiagram
     participant You as You (device)
     participant App as Polkadot app
+    participant Attester as Attester (identity backend)
     participant People as People chain
-    participant DotNS as Asset Hub (.dot names)
+    participant DotNS as Asset Hub (.dot domains)
     You->>App: Choose base name, confirm
     You->>App: Sign registration on device
-    App->>People: Register you as a lite person
-    People-->>App: Finalized
+    App->>Attester: Send signed request
+    Attester->>People: Vouch & register you as a lite person
+    People-->>Attester: Finalized
+    Attester-->>App: Registration confirmed
     People-->>DotNS: Username can be reflected into .dot naming
 ```
 
@@ -93,11 +99,12 @@ rather than letting one user act many times from many accounts. Because apps
 read your tier (and a privacy-preserving alias) directly from the chain, they
 can enforce these limits without ever learning your identity.
 
-Reserving a name is also tied to your registration: claiming your username is
-what puts a matching `.dot` name in your name. More desirable or scarce names
-may be gated behind a personhood tier, so completing this flow is what unlocks
-them. To learn how naming works, see
-[Register a .dot name](register-a-dot-name.md).
+Reserving a name can also be tied to your registration: claiming your username
+can also reserve a matching `.dot` domain in your name when `.dot` reflection is
+enabled on the current devnet build. More desirable or scarce names may be gated
+behind a personhood tier, so completing this flow is what unlocks them. To learn
+how naming works, see
+[Register a .dot domain](register-a-dot-name.md).
 
 ## If something blocks you
 
@@ -114,7 +121,7 @@ them. To learn how naming works, see
 
 - [Identity & personhood architecture](../architecture/identity.md)
 - [Naming (DotNS) architecture](../architecture/naming.md)
-- [Register a .dot name](register-a-dot-name.md)
+- [Register a .dot domain](register-a-dot-name.md)
 - Personhood source: <https://github.com/paritytech/individuality-community>
 - Identity backend source: <https://github.com/paritytech/identity-backend-community>
 - Polkadot developer docs: <https://docs.polkadot.com>

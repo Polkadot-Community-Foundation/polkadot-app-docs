@@ -2,7 +2,7 @@
 
 Browse is the app-discovery directory for the Polkadot Products Devnet. Listing
 your app means publishing a small on-chain record that points directory clients
-back to the `.dot` name and its manifest. This page covers the permission model,
+back to the `.dot` domain and its manifest. This page covers the permission model,
 the CLI path, and how to verify or retract a listing.
 
 !!! note "This is a devnet"
@@ -21,7 +21,7 @@ the on-chain entry by labelhash in the client.
 
 That means listing has two parts:
 
-1. Your app is already deployed to a `.dot` name (its content root is written as
+1. Your app is already deployed to a `.dot` domain (its content root is written as
    a `contenthash`, and a root `manifest` text record carries the display
    metadata).
 2. You call `Publisher.publish("<label>")` so directory clients like Browse can
@@ -74,7 +74,7 @@ flowchart TD
 You will need:
 
 - A built static bundle for your app (for example a Vite `dist/` directory).
-- A `.dot` name you own on the devnet, and proof of personhood on the account
+- A `.dot` domain you own on the devnet, and proof of personhood on the account
   that will publish. See [Username & proof of personhood](username-and-personhood.md).
 - The deploy CLI installed:
 
@@ -97,7 +97,7 @@ You will need:
     If your app has no manifest, it can still be published, but it will not
     hydrate into a rich card.
 
-## Step 1 — Deploy your app to its `.dot` name
+## Step 1 — Deploy your app to its `.dot` domain
 
 If your app is not deployed yet, deploy it first. The CLI merkleizes your
 bundle, uploads it to the Bulletin Chain, and writes the content root as the
@@ -167,7 +167,7 @@ or rate limit on removal.
 
 - Browse reference app (devnet): <https://browse.dev-dot.li>
 - [Build and publish your app](build-and-publish.md)
-- [Register a `.dot` name](register-a-dot-name.md)
+- [Register a `.dot` domain](register-a-dot-name.md)
 - [Discover and open apps](discover-and-open-apps.md)
 - [App delivery architecture](../architecture/app-delivery.md)
 - [Discovery architecture](../architecture/discovery.md)

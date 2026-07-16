@@ -28,9 +28,9 @@ The platform is a small set of cooperating layers:
   clients (Android, iOS, Desktop/Web) that hold keys on-device and host dApps in
   a sandboxed webview via a shared JavaScript **Host API**.
 - **Naming** — [DotNS](naming.md), a set of PolkaVM contracts that
-  turn a `.dot` name into an owner, a resolver, and a content hash.
+  turn a `.dot` domain into an owner, a resolver, and a content hash.
 - **App delivery** — the [`pad` CLI](app-delivery.md) uploads a
-  static bundle to Bulletin and binds its CID to a `.dot` name; the
+  static bundle to Bulletin and binds its CID to a `.dot` domain; the
   [dotli gateway](app-delivery.md) resolves and renders it.
 - **Smart contracts & CDM** — [contracts](contracts.md) are PolkaVM
   bytecode on Asset Hub, deployed and indexed by the Contract Dependency Manager.
@@ -55,7 +55,7 @@ flowchart TD
   subgraph Dev["Developer tooling (npm)"]
     SDK["@parity/product-sdk"]
     PAD["polkadot-app-deploy (pad)"]
-    DOTNS["@parity/dotns-cli"]
+    DOTNS["@polkadot-community-foundation/dotns-cli"]
     CDM["@polkadot-community-foundation/cdm-cli"]
   end
 

@@ -36,7 +36,7 @@ The CLIs all select a network preset, but CDM uses a different flag name:
 
 ```bash
 pad ./dist my-app.dot --env devnet      # @parity/polkadot-app-deploy
-dotns ... --env devnet                  # @parity/dotns-cli
+dotns ... --env devnet                  # @polkadot-community-foundation/dotns-cli
 cdm ...  -n devnet                      # @polkadot-community-foundation/cdm-cli
 ```
 
@@ -83,7 +83,10 @@ platform:
 | DotNS UI | [https://dotns.dev-dot.li](https://dotns.dev-dot.li) |
 | CDM Frontend | [https://contracts.dev-dot.li](https://contracts.dev-dot.li) |
 | Playground template | [https://playground-template.dev-dot.li](https://playground-template.dev-dot.li) |
+| Playground | [https://playground.dev-dot.li](https://playground.dev-dot.li) |
 | Simple Survey | [https://survey.dev-dot.li](https://survey.dev-dot.li) |
+| Mercado (marketplace) | [https://mercado.dev-dot.li](https://mercado.dev-dot.li) |
+| localdot (local marketplace) | [https://localmarket.dev-dot.li](https://localmarket.dev-dot.li) |
 
 ### App installs
 
@@ -91,7 +94,6 @@ To use the Devnet as an end user, install the Polkadot app:
 
 | Platform | Link |
 | --- | --- |
-| Android (Google Play) | [play.google.com/store/apps/details?id=io.pcf.polkadotapp](https://play.google.com/store/apps/details?id=io.pcf.polkadotapp) |
 | Android (APK) | [get.polkadotcommunity.foundation/android/latest.apk](https://get.polkadotcommunity.foundation/android/latest.apk) |
 | iOS (TestFlight) | [testflight.apple.com/join/VvC8SHVE](https://testflight.apple.com/join/VvC8SHVE) |
 | Desktop | [polkadotcommunity.foundation/desktop/](https://polkadotcommunity.foundation/desktop/) |
@@ -99,8 +101,18 @@ To use the Devnet as an end user, install the Polkadot app:
 ### Faucet
 
 Devnet accounts can be funded from the Polkadot faucet at
-[https://faucet.polkadot.io](https://faucet.polkadot.io). Some Devnet builds also
-auto-fund newly created accounts, so you may not need the faucet for a first run.
+[https://faucet.polkadot.io](https://faucet.polkadot.io). The faucet provides
+**native tokens** (for transaction fees and account existence) only.
+
+### Storage authorization
+
+Publishing an app writes to the Bulletin Chain, which is **authorization-based**,
+not fee-based. A deploy account needs an authorization grant (a byte / transaction
+quota) issued by the network's authorizer — it is not obtained from the faucet and
+cannot be self-granted. Request it from the network operators, and inspect an
+account's grant in the
+[Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations).
+See [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization).
 
 ### Node RPC endpoints
 

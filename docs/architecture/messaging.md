@@ -94,8 +94,10 @@ flowchart TD
 
 ## Desktop specifics and device sync
 
-Desktop chat and device sync use the same broad building blocks, but call
-initiation is primarily a mobile-app flow in the current Devnet experience.
+Voice and video calls are a **mobile-only** feature today. The desktop build has
+no call UI and cannot initiate or answer calls. Desktop uses WebRTC only for
+device sync and peer-to-peer chat; it shares the same broad building blocks for
+chat and sync, but calling stays on the mobile app.
 
 ## Common blockers
 
@@ -105,8 +107,8 @@ initiation is primarily a mobile-app flow in the current Devnet experience.
   present before the content is available from Bulletin-backed storage.
 - **A call connects only through a relay.** That is expected on some networks;
   TURN credentials are platform-provided and can change.
-- **Desktop call behavior differs from mobile.** Treat mobile as the primary
-  call surface unless a specific Desktop build documents otherwise.
+- **You want to place a call from desktop.** Calling is mobile-only today; the
+  desktop build has no call UI. Use the mobile app to start or answer calls.
 
 ## Learn more
 

@@ -42,7 +42,7 @@ funds, and open your first `.dot` app.
 ### Build a Product
 
 Create a static web app, connect to the Host API and Product SDK, register a
-`.dot` name, and publish through `pad`.
+`.dot` domain, and publish through `pad`.
 
 [Get started as a developer](getting-started/developers.md)
 </div>
@@ -90,7 +90,7 @@ and terms used across the docs.
 - [Get & use CASH](guides/get-and-use-cash.md)
 - [Discover & open apps](guides/discover-and-open-apps.md)
 - [Build & publish a dApp](guides/build-and-publish.md)
-- [Register a `.dot` name](guides/register-a-dot-name.md)
+- [Register a `.dot` domain](guides/register-a-dot-name.md)
 - [Use platform services from the SDK](guides/platform-services-sdk.md)
 
 </div>

@@ -35,7 +35,7 @@ npm i @polkadot-community-foundation/cdm-env
 
 # Command-line tools
 npm i -g @parity/polkadot-app-deploy
-npm i -g @parity/dotns-cli
+npm i -g @polkadot-community-foundation/dotns-cli
 npm i -g @polkadot-community-foundation/cdm-cli
 ```
 
@@ -45,8 +45,7 @@ npm i -g @polkadot-community-foundation/cdm-cli
 
 ### Entry points
 
-- Polkadot app on [Google Play](https://play.google.com/store/apps/details?id=io.pcf.polkadotapp)
-  or as a direct [Android APK](https://get.polkadotcommunity.foundation/android/latest.apk)
+- Polkadot app as a direct [Android APK](https://get.polkadotcommunity.foundation/android/latest.apk)
 - [iOS TestFlight](https://testflight.apple.com/join/VvC8SHVE)
 - [Desktop app](https://polkadotcommunity.foundation/desktop/)
 - Web gateway: [dev-dot.li](https://dev-dot.li)
@@ -60,7 +59,10 @@ npm i -g @polkadot-community-foundation/cdm-cli
 | DotNS UI | <https://dotns.dev-dot.li> |
 | CDM Frontend | <https://contracts.dev-dot.li> |
 | Playground template | <https://playground-template.dev-dot.li> |
+| Playground | <https://playground.dev-dot.li> |
 | Simple Survey | <https://survey.dev-dot.li> |
+| Mercado (marketplace) | <https://mercado.dev-dot.li> |
+| localdot (local marketplace) | <https://localmarket.dev-dot.li> |
 
 ## Learn more
 

@@ -13,20 +13,24 @@ There are three practical entry points:
 
 - **Browse** — the app-discovery directory at
   <https://browse.dev-dot.li>. Search and pick from the list.
-- **A `.dot` name** — each published app has a name such as `survey.dot`. You
-  can type it into the Polkadot app's browser.
+- **A `.dot` domain** — each published app has a name such as `survey.dot`. On the
+  desktop app you can type it into the address bar. The mobile app has no
+  general address bar, so on mobile you open apps from Browse or by following a
+  `.dot` / `.dot.li` link.
 - **A `dev-dot.li` link** — the web gateway serves each app at
   `https://<name>.dev-dot.li` (for example
   <https://survey.dev-dot.li>). Open it in an ordinary browser.
 
-You reach the platform through the [Polkadot app](https://play.google.com/store/apps/details?id=io.pcf.polkadotapp)
-(mobile and desktop) or the web gateway at <https://dev-dot.li>. If you do not
-have the app yet, see [Create an account & get funds](create-account.md) for
-install links.
+You reach the platform through the Polkadot app (mobile and desktop) or the web
+gateway at <https://dev-dot.li>. If you do not have the app yet, see
+[Create an account & get funds](create-account.md) for install links (Android
+direct APK, iOS TestFlight, and desktop).
 
 ## Find Products in Browse
 
-Browse is a read-only directory of the apps currently published on the network.
+Browse is a directory of the apps currently published on the network. You cannot
+publish an app from Browse, but when you are signed in you can recommend (attest
+to) and bookmark apps, so it is not strictly read-only.
 
 1. Open <https://browse.dev-dot.li>, or find **Browse** inside the Polkadot app.
 2. Use search and categories to narrow the list. Each app is shown with a name,
@@ -39,11 +43,13 @@ Browse reads the Devnet publishing registry and the names attached to published
 apps. For the technical path behind that list, see
 [Discovery architecture](../architecture/discovery.md).
 
-## Open an app by `.dot` name
+## Open an app by `.dot` domain
 
-Inside the Polkadot app's browser you can go straight to a name:
+On the **desktop** app you can go straight to a name:
 
-1. Type the app's name — for example `survey.dot` — into the address bar.
+1. Type the app's name — for example `survey.dot` — into the address bar. (The
+   mobile app has no general address bar; on mobile, open the app from Browse or
+   by following a link instead.)
 2. The app resolves the name, fetches the app bundle, and opens it in a
    sandboxed webview.
 
@@ -56,10 +62,13 @@ These apps are deployed on the devnet and are a good starting point:
 
 | App | Link |
 | --- | --- |
-| DotNS UI (manage `.dot` names) | <https://dotns.dev-dot.li> |
+| DotNS UI (manage `.dot` domains) | <https://dotns.dev-dot.li> |
 | Simple Survey | <https://survey.dev-dot.li> |
 | Playground template | <https://playground-template.dev-dot.li> |
 | CDM Frontend (contracts) | <https://contracts.dev-dot.li> |
+| Playground | <https://playground.dev-dot.li> |
+| Mercado marketplace | <https://mercado.dev-dot.li> |
+| localdot marketplace | <https://localmarket.dev-dot.li> |
 
 ## What happens when you open an app
 
@@ -68,7 +77,7 @@ content in an isolated container:
 
 ```mermaid
 flowchart TD
-  U[You open a .dot name] --> R[Resolve the name]
+  U[You open a .dot domain] --> R[Resolve the name]
   R --> C[Find the published app bundle]
   C --> A[Fetch the app content]
   A --> S[Run in a sandboxed webview]
@@ -86,7 +95,10 @@ Two properties matter for you as a user:
 
 !!! tip "Opening one app from another"
     Inside the Polkadot app, app-to-app navigation stays inside the host. In a
-    plain browser, the same action opens the app's web-gateway link instead.
+    plain browser, the same action opens the app's web-gateway link instead —
+    but note that Browse's plain-web-browser cards currently point at the
+    production `.dot.li` gateway. To stay on the devnet, open the
+    `https://<name>.dev-dot.li` address instead.
 
 ## Learn more
 

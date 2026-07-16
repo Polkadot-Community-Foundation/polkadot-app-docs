@@ -27,7 +27,6 @@ The end-user client for the platform, available on mobile and desktop. Apps run
 inside it, and the app brokers signing, storage, chain access, and identity on
 the user's behalf. Installs:
 
-- Android (Google Play): <https://play.google.com/store/apps/details?id=io.pcf.polkadotapp>
 - Android APK: <https://get.polkadotcommunity.foundation/android/latest.apk>
 - iOS TestFlight: <https://testflight.apple.com/join/VvC8SHVE>
 - Desktop: <https://polkadotcommunity.foundation/desktop/>
@@ -35,12 +34,12 @@ the user's behalf. Installs:
 ### dot.li
 
 The web gateway that serves `.dot` apps in an ordinary browser. On this Devnet
-it is reachable at <https://dev-dot.li>. The gateway resolves a `.dot` name,
+it is reachable at <https://dev-dot.li>. The gateway resolves a `.dot` domain,
 fetches the app bundle, and renders it in a sandboxed iframe.
 
 ## Naming and discovery
 
-### `.dot` name
+### `.dot` domain
 
 A human-readable name, such as `survey.dot`, that maps to a deployed app bundle.
 For most users it works like an app name. For developers it is the name you
@@ -52,7 +51,7 @@ The `.dot` naming system. Use DotNS when you need to register an app name, point
 that name at content, or look up where an app is published. See the
 [naming architecture](../architecture/naming.md).
 
-- DotNS CLI: `npm i -g @parity/dotns-cli`
+- DotNS CLI: `npm i -g @polkadot-community-foundation/dotns-cli`
 - Reference UI: <https://dotns.dev-dot.li>
 
 ### Browse / Publisher
@@ -60,7 +59,7 @@ that name at content, or look up where an app is published. See the
 Browse is the app-discovery directory for the Devnet
 (<https://browse.dev-dot.li>). Use it to find published Products, or to check
 that your own app appears after you list it. Publishing requires ownership of the
-`.dot` name and may require personhood checks.
+`.dot` domain and may require personhood checks.
 
 ## Contracts
 
@@ -118,7 +117,7 @@ npm i @novasamatech/host-api
 ### Deploy CLI (`pad`)
 
 `@parity/polkadot-app-deploy` (bin: `pad`) is the CLI that publishes a built
-static bundle and points a `.dot` name at it.
+static bundle and points a `.dot` domain at it.
 
 ```bash
 npm i -g @parity/polkadot-app-deploy
@@ -157,7 +156,7 @@ current build.
 - Product SDK: <https://www.npmjs.com/package/@parity/product-sdk>
 - Host API: <https://www.npmjs.com/package/@novasamatech/host-api>
 - Deploy CLI: <https://www.npmjs.com/package/@parity/polkadot-app-deploy>
-- DotNS CLI: <https://www.npmjs.com/package/@parity/dotns-cli>
+- DotNS CLI: <https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli>
 - CDM CLI: <https://www.npmjs.com/package/@polkadot-community-foundation/cdm-cli>
 - Chain runtimes (paseo-network): <https://github.com/paseo-network/runtimes>
 - Official Polkadot developer docs: <https://docs.polkadot.com>

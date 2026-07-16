@@ -1,7 +1,7 @@
 # Build & publish a dApp
 
 This is the full publishing path for a first Product app: start from a Product
-SDK frontend, build a static bundle, register a `.dot` name, and publish with
+SDK frontend, build a static bundle, register a `.dot` domain, and publish with
 the `pad` deploy CLI. When it works, the app is reachable as `<name>.dot` inside
 the Polkadot app and at `https://<name>.dev-dot.li` on the web gateway.
 
@@ -40,7 +40,7 @@ Install the SDK and the CLIs you will use:
 ```bash
 npm i @parity/product-sdk
 npm i -g @parity/polkadot-app-deploy   # deploy CLI (bin: pad)
-npm i -g @parity/dotns-cli             # DotNS CLI (bin: dotns)
+npm i -g @polkadot-community-foundation/dotns-cli             # DotNS CLI (bin: dotns)
 npm i -g @polkadot-community-foundation/cdm-cli               # contract manifest CLI (bin: cdm)
 ```
 
@@ -49,12 +49,38 @@ The publishing CLIs (`pad` and `dotns`) select a network with
 name for the public devnet is provided by the team operating the network — see
 [Networks & endpoints](../reference/networks.md).
 
-!!! warning "You need storage authorization"
-    The deploy account must own the `.dot` name and hold a live Bulletin
-    storage authorization (`TransactionStorage.Authorizations`). The CLI never
-    self-authorizes and fails fast if the authorization is missing or expired;
-    the network operator grants quota. Fund the account from the
-    [faucet](https://faucet.polkadot.io) first.
+!!! warning "Two prerequisites for publishing"
+    Your deploy account must (1) **own** the target `.dot` domain and (2) hold a
+    live **Bulletin storage authorization**. `pad` never self-authorizes and fails
+    fast if the authorization is missing or expired. See
+    [Get storage authorization](#get-storage-authorization) below.
+
+## Get storage authorization
+
+Publishing writes your app to the **Bulletin Chain**, and Bulletin storage is
+**authorization-based, not fee-based**. Before `pad` can upload, your deploy
+account needs a live storage *authorization*: an on-chain quota of bytes and
+transactions, recorded in `TransactionStorage.Authorizations`. You do **not** pay
+devnet tokens per upload.
+
+You cannot grant this to yourself. Authorizations are issued by the network's
+**authorizer** — an operator role — with the `authorize_account(who, transactions,
+bytes)` call. On the devnet, request authorization for your deploy account from the
+team operating the network; they run the grant for you. You can check whether an
+account is authorized, and when its grant expires, in the Bulletin Chain Console:
+
+- Bulletin Chain Console — [authorizations view](https://paritytech.github.io/polkadot-bulletin-chain/authorizations)
+- How authorizations work — [polkadot-bulletin-chain](https://github.com/paritytech/polkadot-bulletin-chain)
+
+!!! note "Authorization is not the faucet"
+    The [faucet](https://faucet.polkadot.io) provides **native devnet tokens** for
+    transaction fees and account existence — it does **not** grant storage
+    authorization. Publishing typically needs both: native tokens to sign the
+    on-chain transactions, and a Bulletin authorization to upload the bundle.
+
+Authorizations are finite and expire; refreshing them is also an authorizer
+action. If a deploy account that used to work starts failing at the upload step,
+its authorization has most likely lapsed — ask the operator to refresh it.
 
 ## 1. Scaffold with the Product SDK
 
@@ -90,7 +116,7 @@ and register its PolkaVM contracts first and record them in a `cdm.json`
 manifest with the `cdm` CLI — see
 [Deploy & register contracts](deploy-contracts-cdm.md).
 
-## 3. Register a .dot name
+## 3. Register a .dot domain
 
 Names are `.dot` domains managed by DotNS. Check availability and register with
 the DotNS CLI:
@@ -102,7 +128,7 @@ dotns register <name>.dot --env <network>
 
 Label eligibility depends on length and personhood tier — short or reserved
 names are gated behind proof of personhood. See
-[Register a .dot name](register-a-dot-name.md) and the
+[Register a .dot domain](register-a-dot-name.md) and the
 [Naming architecture](../architecture/naming.md) for the full rules.
 
 !!! tip
@@ -144,13 +170,13 @@ These are working, deployed examples (source under
 
 ## Learn more
 
-- [Register a .dot name](register-a-dot-name.md)
+- [Register a .dot domain](register-a-dot-name.md)
 - [Deploy & register contracts](deploy-contracts-cdm.md)
 - [Use platform services from the SDK](platform-services-sdk.md)
 - [App delivery architecture](../architecture/app-delivery.md)
 - npm: [@parity/product-sdk](https://www.npmjs.com/package/@parity/product-sdk),
   [@parity/polkadot-app-deploy](https://www.npmjs.com/package/@parity/polkadot-app-deploy),
-  [@parity/dotns-cli](https://www.npmjs.com/package/@parity/dotns-cli)
+  [@polkadot-community-foundation/dotns-cli](https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli)
 - Source: [product-sdk](https://github.com/paritytech/product-sdk),
   [polkadot-app-deploy](https://github.com/paritytech/polkadot-app-deploy),
   [dotli-starter](https://github.com/paritytech/dotli-starter)

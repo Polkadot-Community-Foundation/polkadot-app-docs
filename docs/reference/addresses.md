@@ -22,7 +22,7 @@ source of truth before you build anything around a fixed value.
 ## The deployments register (authoritative)
 
 The authoritative list of live addresses, CIDs, genesis hashes, RPC endpoints,
-and `.dot` names is the
+and `.dot` domains is the
 [`summit-net-deployments`](https://github.com/paritytech/summit-net-deployments)
 register:
 
@@ -76,8 +76,7 @@ represented on the People chain for app-facing CASH flows.
 Asset IDs and People-chain representations are recorded in the register's
 `DEVNET.md`. The native token is PAS with 10 decimals; Devnet tokens carry no
 value. You can obtain Devnet funds from the
-[Polkadot faucet](https://faucet.polkadot.io), and some builds also auto-fund new
-accounts.
+[Polkadot faucet](https://faucet.polkadot.io).
 
 ## On-chain registries
 
@@ -87,7 +86,7 @@ you are targeting.
 
 ### DotNS (the `.dot` naming system)
 
-DotNS resolves a `.dot` name to an app bundle and records ownership. For most
+DotNS resolves a `.dot` domain to an app bundle and records ownership. For most
 developers, the important idea is simple: a name points to content, and the
 gateway uses that record to load the app.
 

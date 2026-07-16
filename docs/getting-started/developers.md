@@ -1,7 +1,7 @@
 # Getting Started for Developers
 
 This path is for building a first Product on the **Polkadot Products Devnet**.
-The basic loop is small: build a static web app, give it a `.dot` name, publish
+The basic loop is small: build a static web app, give it a `.dot` domain, publish
 the bundle, and use the SDK when the app needs platform services.
 
 !!! note "This is a devnet"
@@ -13,7 +13,7 @@ the bundle, and use the SDK when the app needs platform services.
 ```mermaid
 flowchart LR
   A[Build web app<br/>@parity/product-sdk] --> B[Produce static dist/]
-  B --> C[Register a .dot name<br/>@parity/dotns-cli]
+  B --> C[Register a .dot domain<br/>@polkadot-community-foundation/dotns-cli]
   C --> D[Publish bundle to Bulletin<br/>+ bind name<br/>pad]
   D --> E[Live at name.dot in the app<br/>and https://name.dev-dot.li]
   A -. optional .-> F[Deploy contracts<br/>cdm]
@@ -24,7 +24,7 @@ A Product is a **static web app**: HTML, CSS, and JavaScript. It runs inside a
 host — the Polkadot app or the web gateway at
 [https://dev-dot.li](https://dev-dot.li) — which provides the wallet, signing
 prompts, storage, and chain access. Publishing means making the bundle available
-on the Devnet and pointing a `.dot` name at it.
+on the Devnet and pointing a `.dot` domain at it.
 
 ## 1. Install the tooling
 
@@ -38,7 +38,7 @@ npm i @parity/product-sdk
 npm i @novasamatech/host-api
 
 # CLIs (install globally)
-npm i -g @parity/dotns-cli          # dotns — register/manage .dot names
+npm i -g @polkadot-community-foundation/dotns-cli          # dotns — register/manage .dot domains
 npm i -g @parity/polkadot-app-deploy # pad   — publish app bundles
 npm i -g @polkadot-community-foundation/cdm-cli            # cdm    — build/deploy/register contracts
 ```
@@ -78,9 +78,9 @@ const cid = await app.cloudStorage.upload("hello world");
 
 Build your app to a static directory (the reference template uses `vite build` → `dist/`).
 
-## 4. Register a `.dot` name
+## 4. Register a `.dot` domain
 
-Your deploy account must **own** the `.dot` name before you can publish to it.
+Your deploy account must **own** the `.dot` domain before you can publish to it.
 Register it with the DotNS CLI.
 
 ```bash
@@ -93,7 +93,7 @@ characters. Short or reserved names are gated by proof of personhood. See
 
 ## 5. Publish the bundle with `pad`
 
-`pad` publishes your static build and updates the `.dot` name so clients know
+`pad` publishes your static build and updates the `.dot` domain so clients know
 which bundle to open.
 
 ```bash
@@ -128,14 +128,17 @@ Browse published contracts at
 
 - Browse (app directory) — [https://browse.dev-dot.li](https://browse.dev-dot.li)
 - DotNS UI — [https://dotns.dev-dot.li](https://dotns.dev-dot.li)
+- Playground — [https://playground.dev-dot.li](https://playground.dev-dot.li)
 - Simple Survey — [https://survey.dev-dot.li](https://survey.dev-dot.li)
+- Mercado (marketplace) — [https://mercado.dev-dot.li](https://mercado.dev-dot.li)
+- localdot (local marketplace) — [https://localmarket.dev-dot.li](https://localmarket.dev-dot.li)
 
-To test as an end user, install the app: [Android (Play)](https://play.google.com/store/apps/details?id=io.pcf.polkadotapp), [Android APK](https://get.polkadotcommunity.foundation/android/latest.apk), [iOS TestFlight](https://testflight.apple.com/join/VvC8SHVE), or [Desktop](https://polkadotcommunity.foundation/desktop/). Fund a devnet account at the [faucet](https://faucet.polkadot.io) (some builds also auto-fund new accounts). See [Getting started for users](users.md).
+To test as an end user, install the app: [Android APK](https://get.polkadotcommunity.foundation/android/latest.apk), [iOS TestFlight](https://testflight.apple.com/join/VvC8SHVE), or [Desktop](https://polkadotcommunity.foundation/desktop/). Fund a devnet account at the [faucet](https://faucet.polkadot.io) for native tokens, or use the in-app CASH top-up. See [Getting started for users](users.md).
 
 ## Learn more
 
 - Guide: [Build & publish a dApp](../guides/build-and-publish.md)
-- Guide: [Register a .dot name](../guides/register-a-dot-name.md)
+- Guide: [Register a .dot domain](../guides/register-a-dot-name.md)
 - Guide: [Deploy & register contracts](../guides/deploy-contracts-cdm.md)
 - Guide: [Use platform services from the SDK](../guides/platform-services-sdk.md)
 - Architecture: [App delivery](../architecture/app-delivery.md) · [Naming (DotNS)](../architecture/naming.md) · [Smart contracts & CDM](../architecture/contracts.md)

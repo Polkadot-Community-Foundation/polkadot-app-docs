@@ -30,20 +30,24 @@ You can install the app from the following locations. The Desktop build also run
 web application, and the same product suite is reachable through the web gateway at
 [https://dev-dot.li](https://dev-dot.li).
 
-- Android (Play): <https://play.google.com/store/apps/details?id=io.pcf.polkadotapp>
 - Android APK: <https://get.polkadotcommunity.foundation/android/latest.apk>
 - iOS TestFlight: <https://testflight.apple.com/join/VvC8SHVE>
 - Desktop: <https://polkadotcommunity.foundation/desktop/>
 
 ## Wallet and account management
 
-Accounts are created and stored on-device; the clients are self-custodial. Keys are held
-in the platform's hardware-backed secure storage (the Android keystore, or the iOS Secure
-Enclave and Keychain), and recovery is offered through the device's cloud backup
-(Google Drive on Android, iCloud on iOS). Signing always happens locally: when a dApp or
-an in-app action needs a signature, the app presents a modal, and only on your approval
-does the on-device key sign the payload. Some devnet builds also auto-fund new accounts;
-otherwise you can top up from the faucet at <https://faucet.polkadot.io>.
+On mobile (Android, iOS), accounts are created and stored on-device and the app is
+self-custodial. Keys are held in the platform's hardware-backed secure storage (the
+Android keystore, or the iOS Keychain), and recovery is offered through the device's
+cloud backup (Google Drive on Android, iCloud on iOS). On mobile, signing happens
+locally: when a dApp or an in-app action needs a signature, the app presents a modal, and
+only on your approval does the on-device key sign the payload.
+
+The desktop/web client holds no keys of its own. It is a companion: you pair it with your
+phone (scan a pairing code) and signing happens on the phone. Nothing funds a brand-new
+account automatically. On devnet (non-production) builds you can top up your account with
+test tokens using the manual "+" (top-up) action; for native devnet tokens to pay
+transaction fees you can also use the faucet at <https://faucet.polkadot.io>.
 
 The identity, chat, and payment features map onto specific parachains: the People Chain
 carries your username and the chat statement store, Asset Hub carries payments and the
@@ -51,7 +55,7 @@ DotNS name registry, and the Bulletin Chain serves dApp content and chat attachm
 
 ## The app browser and the client layers
 
-The in-app browser addresses dApps by `.dot` name rather than by URL. A name is
+The in-app browser addresses dApps by `.dot` domain rather than by URL. A name is
 resolved through DotNS, the referenced content archive is fetched from Bulletin
 or a gateway, and the archive runs inside a sandboxed webview. The app injects a
 Host API bridge so Products can ask the host for account, signing, chain,
@@ -59,7 +63,7 @@ permission, storage, theme, notification, payment, and navigation services.
 
 ```mermaid
 flowchart TD
-  U[User opens .dot name] --> R[Resolve through DotNS]
+  U[User opens .dot domain] --> R[Resolve through DotNS]
   R --> A[Fetch app bundle]
   A --> S[Run in sandboxed webview]
   S --> C[Host API bridge]

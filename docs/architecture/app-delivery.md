@@ -2,12 +2,12 @@
 
 This page follows a built frontend as it becomes a live app on the Polkadot
 Products Devnet. The path is concrete: publish a static bundle with the `pad`
-CLI, store the content on the Bulletin chain, bind a `.dot` name to it, and load
+CLI, store the content on the Bulletin chain, bind a `.dot` domain to it, and load
 it through the `dev-dot.li` gateway or the Polkadot app.
 
 App delivery is deliberately layered so that no single server sits between a user
 and an app. Content lives on-chain (Bulletin), the pointer to it lives on-chain
-(a `.dot` name resolver on Asset Hub), and the loader is a client-side program
+(a `.dot` domain resolver on Asset Hub), and the loader is a client-side program
 that reads both directly.
 
 ## The two pipelines at a glance
@@ -45,21 +45,27 @@ pad ./dist my-app.dot --env <network>
 ```
 
 The CLI prepares the static bundle, uploads the content, and binds the resulting
-content identifier to the `.dot` name. Re-publishing the same app updates that
+content identifier to the `.dot` domain. Re-publishing the same app updates that
 name to point at the new content.
 
 ### Bulletin storage and upload authorization
 
 Content is stored on the Bulletin chain. Uploads are authorization-based rather
 than fee-based: the deploy account needs upload quota, but does not pay devnet
-tokens for each bundle.
+tokens for each bundle. Quota is granted by the network's **authorizer** (an
+operator role) via `authorize_account`; a publisher cannot self-authorize. On the
+devnet you request authorization for your deploy account from the operators, and
+can inspect it in the [Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations).
+See [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization)
+for the practical steps. This is separate from the token
+[faucet](https://faucet.polkadot.io), which only provides native tokens for fees.
 
 !!! note
     Authorizations are finite and expire. If a previously working deploy
     account starts failing at the upload step, its authorization likely lapsed
     and must be refreshed before uploads resume.
 
-### Binding the `.dot` name
+### Binding the `.dot` domain
 
 Once the content CID exists, the CLI checks whether the signer owns the `.dot`
 name. If the name is available, it can register it; if the signer already owns
@@ -104,7 +110,7 @@ Polkadot app it is `<label>.dot`.
 ## Common blockers
 
 - **Upload fails.** The deploy account may need Bulletin storage authorization.
-- **The name cannot be updated.** The signer must own the `.dot` name.
+- **The name cannot be updated.** The signer must own the `.dot` domain.
 - **The app opens but has stale content.** Confirm the name's content hash points
   to the latest CID and that the gateway is resolving the expected network.
 - **The app is live but hard to find.** Use `--publish` so Browse can list it.

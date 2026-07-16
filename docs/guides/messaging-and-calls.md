@@ -16,7 +16,6 @@ This page covers the user-facing flow and the current limits of each client.
 
 You will need the Polkadot app installed and an on-device account:
 
-- Android (Play): <https://play.google.com/store/apps/details?id=io.pcf.polkadotapp>
 - Android APK: <https://get.polkadotcommunity.foundation/android/latest.apk>
 - iOS (TestFlight): <https://testflight.apple.com/join/VvC8SHVE>
 - Desktop: <https://polkadotcommunity.foundation/desktop/>
@@ -26,9 +25,8 @@ to reach need an account and, in practice, to have added each other as a
 contact.
 
 !!! tip
-    Voice and video call initiation is a mobile-app feature. On Desktop you can
-    take part in chats and see call state (ringing, active, missed), but calls
-    are started from Android or iOS.
+    Voice and video calls are a mobile-only feature today. You place and receive
+    them on Android or iOS; the Desktop app has no call UI. Desktop is for chats.
 
 ## How messaging works
 
@@ -123,8 +121,8 @@ sequenceDiagram
   Caller->>SS: End call
 ```
 
-On Desktop, incoming call state is folded from the same call-signal messages and
-shown in the chat UI (ringing, active, finished, cancelled, missed).
+Calls are a mobile-only feature today: the Desktop app has no call UI, so voice
+and video calls are placed and received only on Android or iOS.
 
 ## Device sync
 
@@ -135,8 +133,8 @@ channel opens.
 
 ## Limits and honesty
 
-- Voice/video call initiation is a mobile feature; Desktop is receive/display
-  only, and Desktop attachment sending is not yet available.
+- Voice/video calls are a mobile-only feature today; the Desktop app has no call
+  UI, and Desktop attachment sending is not yet available.
 - Whether a specific call is peer-to-peer or TURN-relayed depends on your
   network; the app degrades gracefully to relaying when a direct path is not
   possible.

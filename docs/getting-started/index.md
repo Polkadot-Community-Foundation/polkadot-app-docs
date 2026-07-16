@@ -23,7 +23,7 @@ a Product that runs inside it.
 
 -   ### For developers
 
-    Build a web app, register a `.dot` name, publish it to the Devnet, and use
+    Build a web app, register a `.dot` domain, publish it to the Devnet, and use
     platform services such as accounts, signing, chains, contracts, and storage
     through the Product SDK.
 
@@ -41,24 +41,23 @@ into one public preview:
 - **Use Products** through `.dot` addresses, either in the app or
   through the web gateway at
   [dev-dot.li](https://dev-dot.li).
-- **Publish your own Product** as a static web app and bind it to a `.dot` name
+- **Publish your own Product** as a static web app and bind it to a `.dot` domain
   so others can open it the same way.
 
 !!! note "Getting test funds"
     Devnet accounts are funded from the
-    [Polkadot faucet](https://faucet.polkadot.io); some app builds can also fund
-    new accounts automatically. The tokens carry no value, but you still need
-    them for fees and app flows.
+    [Polkadot faucet](https://faucet.polkadot.io). The tokens carry no value, but
+    you still need them for fees and app flows.
 
 ## How it fits together
 
-The main idea is simple: a user opens a `.dot` name, the platform resolves that
+The main idea is simple: a user opens a `.dot` domain, the platform resolves that
 name to an app bundle, and the app runs in a host that provides the wallet and
 chain services.
 
 ```mermaid
 flowchart LR
-  U[User in the Polkadot app or web gateway] --> N[".dot name"]
+  U[User in the Polkadot app or web gateway] --> N[".dot domain"]
   N --> R[DotNS resolves the name to content]
   R --> A[App bundle fetched and sandboxed]
   A --> S[Platform services: accounts, signing, chains, storage]

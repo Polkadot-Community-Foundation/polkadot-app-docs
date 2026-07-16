@@ -15,7 +15,6 @@ Install the Polkadot app for the full account, signing, payments, and messaging
 experience. Use the web gateway when you only want to open Devnet apps from a
 browser.
 
-- Android (Google Play): <https://play.google.com/store/apps/details?id=io.pcf.polkadotapp>
 - Android APK (direct): <https://get.polkadotcommunity.foundation/android/latest.apk>
 - iOS (TestFlight): <https://testflight.apple.com/join/VvC8SHVE>
 - Desktop: <https://polkadotcommunity.foundation/desktop/>
@@ -45,21 +44,27 @@ happens locally after you approve it.
 
 There are two ways to receive devnet funds.
 
-### Use "Get CASH" in the app
+### Top up your CASH in the app
 
-On non-production networks the app exposes an in-app top-up. When you tap
-**Get CASH**, the app requests a devnet top-up and prepares the funds so they
-show up as your **CASH** balance. Some devnet builds also fund a brand-new
-account automatically.
+Nothing funds a brand-new account automatically — you have to top it up
+yourself. On devnet builds, open your **Pocket**, go to the CASH card, and tap
+the **+** (top-up) button next to **Get CASH** to fund your account with test
+CASH. Once the deposit settles, your balance updates. The **+** top-up button
+appears only on devnet (non-production) builds.
+
+The labelled **Get CASH** button is different: it opens a flow to *convert* an
+asset you already hold into CASH (on iOS, via a payment card), which can take
+time — it is not the instant faucet. For a brand-new empty account, the **+**
+button is the one to use.
 
 ```mermaid
 sequenceDiagram
     participant U as You
     participant App as Polkadot app
-    U->>App: Tap "Get CASH"
+    U->>App: Open Pocket, tap "+" (top-up)
     App->>App: Request devnet top-up
-    Note over App: Prepare funds for spending
-    App-->>U: CASH balance appears
+    Note over App: Deposit settles
+    App-->>U: CASH balance updates
 ```
 
 CASH is the balance you spend inside the app. For what it is and how to send it,
@@ -67,8 +72,9 @@ see [Get & use CASH](get-and-use-cash.md).
 
 ### The faucet
 
-You can also request devnet tokens from the public faucet. This is useful when
-you need native devnet funds for fees as well as CASH for app flows.
+You can also request devnet tokens from the public faucet. The faucet provides
+native devnet tokens for transaction fees — not CASH. Use it when you need
+native funds to cover fees.
 
 - <https://faucet.polkadot.io>
 

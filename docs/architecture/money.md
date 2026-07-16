@@ -29,8 +29,10 @@ existence.
 ## Where CASH fits
 
 CASH is built on the Polkadot asset stack and is used through the **People**
-chain by the Polkadot app. The same logical asset can also be represented from
-Asset Hub, where the protected asset id used by the devnet is `50000413`.
+chain by the Polkadot app. On People, the balance is a local pUSD asset
+(**asset id `1`**) that Coinage denominates and presents as CASH. The same
+logical value is also represented on **Asset Hub**, where the id is
+`50000413` — a protected asset whose Asset-Hub-side transfers are gated.
 
 For day-to-day use, people do not need to move assets between chains manually.
 The app presents CASH as a single balance and handles the chain-specific work
@@ -39,9 +41,9 @@ behind the scenes.
 ```mermaid
 flowchart LR
   App["Polkadot app<br/>shows CASH"] --> Coinage["Coinage on People<br/>holds and sends CASH"]
-  Asset["Digital-dollar asset<br/>devnet only"] --> Coinage
+  Asset["pUSD local asset<br/>People asset id 1"] --> Coinage
   PAS["PAS native token<br/>fees + account existence"] -. separate .-> App
-  AH["Asset Hub view<br/>asset id 50000413"] -. same logical asset .-> Asset
+  AH["Asset Hub id 50000413<br/>AH transfers gated"] -. same logical value .-> Asset
 ```
 
 ## How CASH is held
@@ -66,8 +68,8 @@ There are three common paths:
 3. **Earn rewards.** Some app and personhood flows can reward users with value
    that is later shown as CASH.
 
-The important user expectation is simple: once onboarding completes, the CASH
-card updates and the user can spend it.
+The important user expectation is simple: once onboarding completes, the balance
+in your **Pocket** updates and the user can spend it.
 
 ## Sending CASH
 

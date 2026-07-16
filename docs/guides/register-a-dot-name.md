@@ -1,11 +1,11 @@
-# Register a .dot name
+# Register a .dot domain
 
-A `.dot` name is a human-readable handle on the Polkadot Products Devnet. It maps to
+A `.dot` domain is a human-readable handle on the Polkadot Products Devnet. It maps to
 an owner account and, optionally, to an application bundle — so that visiting
 `your-app.dot` in the [Polkadot app](https://polkadotcommunity.foundation/desktop/)
 or the [web gateway](https://dev-dot.li) loads your app.
 
-You can register and manage names with the DotNS CLI (`@parity/dotns-cli`).
+You can register and manage names with the DotNS CLI (`@polkadot-community-foundation/dotns-cli`).
 Short and reserved names have extra gates; ordinary app names follow the normal
 registration path. The same reads and lookups are available from the
 [DotNS reference UI](https://dotns.dev-dot.li).
@@ -39,7 +39,7 @@ and [dotns-sdk](https://github.com/paritytech/dotns-sdk) repositories.
 ## Install the CLI
 
 ```bash
-npm i -g @parity/dotns-cli
+npm i -g @polkadot-community-foundation/dotns-cli
 # provides the `dotns` command
 ```
 
@@ -76,7 +76,7 @@ dotns account is-mapped <address> --env devnet
 ```
 
 If your account has no balance, request devnet funds from the
-[faucet](https://faucet.polkadot.io). Some devnet builds also auto-fund new accounts.
+[faucet](https://faucet.polkadot.io).
 
 ## Reserved and short-name gating
 
@@ -163,7 +163,7 @@ dotns register subname --env devnet
 
 - [dotns contracts](https://github.com/paritytech/dotns)
 - [dotns-sdk — CLI and UI](https://github.com/paritytech/dotns-sdk)
-- [@parity/dotns-cli on npm](https://www.npmjs.com/package/@parity/dotns-cli)
+- [@polkadot-community-foundation/dotns-cli on npm](https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli)
 - [DotNS reference UI (devnet)](https://dotns.dev-dot.li)
 - [Web gateway](https://dev-dot.li)
 - [Polkadot developer docs](https://docs.polkadot.com)
