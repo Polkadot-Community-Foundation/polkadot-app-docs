@@ -5,6 +5,10 @@
    look, edit the design tokens in :root and the two colour schemes below; no
    template or component changes are required. Palette and typography are
    adapted from the Polkadot Developer Docs (docs.polkadot.com) style guide.
+
+   2026 revamp: dark scheme is the default (set in mkdocs.yml), and Mermaid
+   diagrams get a modern, per-chain colour system — see the "Mermaid diagrams"
+   section at the bottom of this file.
    ============================================================================= */
 
 :root {
@@ -34,6 +38,19 @@
   --success: #059669;
   --error: #dc2626;
   --warning: #d97706;
+
+  /* Diagram / Mermaid category hues — shared by every diagram in the docs.
+     Each system chain / actor gets a stable colour so readers learn it once.
+     Fills and strokes are derived from these with color-mix against the current
+     surface + border tokens, so the same hue works in light and dark. */
+  --dg-relay: var(--accent-default);   /* relay chain / root of trust  */
+  --dg-assethub: #6366f1;              /* Asset Hub (para 1000)        */
+  --dg-people: #0ea5e9;                /* People (para 1004)           */
+  --dg-bulletin: #14b8a6;              /* Bulletin (para 1010)         */
+  --dg-developer: #f59e0b;             /* developer / author actor     */
+  --dg-dotns: #8b5cf6;                 /* DotNS naming                 */
+  --dg-gateway: #0ea5e9;              /* web gateway                   */
+  --dg-user: #22c55e;                  /* end user actor               */
 
   /* Fonts */
   --md-text-font: "DM Sans", sans-serif;
@@ -68,6 +85,7 @@
   --color-border-strong: var(--grey-300);
   --color-tooltip-underline: var(--grey-500);
   --color-text-hover: var(--accent-default);
+  --logo-filter: invert(1); /* light mode: invert the light-toned logo so it reads dark */
 
   --md-default-bg-color: var(--color-bg);
   --md-default-fg-color: var(--color-text-primary);
@@ -89,14 +107,14 @@
   --md-footer-fg-color--light: var(--color-text-secondary);
 
   --md-typeset-table-color: var(--color-border-strong);
-  --md-mermaid-edge-color: var(--color-text-secondary);
+  --md-mermaid-edge-color: var(--color-border-strong);
   --md-mermaid-node-bg-color: var(--color-surface);
   --md-mermaid-node-fg-color: var(--color-text-primary);
-  --md-mermaid-label-bg-color: var(--color-surface-secondary);
-  --md-mermaid-label-fg-color: var(--color-text-primary);
+  --md-mermaid-label-bg-color: var(--color-surface);
+  --md-mermaid-label-fg-color: var(--color-text-secondary);
 }
 
-/* --- Dark scheme ---------------------------------------------------------- */
+/* --- Dark scheme (default) ------------------------------------------------ */
 [data-md-color-scheme="polkadot-dark"] {
   --color-bg: var(--grey-950);
   --color-surface: var(--grey-900);
@@ -108,6 +126,7 @@
   --color-border-strong: var(--grey-700);
   --color-tooltip-underline: var(--grey-600);
   --color-text-hover: var(--accent-default);
+  --logo-filter: none; /* dark mode: show the light-toned logo as-is */
 
   --md-default-bg-color: var(--color-bg);
   --md-default-fg-color: var(--color-text-primary);
@@ -129,11 +148,29 @@
   --md-footer-fg-color--light: var(--color-text-secondary);
 
   --md-typeset-table-color: var(--color-border-strong);
-  --md-mermaid-edge-color: var(--color-text-secondary);
+  --md-mermaid-edge-color: var(--color-border-strong);
   --md-mermaid-node-bg-color: var(--color-surface);
   --md-mermaid-node-fg-color: var(--color-text-primary);
-  --md-mermaid-label-bg-color: var(--color-surface-secondary);
-  --md-mermaid-label-fg-color: var(--color-text-primary);
+  --md-mermaid-label-bg-color: var(--color-surface);
+  --md-mermaid-label-fg-color: var(--color-text-secondary);
+}
+
+/* --- Design-audit aliases -------------------------------------------------
+   Short tokens (--surface / --ink / --acc / --border …) used by the bespoke
+   HTML+SVG diagram figures (see docs/architecture/network.md). They map onto
+   the scheme-aware tokens above, so a hand-authored figure themes correctly in
+   both light and dark with no per-figure edits. */
+:root {
+  --acc: var(--accent-default);
+  --bg: var(--color-bg);
+  --surface: var(--color-surface);
+  --surface2: var(--color-surface-secondary);
+  --ink: var(--color-text-primary);
+  --ink2: var(--color-text-secondary);
+  --ink3: var(--color-text-tertiary);
+  --border: var(--color-border);
+  --border2: var(--color-border-strong);
+  --pad: 12px 15px;
 }
 
 /* --- Typography ----------------------------------------------------------- */
@@ -216,6 +253,7 @@
 .md-header__button.md-logo svg {
   height: 36px;
   width: auto;
+  filter: var(--logo-filter, none); /* scheme-aware: none in dark, invert(1) in light */
 }
 
 .md-header__button:hover {
@@ -453,4 +491,202 @@ body:has(.home-hero) .md-content {
 .md-typeset table:not([class]) th {
   background-color: var(--color-surface-secondary);
   color: var(--color-text-primary);
+}
+
+/* --- Bespoke diagram figures ---------------------------------------------
+   Hand-authored HTML+SVG diagrams (see docs/architecture/network.md) live in a
+   `<figure class="dg-figure">` with a mono caption. Node colours are inline in
+   the figure (per-chain hues), while the shell/typography come from here. */
+.md-typeset .dg-figure {
+  display: block;
+  width: 100%;
+  margin: 1.4rem 0 1rem;
+  padding: 1.4rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 12px 32px -12px rgba(16, 24, 40, 0.08);
+  overflow: hidden;
+  text-align: left;
+}
+
+.md-typeset .dg-figcaption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 0.4rem;
+  font-family: var(--md-code-font);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.md-typeset .dg-figcaption .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent-default);
+}
+
+/* Per-chain para-ID chip next to a heading. Pass the hue with style="--chip:#…". */
+.md-typeset .dg-chip {
+  display: inline-block;
+  margin-left: 0.45rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-family: var(--md-code-font);
+  font-size: 0.68rem;
+  font-weight: 500;
+  vertical-align: middle;
+  color: var(--chip, var(--accent-default));
+  background: color-mix(in srgb, var(--chip, var(--accent-default)) 12%, transparent);
+}
+
+/* =============================================================================
+   Mermaid diagrams
+   -----------------------------------------------------------------------------
+   Two layers of styling:
+
+   1. GLOBAL — applies to EVERY diagram automatically (no per-diagram edits):
+      rounded nodes, surface-matched fills, quieter edges, and pill-shaped
+      edge labels. This alone modernises all 39 diagrams in the docs.
+
+   2. PER-CHAIN COLOUR — an opt-in convention. In a diagram, register the
+      shared classes and assign them to nodes:
+
+        classDef relayNode    stroke-width:1px;
+        classDef assethubNode stroke-width:1px;
+        classDef peopleNode   stroke-width:1px;
+        classDef bulletinNode stroke-width:1px;
+        classDef developerNode stroke-width:1px;
+        classDef dotnsNode    stroke-width:1px;
+        classDef gatewayNode  stroke-width:1px;
+        classDef userNode     stroke-width:1px;
+
+        class Relay relayNode
+        class AH assethubNode
+        ...
+
+      The colours themselves stay HERE (derived from the --dg-* tokens), so the
+      palette is centralised and scheme-aware. See docs/architecture/network.md
+      for the reference implementation.
+
+   NOTE: Mermaid selector names are stable across v10.x but do verify with
+   `mkdocs serve` after upgrading mkdocs-material / mermaid.
+   ============================================================================= */
+
+.md-typeset .mermaid {
+  margin: 1.5rem 0;
+}
+
+/* Node shells — rounded, matched to the current surface. */
+.md-typeset .mermaid .node > rect,
+.md-typeset .mermaid .node > polygon,
+.md-typeset .mermaid .node > path,
+.md-typeset .mermaid .node > circle {
+  rx: 12px;
+  ry: 12px;
+  stroke-width: 1px;
+  fill: var(--color-surface);
+  stroke: var(--color-border-strong);
+}
+
+.md-typeset .mermaid .node .nodeLabel {
+  font-family: var(--md-text-font);
+  color: var(--color-text-primary);
+}
+
+/* Subgraph clusters. */
+.md-typeset .mermaid .cluster > rect {
+  rx: 16px;
+  ry: 16px;
+  fill: color-mix(in srgb, var(--color-text-tertiary) 6%, transparent) !important;
+  stroke: var(--color-border) !important;
+  stroke-dasharray: 4 4;
+}
+
+.md-typeset .mermaid .cluster .nodeLabel,
+.md-typeset .mermaid .cluster-label .nodeLabel {
+  font-family: var(--md-code-font);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+/* Edges + arrowheads. */
+.md-typeset .mermaid .edgePath .path,
+.md-typeset .mermaid .flowchart-link {
+  stroke: var(--color-border-strong) !important;
+  stroke-width: 1.4px !important;
+}
+
+.md-typeset .mermaid marker path,
+.md-typeset .mermaid .marker {
+  fill: var(--color-text-tertiary) !important;
+  stroke: var(--color-text-tertiary) !important;
+}
+
+/* Edge labels as monospace pills. */
+.md-typeset .mermaid .edgeLabel,
+.md-typeset .mermaid .edgeLabel p {
+  background: var(--color-surface) !important;
+  color: var(--color-text-secondary) !important;
+  font-family: var(--md-code-font);
+  font-size: 0.72rem;
+}
+.md-typeset .mermaid .edgeLabel foreignObject > div {
+  background: transparent;
+}
+
+/* ---- Per-chain colour classes (opt-in, see convention above) ------------- */
+.md-typeset .mermaid .relayNode > rect,
+.md-typeset .mermaid .relayNode > polygon,
+.md-typeset .mermaid .relayNode > path {
+  fill: color-mix(in srgb, var(--dg-relay) 15%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-relay) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .assethubNode > rect,
+.md-typeset .mermaid .assethubNode > polygon,
+.md-typeset .mermaid .assethubNode > path {
+  fill: color-mix(in srgb, var(--dg-assethub) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-assethub) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .peopleNode > rect,
+.md-typeset .mermaid .peopleNode > polygon,
+.md-typeset .mermaid .peopleNode > path {
+  fill: color-mix(in srgb, var(--dg-people) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-people) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .bulletinNode > rect,
+.md-typeset .mermaid .bulletinNode > polygon,
+.md-typeset .mermaid .bulletinNode > path {
+  fill: color-mix(in srgb, var(--dg-bulletin) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-bulletin) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .developerNode > rect,
+.md-typeset .mermaid .developerNode > polygon,
+.md-typeset .mermaid .developerNode > path {
+  fill: color-mix(in srgb, var(--dg-developer) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-developer) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .dotnsNode > rect,
+.md-typeset .mermaid .dotnsNode > polygon,
+.md-typeset .mermaid .dotnsNode > path {
+  fill: color-mix(in srgb, var(--dg-dotns) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-dotns) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .gatewayNode > rect,
+.md-typeset .mermaid .gatewayNode > polygon,
+.md-typeset .mermaid .gatewayNode > path {
+  fill: color-mix(in srgb, var(--dg-gateway) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-gateway) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .userNode > rect,
+.md-typeset .mermaid .userNode > polygon,
+.md-typeset .mermaid .userNode > path {
+  fill: color-mix(in srgb, var(--dg-user) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-user) 55%, var(--color-border)) !important;
 }

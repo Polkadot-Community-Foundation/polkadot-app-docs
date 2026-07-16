@@ -48,17 +48,19 @@ theme:
     - content.tooltips
     - search.suggest
     - search.highlight
+  # Dark scheme is the default; the toggle lets readers switch to light. The
+  # first entry is what loads first, so polkadot-dark leads. (No prefers-color-
+  # scheme media queries — the docs open dark for everyone, matching the new
+  # black-and-white-forward identity with per-chain diagram colour.)
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: polkadot-light
-      toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: polkadot-dark
+    - scheme: polkadot-dark
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
+    - scheme: polkadot-light
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
 
 markdown_extensions:
   - abbr
