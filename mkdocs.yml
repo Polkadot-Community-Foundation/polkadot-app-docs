@@ -20,11 +20,6 @@ extra_css:
   - assets/stylesheets/fonts.css
   - assets/stylesheets/theme.css
 
-# Auto-colours every Mermaid diagram by matching node label text to the shared
-# chain/actor classes (colours live in theme.css). No per-diagram edits needed.
-extra_javascript:
-  - assets/javascripts/mermaid-chain-colors.js
-
 validation:
   absolute_links: ignore
   unrecognized_links: ignore

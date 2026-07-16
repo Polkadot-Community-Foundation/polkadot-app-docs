@@ -328,6 +328,16 @@ body:has(.home-hero) .md-content {
   margin: 0 auto;
 }
 
+/* The hero spans the full home width; the content below it reads in a narrower,
+   centred column. */
+body:has(.home-hero) .md-content__inner > *:not(.home-hero) {
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Keep the hero full width even though its siblings are constrained. */
+body:has(.home-hero) .home-hero { max-width: none; }
+
 .home-hero {
   min-height: 420px;
   display: flex;
@@ -811,6 +821,12 @@ body:has(.home-hero) .md-content {
 
 .md-typeset .mermaid {
   margin: 1.5rem 0;
+  padding: 1.4rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 12px 32px -12px rgba(16, 24, 40, 0.08);
+  overflow: hidden;
 }
 
 /* Node shells — rounded, matched to the current surface. */

@@ -55,20 +55,13 @@ The main idea is simple: a user opens a `.dot` domain, the platform resolves tha
 name to an app bundle, and the app runs in a host that provides the wallet and
 chain services.
 
-<figure class="dg-figure">
-<figcaption class="dg-figcaption"><span class="dot"></span>how it fits together</figcaption>
-<div class="dg-flow">
-  <div class="dg-node user"><div class="eb">Actor</div><div class="tt">User</div><div class="sb">in the Polkadot app or web gateway</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node dotns"><div class="eb">Naming</div><div class="tt">.dot domain</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node dotns"><div class="eb">Naming</div><div class="tt">DotNS resolves the name to content</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node bulletin"><div class="eb">Bundle</div><div class="tt">App bundle fetched and sandboxed</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node bulletin"><div class="eb">Services</div><div class="tt">Platform services</div><div class="sb">accounts, signing, chains, storage</div></div>
-</div>
-</figure>
+```mermaid
+flowchart LR
+  U[User in the Polkadot app or web gateway] --> N[".dot domain"]
+  N --> R[DotNS resolves the name to content]
+  R --> A[App bundle fetched and sandboxed]
+  A --> S[Platform services: accounts, signing, chains, storage]
+```
 
 For the deeper model, read the [architecture overview](../architecture/index.md).
 

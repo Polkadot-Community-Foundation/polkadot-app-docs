@@ -31,11 +31,11 @@ the user's behalf. Installs:
 - iOS TestFlight: <https://testflight.apple.com/join/VvC8SHVE>
 - Desktop: <https://polkadotcommunity.foundation/desktop/>
 
-### dot.li
+### dev-dot.li
 
-The web gateway that serves `.dot` apps in an ordinary browser. On this Devnet
-it is reachable at <https://dev-dot.li>. The gateway resolves a `.dot` domain,
-fetches the app bundle, and renders it in a sandboxed iframe.
+The web gateway that serves `.dot` apps in an ordinary browser, reachable at
+<https://dev-dot.li>. It resolves a `.dot` domain, fetches the app bundle, and
+renders it in a sandboxed iframe.
 
 ## Naming and discovery
 

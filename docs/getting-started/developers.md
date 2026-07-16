@@ -10,22 +10,15 @@ the bundle, and use the SDK when the app needs platform services.
 
 ## The shape of a first app
 
-<figure class="dg-figure">
-<figcaption class="dg-figcaption"><span class="dot"></span>first-app publish flow</figcaption>
-<div class="dg-flow">
-  <div class="dg-node assethub"><div class="eb">Optional</div><div class="tt">Deploy contracts</div><div class="sb">cdm</div></div>
-  <div class="dg-edge dashed"><span class="lb">optional</span></div>
-  <div class="dg-node developer"><div class="eb">Step 1</div><div class="tt">Build web app</div><div class="sb">@parity/product-sdk</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node"><div class="eb">Step 2</div><div class="tt">Produce static dist/</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node dotns"><div class="eb">Naming</div><div class="tt">Register a .dot domain</div><div class="sb">@polkadot-community-foundation/dotns-cli</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node bulletin"><div class="eb">Publish</div><div class="tt">Publish bundle to Bulletin + bind name</div><div class="sb">pad</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node gateway"><div class="eb">Live</div><div class="tt">Live at name.dot in the app</div><div class="sb">and https://name.dev-dot.li</div></div>
-</div>
-</figure>
+```mermaid
+flowchart LR
+  A[Build web app<br/>@parity/product-sdk] --> B[Produce static dist/]
+  B --> C[Register a .dot domain<br/>@polkadot-community-foundation/dotns-cli]
+  C --> D[Publish bundle to Bulletin<br/>+ bind name<br/>pad]
+  D --> E[Live at name.dot in the app<br/>and https://name.dev-dot.li]
+  A -. optional .-> F[Deploy contracts<br/>cdm]
+  F --> A
+```
 
 A Product is a **static web app**: HTML, CSS, and JavaScript. It runs inside a
 host — the Polkadot app or the web gateway at

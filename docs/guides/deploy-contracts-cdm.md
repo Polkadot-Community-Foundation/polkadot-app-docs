@@ -19,28 +19,17 @@ mapping in an on-chain `ContractRegistry` contract.
 
 ## How the pieces fit
 
-<figure class="dg-figure">
-<figcaption class="dg-figcaption"><span class="dot"></span>cdm deploy pipeline</figcaption>
-<div class="dg-flow col">
-  <div class="dg-node assethub"><div class="eb">CLI</div><div class="tt">cdm deploy -n network</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node assethub"><div class="eb">Resolve</div><div class="tt">Resolve preset</div><div class="sb">AssetHub/Bulletin RPC + registry addr</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node assethub"><div class="eb">Build order</div><div class="tt">Detect build order</div><div class="sb">from Cargo.toml package.metadata.cdm</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node assethub"><div class="eb">Build</div><div class="tt">cargo-pvm-contract build &#8594; .polkavm</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node assethub"><div class="eb">Dry-run</div><div class="tt">ReviveApi.instantiate</div><div class="sb">gas + CREATE2 address</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node bulletin"><div class="eb">Metadata</div><div class="tt">Publish ABI+readme to Bulletin &#8594; CID</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node"><div class="eb">Submit</div><div class="tt">Utility.batch_all</div><div class="sb">instantiate_with_code + registry.publishLatest</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node assethub"><div class="eb">Registry</div><div class="tt">ContractRegistry PVM contract</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node"><div class="eb">Entry</div><div class="tt">name &#8594; owner + versioned address + metadata_uri</div></div>
-</div>
-</figure>
+```mermaid
+flowchart TD
+  A[cdm deploy -n network] --> B[Resolve preset: AssetHub/Bulletin RPC + registry addr]
+  B --> C[Detect build order from Cargo.toml package.metadata.cdm]
+  C --> D[cargo-pvm-contract build -> .polkavm]
+  D --> E[Dry-run ReviveApi.instantiate: gas + CREATE2 address]
+  E --> F[Publish ABI+readme metadata to Bulletin -> CID]
+  F --> G[Utility.batch_all: instantiate_with_code + registry.publishLatest]
+  G --> H[(ContractRegistry PVM contract)]
+  H --> I[name -> owner + versioned address + metadata_uri]
+```
 
 The `ContractRegistry` is a single PVM contract per network. Its key methods
 include `publishLatest`, `getAddress`, `getMetadataUri`, `getVersionCount`,
@@ -132,25 +121,20 @@ cdm install @org/name:3 -n <network>
 cdm install -n <network>
 ```
 
-<figure class="dg-figure">
-<figcaption class="dg-figcaption"><span class="dot"></span>cdm install &amp; frontend resolve</figcaption>
-<div class="dg-flow">
-  <div class="dg-node"><div class="eb">Dependency</div><div class="tt">@org/name</div><div class="sb">cdm install</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node"><div class="eb">Registry read</div><div class="tt">getVersionCount / getAddress / getMetadataUri</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-stage">
-    <div class="dg-node assethub"><div class="eb">On-chain</div><div class="tt">ContractRegistry</div></div>
-    <div class="dg-node bulletin"><div class="eb">Metadata</div><div class="tt">fetch metadata CID</div><div class="sb">Bulletin/IPFS gateway</div></div>
-  </div>
-  <div class="dg-edge"></div>
-  <div class="dg-node assethub"><div class="eb">Install</div><div class="tt">cdm.json</div><div class="sb">address + abi + .cdm typings</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node assethub"><div class="eb">Frontend</div><div class="tt">createContract</div><div class="sb">CONTRACTS_REGISTRY_ABI @ registryAddress</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node assethub"><div class="eb">Runtime read</div><div class="tt">getAddress / getContracts / searchContractNames</div></div>
-</div>
-</figure>
+```mermaid
+flowchart LR
+  subgraph Install[cdm install]
+    P[dependency @org/name] --> Q[registry.getVersionCount/getAddress/getMetadataUri]
+    Q --> R[(ContractRegistry)]
+    Q --> S[fetch metadata CID from Bulletin/IPFS gateway]
+    S --> T[cdm.json: address + abi + .cdm typings]
+  end
+  subgraph Runtime[Frontend / app]
+    T --> U[createContract CONTRACTS_REGISTRY_ABI @ registryAddress]
+    U --> V[getAddress / getContracts / searchContractNames]
+    V --> R
+  end
+```
 
 `install` builds a registry handle from `CONTRACTS_REGISTRY_ABI` at the
 network's registry address, resolves the version with `getVersionCount`, reads

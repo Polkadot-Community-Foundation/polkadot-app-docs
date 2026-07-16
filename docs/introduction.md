@@ -41,32 +41,41 @@ Four layers stack on top of each other. When you are blocked, first identify
 which layer you are working in: the entry point, your Product, the developer
 tools, or the platform services.
 
-<figure class="dg-figure">
-<figcaption class="dg-figcaption"><span class="dot"></span>Four-layer platform stack</figcaption>
-<div class="dg-flow col">
-  <div class="dg-stage">
-    <div class="dg-node"><div class="eb">Entry</div><div class="tt">Polkadot app</div><div class="sb">mobile + desktop</div></div>
-    <div class="dg-node gateway"><div class="eb">Gateway</div><div class="tt">Web gateway</div><div class="sb">dev-dot.li</div></div>
-  </div>
-  <div class="dg-edge"></div>
-  <div class="dg-node bulletin"><div class="eb">Your dApp</div><div class="tt">Static web bundle</div><div class="sb">.dot domain &#8594; content</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-stage">
-    <div class="dg-node"><div class="eb">Tooling</div><div class="tt">Product SDK</div><div class="sb">@parity/product-sdk</div></div>
-    <div class="dg-node"><div class="eb">Tooling</div><div class="tt">Host API</div><div class="sb">@novasamatech/host-api</div></div>
-    <div class="dg-node developer"><div class="eb">Tooling</div><div class="tt">CLIs</div><div class="sb">pad / dotns / cdm</div></div>
-  </div>
-  <div class="dg-edge"></div>
-  <div class="dg-stage">
-    <div class="dg-node dotns"><div class="eb">Naming</div><div class="tt">DotNS naming</div><div class="sb">Asset Hub contracts</div></div>
-    <div class="dg-node bulletin"><div class="eb">Storage</div><div class="tt">Bulletin content storage</div></div>
-    <div class="dg-node people"><div class="eb">People</div><div class="tt">Identity + personhood</div><div class="sb">People chain</div></div>
-    <div class="dg-node people"><div class="eb">People</div><div class="tt">CASH + assets</div><div class="sb">People chain / Asset Hub</div></div>
-    <div class="dg-node assethub"><div class="eb">Asset Hub</div><div class="tt">PolkaVM contracts</div><div class="sb">pallet-revive + CDM</div></div>
-    <div class="dg-node gateway"><div class="eb">Browse</div><div class="tt">Browse directory</div><div class="sb">Publisher registry</div></div>
-  </div>
-</div>
-</figure>
+```mermaid
+flowchart TD
+  subgraph U[Entry points]
+    APP[Polkadot app<br/>mobile + desktop]
+    GW[Web gateway<br/>dev-dot.li]
+  end
+  subgraph D[Your dApp]
+    BUNDLE[Static web bundle<br/>.dot domain -> content]
+  end
+  subgraph S[Developer tooling]
+    SDK[Product SDK<br/>@parity/product-sdk]
+    HOST[Host API<br/>@novasamatech/host-api]
+    CLIS[CLIs: pad / dotns / cdm]
+  end
+  subgraph P[Platform services on Paseo]
+    NAME[DotNS naming<br/>Asset Hub contracts]
+    STORE[Bulletin content storage]
+    ID[Identity + personhood<br/>People chain]
+    MONEY[CASH + assets<br/>People chain / Asset Hub]
+    CONTRACTS[PolkaVM contracts<br/>pallet-revive + CDM]
+    BROWSE[Browse directory<br/>Publisher registry]
+  end
+  APP --> BUNDLE
+  GW --> BUNDLE
+  BUNDLE --> HOST
+  BUNDLE --> SDK
+  SDK --> HOST
+  CLIS --> NAME
+  CLIS --> STORE
+  CLIS --> CONTRACTS
+  HOST --> ID
+  HOST --> MONEY
+  NAME --> STORE
+  BROWSE --> NAME
+```
 
 - **The Polkadot app** keeps keys on-device, runs Products in a sandbox, and
   exposes the Host API.

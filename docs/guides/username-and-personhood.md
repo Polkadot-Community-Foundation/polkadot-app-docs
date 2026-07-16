@@ -66,18 +66,21 @@ Behind the scenes, the app sends your signed request to the attester service,
 which records your username on the People chain. Your username can also be
 reflected into `.dot` naming so it works across app and discovery flows.
 
-<figure class="dg-figure">
-<figcaption class="dg-figcaption"><span class="dot"></span>Username registration flow</figcaption>
-<div class="dg-seq">
-  <div class="dg-seq-step"><span class="dg-actor user">You (device)</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Choose base name, confirm</span></div>
-  <div class="dg-seq-step"><span class="dg-actor user">You (device)</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Sign registration on device</span></div>
-  <div class="dg-seq-step"><span class="dg-actor">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor people">Attester (identity backend)</span><span class="msg">Send signed request</span></div>
-  <div class="dg-seq-step"><span class="dg-actor people">Attester (identity backend)</span><span class="arr">&#8594;</span><span class="dg-actor people">People chain</span><span class="msg">Vouch &amp; register you as a lite person</span></div>
-  <div class="dg-seq-step"><span class="dg-actor people">People chain</span><span class="arr">&#8594;</span><span class="dg-actor people">Attester (identity backend)</span><span class="msg">Finalized</span></div>
-  <div class="dg-seq-step"><span class="dg-actor people">Attester (identity backend)</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Registration confirmed</span></div>
-  <div class="dg-seq-step"><span class="dg-actor people">People chain</span><span class="arr">&#8594;</span><span class="dg-actor assethub">Asset Hub (.dot domains)</span><span class="msg">Username can be reflected into .dot naming</span></div>
-</div>
-</figure>
+```mermaid
+sequenceDiagram
+    participant You as You (device)
+    participant App as Polkadot app
+    participant Attester as Attester (identity backend)
+    participant People as People chain
+    participant DotNS as Asset Hub (.dot domains)
+    You->>App: Choose base name, confirm
+    You->>App: Sign registration on device
+    App->>Attester: Send signed request
+    Attester->>People: Vouch & register you as a lite person
+    People-->>Attester: Finalized
+    Attester-->>App: Registration confirmed
+    People-->>DotNS: Username can be reflected into .dot naming
+```
 
 ## Reach Full personhood (optional)
 

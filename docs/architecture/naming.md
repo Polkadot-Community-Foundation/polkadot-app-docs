@@ -35,25 +35,15 @@ those hashes themselves; the CLI, SDK, gateway, and host tooling do it.
 Resolution is a read-only path. A client never needs a naming server: it computes
 the node locally and reads two contracts.
 
-<figure class="dg-figure">
-<figcaption class="dg-figcaption"><span class="dot"></span>name.dot resolution</figcaption>
-<div class="dg-flow col">
-  <div class="dg-node dotns"><div class="eb">Naming</div><div class="tt">name.dot</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node dotns"><div class="eb">Step 1</div><div class="tt">Compute name id</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node dotns"><div class="eb">Registry</div><div class="tt">Read owner + resolver</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-stage">
-    <div class="dg-node dotns"><div class="eb">registered</div><div class="tt">DotnsContentResolver.contenthash(node)</div></div>
-    <div class="dg-node"><div class="eb">not registered</div><div class="tt">resolve fails / empty</div></div>
-  </div>
-  <div class="dg-edge"><span class="lb">registered</span></div>
-  <div class="dg-node bulletin"><div class="eb">Decode</div><div class="tt">decode contenthash &#8594; IPFS CID</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node gateway"><div class="eb">Gateway</div><div class="tt">Fetch bundle via gateway</div></div>
-</div>
-</figure>
+```mermaid
+flowchart TD
+  A["name.dot"] --> B["Compute name id"]
+  B --> C["Read owner + resolver"]
+  C -->|registered| D["DotnsContentResolver.contenthash(node)"]
+  D --> E["decode contenthash → IPFS CID"]
+  E --> F["Fetch bundle via gateway"]
+  C -->|not registered| G["resolve fails / empty"]
+```
 
 The resolution path is:
 
@@ -82,22 +72,14 @@ DotNS separates ownership, records, and control into distinct contracts. That
 separation lets the system rotate pieces of the protocol without changing the
 basic model that clients depend on.
 
-<figure class="dg-figure">
-<figcaption class="dg-figcaption"><span class="dot"></span>DotNS contract topology</figcaption>
-<div class="dg-flow col">
-  <div class="dg-node people"><div class="eb">Name rules</div><div class="tt">Name rules</div><div class="sb">length + personhood</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node"><div class="eb">Controllers</div><div class="tt">Registration controllers</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node dotns"><div class="eb">Registrar</div><div class="tt">Registrar</div><div class="sb">name ownership</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node dotns"><div class="eb">Registry</div><div class="tt">Registry</div><div class="sb">owner + resolver</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node dotns"><div class="eb">Resolvers</div><div class="tt">Resolvers</div><div class="sb">contenthash + records</div></div>
-  <div class="dg-edge"></div>
-  <div class="dg-node gateway"><div class="eb">Gateway</div><div class="tt">Gateway / app clients</div></div>
-</div>
-</figure>
+```mermaid
+flowchart TD
+  Controller["Registration controllers"] --> Registrar["Registrar<br/>name ownership"]
+  Registrar --> Registry["Registry<br/>owner + resolver"]
+  Registry --> Resolver["Resolvers<br/>contenthash + records"]
+  Rules["Name rules<br/>length + personhood"] --> Controller
+  Resolver --> Gateway["Gateway / app clients"]
+```
 
 - **Registrar** records who owns a `.dot` domain.
 - **Registry** connects the name to its resolver.

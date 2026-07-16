@@ -38,22 +38,13 @@ For day-to-day use, people do not need to move assets between chains manually.
 The app presents CASH as a single balance and handles the chain-specific work
 behind the scenes.
 
-<figure class="dg-figure">
-<figcaption class="dg-figcaption"><span class="dot"></span>CASH on People</figcaption>
-<div class="dg-flow">
-  <div class="dg-stage">
-    <div class="dg-node"><div class="eb">native</div><div class="tt">PAS</div><div class="sb">fees + account existence</div></div>
-    <div class="dg-node assethub"><div class="eb">Asset Hub</div><div class="tt">id 50000413</div><div class="sb">AH transfers gated</div></div>
-  </div>
-  <div class="dg-edge dashed"><span class="lb">separate / same logical value</span></div>
-  <div class="dg-stage">
-    <div class="dg-node people"><div class="eb">app</div><div class="tt">Polkadot app</div><div class="sb">shows CASH</div></div>
-    <div class="dg-node people"><div class="eb">People id 1</div><div class="tt">pUSD local asset</div></div>
-  </div>
-  <div class="dg-edge"></div>
-  <div class="dg-node people"><div class="eb">People</div><div class="tt">Coinage</div><div class="sb">holds and sends CASH</div></div>
-</div>
-</figure>
+```mermaid
+flowchart LR
+  App["Polkadot app<br/>shows CASH"] --> Coinage["Coinage on People<br/>holds and sends CASH"]
+  Asset["pUSD local asset<br/>People asset id 1"] --> Coinage
+  PAS["PAS native token<br/>fees + account existence"] -. separate .-> App
+  AH["Asset Hub id 50000413<br/>AH transfers gated"] -. same logical value .-> Asset
+```
 
 ## How CASH is held
 
@@ -89,17 +80,18 @@ Sending CASH is a wallet-mediated action:
 3. The user approves the action locally.
 4. The app submits the transaction and waits for settlement.
 
-<figure class="dg-figure">
-<figcaption class="dg-figcaption"><span class="dot"></span>Sending CASH</figcaption>
-<div class="dg-seq">
-  <div class="dg-seq-step"><span class="dg-actor user">User</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Send CASH</span></div>
-  <div class="dg-seq-step"><span class="dg-actor">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor user">User</span><span class="msg">Ask for approval</span></div>
-  <div class="dg-seq-step"><span class="dg-actor user">User</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Approve locally</span></div>
-  <div class="dg-seq-step"><span class="dg-actor">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor people">People chain</span><span class="msg">Submit Coinage transfer</span></div>
-  <div class="dg-seq-step"><span class="dg-actor people">People chain</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Transfer settles</span></div>
-  <div class="dg-seq-step"><span class="dg-actor">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor user">User</span><span class="msg">Balance updates</span></div>
-</div>
-</figure>
+```mermaid
+sequenceDiagram
+  participant User
+  participant App as Polkadot app
+  participant People as People chain
+  User->>App: Send CASH
+  App->>User: Ask for approval
+  User-->>App: Approve locally
+  App->>People: Submit Coinage transfer
+  People-->>App: Transfer settles
+  App-->>User: Balance updates
+```
 
 ## What developers should rely on
 
