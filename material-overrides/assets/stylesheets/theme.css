@@ -697,6 +697,86 @@ body:has(.home-hero) .md-content {
 @media screen and (max-width: 60em) { .md-typeset .dg-cards { grid-template-columns: 1fr; } }
 
 /* =============================================================================
+   Diagram primitives — CSS-laid-out node/flow/sequence diagrams
+   -----------------------------------------------------------------------------
+   A reliable, coordinate-free way to author the mockup's coloured-card diagrams:
+   pages write semantic markup, CSS handles layout. Colour a node/actor with a
+   chain class (.relay .assethub .people .bulletin .developer .dotns .gateway
+   .user) or an inline --n:<hue>. See docs/AUTHORING-diagrams.md.
+   ============================================================================= */
+
+/* Flow: a row (default) or column of stages connected by edges. */
+.md-typeset .dg-flow {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 0.55rem 0.4rem;
+}
+.md-typeset .dg-flow.col { flex-direction: column; align-items: stretch; }
+.md-typeset .dg-stage { display: flex; flex-direction: column; gap: 0.5rem; }
+.md-typeset .dg-flow.col .dg-stage { flex-direction: row; justify-content: center; }
+
+/* Node card. */
+.md-typeset .dg-node {
+  position: relative;
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  min-width: 8.5rem;
+  background: color-mix(in srgb, var(--n, var(--color-text-tertiary)) 9%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--n, var(--color-text-tertiary)) 32%, var(--color-border));
+}
+.md-typeset .dg-node .eb {
+  font-family: var(--md-code-font); font-size: 0.58rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--n, var(--color-text-tertiary));
+}
+.md-typeset .dg-node .tt { margin-top: 0.25rem; font-weight: 600; font-size: 0.84rem; color: var(--color-text-primary); line-height: 1.2; }
+.md-typeset .dg-node .sb { margin-top: 0.15rem; font-size: 0.72rem; color: var(--color-text-secondary); line-height: 1.35; }
+
+.md-typeset .dg-node.relay { --n: var(--dg-relay); }
+.md-typeset .dg-node.assethub { --n: var(--dg-assethub); }
+.md-typeset .dg-node.people { --n: var(--dg-people); }
+.md-typeset .dg-node.bulletin { --n: var(--dg-bulletin); }
+.md-typeset .dg-node.developer { --n: var(--dg-developer); }
+.md-typeset .dg-node.dotns { --n: var(--dg-dotns); }
+.md-typeset .dg-node.gateway { --n: var(--dg-gateway); }
+.md-typeset .dg-node.user { --n: var(--dg-user); }
+
+/* Edge connector with optional pill label. */
+.md-typeset .dg-edge {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
+  color: var(--color-text-tertiary); font-family: var(--md-code-font); font-size: 0.6rem;
+}
+.md-typeset .dg-edge::before { content: "\2192"; font-size: 1.05rem; line-height: 1; }
+.md-typeset .dg-flow.col > .dg-edge::before { content: "\2193"; }
+.md-typeset .dg-edge.dashed::before { opacity: 0.55; }
+.md-typeset .dg-edge .lb {
+  padding: 1px 7px; border: 1px solid var(--color-border); border-radius: 999px;
+  background: var(--color-surface); white-space: nowrap; color: var(--color-text-secondary);
+}
+
+/* Sequence: vertical list of from -> to : message steps. */
+.md-typeset .dg-seq { display: flex; flex-direction: column; gap: 0.4rem; }
+.md-typeset .dg-seq-step {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem;
+  padding: 0.45rem 0.65rem; border: 1px solid var(--color-border); border-radius: 10px;
+  background: var(--color-surface);
+}
+.md-typeset .dg-actor {
+  font-family: var(--md-code-font); font-size: 0.64rem; font-weight: 600;
+  padding: 2px 7px; border-radius: 6px; white-space: nowrap;
+  color: var(--n, var(--color-text-primary));
+  background: color-mix(in srgb, var(--n, var(--color-text-tertiary)) 13%, transparent);
+}
+.md-typeset .dg-actor.relay { --n: var(--dg-relay); }
+.md-typeset .dg-actor.assethub { --n: var(--dg-assethub); }
+.md-typeset .dg-actor.people { --n: var(--dg-people); }
+.md-typeset .dg-actor.bulletin { --n: var(--dg-bulletin); }
+.md-typeset .dg-actor.developer { --n: var(--dg-developer); }
+.md-typeset .dg-actor.dotns { --n: var(--dg-dotns); }
+.md-typeset .dg-actor.gateway { --n: var(--dg-gateway); }
+.md-typeset .dg-actor.user { --n: var(--dg-user); }
+.md-typeset .dg-seq-step .arr { color: var(--color-text-tertiary); font-family: var(--md-code-font); }
+.md-typeset .dg-seq-step .msg { font-size: 0.78rem; color: var(--color-text-secondary); }
+
+/* =============================================================================
    Mermaid diagrams
    -----------------------------------------------------------------------------
    Two layers of styling:

@@ -66,16 +66,26 @@ Who is allowed to list an app is enforced on-chain:
 
 Unpublishing is simpler: if you own the name, you can remove it from Browse.
 
-```mermaid
-flowchart TD
-  A[Publish label] --> B{Own the .dot domain?}
-  B -- no --> E1[Cannot publish]
-  B -- yes --> C{Enough personhood?}
-  C -- no --> E2[Complete personhood flow]
-  C -- yes --> D{Under rate limit?}
-  D -- no --> E3[Wait for the window]
-  D -- yes --> R[Listing appears in Browse]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>publish permission gate</figcaption>
+<div class="dg-flow col">
+  <div class="dg-node"><div class="eb">Actor</div><div class="tt">Publish label</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Check</div><div class="tt">Own the .dot domain?</div></div>
+  <div class="dg-edge"><span class="lb">yes</span></div>
+  <div class="dg-node people"><div class="eb">Check</div><div class="tt">Enough personhood?</div></div>
+  <div class="dg-edge"><span class="lb">yes</span></div>
+  <div class="dg-node"><div class="eb">Check</div><div class="tt">Under rate limit?</div></div>
+  <div class="dg-edge"><span class="lb">yes</span></div>
+  <div class="dg-node gateway"><div class="eb">Result</div><div class="tt">Listing appears in Browse</div></div>
+  <div class="dg-edge dashed"><span class="lb">no at any check</span></div>
+  <div class="dg-stage">
+    <div class="dg-node"><div class="eb">no domain</div><div class="tt">Cannot publish</div></div>
+    <div class="dg-node people"><div class="eb">no personhood</div><div class="tt">Complete personhood flow</div></div>
+    <div class="dg-node"><div class="eb">rate limited</div><div class="tt">Wait for the window</div></div>
+  </div>
+</div>
+</figure>
 
 Listing is not a separate deploy step. The `pad` deploy CLI
 ([`@parity/polkadot-app-deploy`](https://www.npmjs.com/package/@parity/polkadot-app-deploy))
@@ -98,15 +108,25 @@ Discovery reads do not need a signer and do not send transactions. Opening an
 app is a handoff: inside the Polkadot app, Browse asks the host to navigate to
 the `.dot` domain; in a browser, it opens the web gateway.
 
-```mermaid
-flowchart LR
-  P["Publisher.getPublished<br/>labelhashes"] --> L["Registrar.labelOf<br/>labelhash to label"]
-  L --> C["ContentResolver.contenthash<br/>drop non-live"]
-  C --> M["ContentResolver.text manifest<br/>displayName/desc/icon"]
-  M --> UI[Product cards]
-  UI -->|host| H["hostApi.navigateTo label.dot"]
-  UI -->|browser| W["open label.dot.li"]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>listing read path</figcaption>
+<div class="dg-flow">
+  <div class="dg-node"><div class="eb">Enumerate</div><div class="tt">Publisher.getPublished</div><div class="sb">labelhashes</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Resolve</div><div class="tt">Registrar.labelOf</div><div class="sb">labelhash to label</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Hydrate</div><div class="tt">ContentResolver.contenthash</div><div class="sb">drop non-live</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Hydrate</div><div class="tt">ContentResolver.text manifest</div><div class="sb">displayName/desc/icon</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Render</div><div class="tt">Product cards</div></div>
+  <div class="dg-edge"><span class="lb">open</span></div>
+  <div class="dg-stage">
+    <div class="dg-node dotns"><div class="eb">host</div><div class="tt">hostApi.navigateTo label.dot</div></div>
+    <div class="dg-node dotns"><div class="eb">browser</div><div class="tt">open label.dot.li</div></div>
+  </div>
+</div>
+</figure>
 
 !!! tip
     Because the registry stores only labelhash + publisher + timestamp, re-skinning an app

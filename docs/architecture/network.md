@@ -48,26 +48,24 @@ money flows, and **Bulletin** for web-app bundle storage.
 Asset Hub is the primary chain for Product developers. It carries the contract,
 asset, and naming machinery used by deployed apps.
 
-### pallet-revive (PolkaVM contracts)
-
-`pallet-revive` provides the PolkaVM smart-contract environment. CDM, DotNS, and
-application contracts run here.
-
-### Assets suite and ERC-20 precompiles
-
-Asset Hub exposes on-chain assets to contracts through ERC-20-style precompiles,
-so Product contracts can read and transfer supported assets without learning
-Substrate storage details.
-
-### DotNS gateway
-
-The DotNS gateway connects `.dot` domains to the contract environment. For how
-names resolve to app bundles, see [Naming](./naming.md).
-
-### Personhood precompile
-
-Contracts on Asset Hub can read proof-of-personhood through a precompile. That
-lets apps ask for a user's personhood tier without calling the identity backend.
+<div class="dg-cards" markdown="1">
+<div class="dg-card" markdown="1">
+**pallet-revive**
+The PolkaVM smart-contract environment. CDM, DotNS, and application contracts run here.
+</div>
+<div class="dg-card" markdown="1">
+**Assets + ERC-20 precompiles**
+On-chain assets exposed to contracts through ERC-20-style precompiles, so contracts read and transfer supported assets without Substrate storage details.
+</div>
+<div class="dg-card" markdown="1">
+**DotNS gateway**
+Connects `.dot` domains to the contract environment. See [Naming](./naming.md) for how names resolve to app bundles.
+</div>
+<div class="dg-card" markdown="1">
+**Personhood precompile**
+Contracts read a user's personhood tier through a precompile, without calling the identity backend.
+</div>
+</div>
 
 ## People <span class="dg-chip" style="--chip:#0ea5e9">para 1004</span>
 

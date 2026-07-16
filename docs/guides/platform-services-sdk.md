@@ -72,19 +72,34 @@ const client = createChainClient({
 });
 ```
 
-```mermaid
-flowchart TD
-  A[App: getChainAPI env] --> B{env in paseo/summit/devnet?}
-  B -- no --> X[throw: not yet available]
-  B -- yes --> C[loadDescriptors: assetHub + bulletin + individuality]
-  C --> D[createChainClient: cache by genesis fingerprint]
-  D --> E[host-routed provider]
-  E -- inside container --> G[Polkadot app / desktop / gateway]
-  E -- not in container --> Y[throw: Host provider unavailable]
-  G --> H[(Asset Hub)]
-  G --> I[(Bulletin)]
-  G --> J[(Individuality / People)]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>getChainAPI() connect flow</figcaption>
+<div class="dg-flow col">
+  <div class="dg-node developer"><div class="eb">App</div><div class="tt">getChainAPI(env)</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Guard</div><div class="tt">env in paseo / summit / devnet?</div></div>
+  <div class="dg-edge"><span class="lb">no / yes</span></div>
+  <div class="dg-stage">
+    <div class="dg-node"><div class="eb">env: no</div><div class="tt">throw: not yet available</div></div>
+    <div class="dg-node assethub"><div class="eb">env: yes</div><div class="tt">loadDescriptors</div><div class="sb">assetHub + bulletin + individuality</div></div>
+  </div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Client</div><div class="tt">createChainClient</div><div class="sb">cache by genesis fingerprint</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Provider</div><div class="tt">host-routed provider</div></div>
+  <div class="dg-edge"><span class="lb">inside / not in container</span></div>
+  <div class="dg-stage">
+    <div class="dg-node"><div class="eb">not in container</div><div class="tt">throw: Host provider unavailable</div></div>
+    <div class="dg-node gateway"><div class="eb">inside container</div><div class="tt">Polkadot app / desktop / gateway</div></div>
+  </div>
+  <div class="dg-edge"></div>
+  <div class="dg-stage">
+    <div class="dg-node assethub"><div class="eb">chain</div><div class="tt">Asset Hub</div></div>
+    <div class="dg-node bulletin"><div class="eb">chain</div><div class="tt">Bulletin</div></div>
+    <div class="dg-node people"><div class="eb">chain</div><div class="tt">Individuality / People</div></div>
+  </div>
+</div>
+</figure>
 
 ## Sign transactions
 

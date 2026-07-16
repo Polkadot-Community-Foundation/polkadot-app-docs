@@ -45,28 +45,27 @@ chains as transport, plus WebRTC for live media:
 
 Encryption is per peer. The chain sees only ciphertext.
 
-```mermaid
-flowchart TD
-  subgraph You
-    A1[Chat UI / ChatEngine]
-    A2[WebRTC peer connection]
-  end
-  subgraph Contact
-    B1[Chat UI / ChatEngine]
-    B2[WebRTC peer connection]
-  end
-  SS[People chain<br/>statement store]
-  BC[Bulletin-backed<br/>attachment storage]
-  TURN[STUN / TURN]
-
-  A1 -- E2E-encrypted statements<br/>text + call signals --> SS
-  SS -- subscription --> B1
-  A1 -- chunked AES media --> BC
-  BC -- fetch by HopTicket --> B1
-  A2 -- ICE / audio+video --> TURN
-  TURN -- relay --> B2
-  A2 -. direct P2P when possible .- B2
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>messaging transport paths</figcaption>
+<div class="dg-flow col">
+  <div class="dg-stage">
+    <div class="dg-node user"><div class="eb">You</div><div class="tt">Chat UI / ChatEngine</div></div>
+    <div class="dg-node user"><div class="eb">You</div><div class="tt">WebRTC peer connection</div></div>
+  </div>
+  <div class="dg-edge"><span class="lb">E2E statements (text + call signals) · chunked AES media · ICE audio+video</span></div>
+  <div class="dg-stage">
+    <div class="dg-node people"><div class="eb">People chain</div><div class="tt">statement store</div></div>
+    <div class="dg-node bulletin"><div class="eb">Bulletin</div><div class="tt">attachment storage</div></div>
+    <div class="dg-node"><div class="eb">Relay</div><div class="tt">STUN / TURN</div></div>
+  </div>
+  <div class="dg-edge"><span class="lb">subscription · fetch by HopTicket · relay</span></div>
+  <div class="dg-stage">
+    <div class="dg-node user"><div class="eb">Contact</div><div class="tt">Chat UI / ChatEngine</div></div>
+    <div class="dg-node user"><div class="eb">Contact</div><div class="tt">WebRTC peer connection</div></div>
+  </div>
+  <div class="dg-edge dashed"><span class="lb">WebRTC peers connect direct P2P when possible</span></div>
+</div>
+</figure>
 
 ## Start a chat and send messages
 
@@ -105,21 +104,20 @@ Calls are placed from the mobile app.
 4. Once connection negotiation completes, audio and video flow peer to peer over
    WebRTC, either directly or relayed through TURN.
 
-```mermaid
-sequenceDiagram
-  participant Caller
-  participant SS as People chain<br/>statement store
-  participant Callee
-  Caller->>Caller: Prepare WebRTC session
-  Caller->>SS: Send encrypted call offer
-  SS-->>Callee: offer statement
-  Callee->>SS: Send encrypted answer
-  SS-->>Caller: answer statement
-  Caller->>SS: Exchange connection candidates
-  Callee->>SS: Exchange connection candidates
-  Caller-->>Callee: WebRTC media (direct or TURN relay)
-  Caller->>SS: End call
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>call signaling over the statement store</figcaption>
+<div class="dg-seq">
+  <div class="dg-seq-step"><span class="dg-actor user">Caller</span><span class="arr">&#8594;</span><span class="dg-actor user">Caller</span><span class="msg">Prepare WebRTC session</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Caller</span><span class="arr">&#8594;</span><span class="dg-actor people">statement store</span><span class="msg">Send encrypted call offer</span></div>
+  <div class="dg-seq-step"><span class="dg-actor people">statement store</span><span class="arr">&#8594;</span><span class="dg-actor user">Callee</span><span class="msg">offer statement</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Callee</span><span class="arr">&#8594;</span><span class="dg-actor people">statement store</span><span class="msg">Send encrypted answer</span></div>
+  <div class="dg-seq-step"><span class="dg-actor people">statement store</span><span class="arr">&#8594;</span><span class="dg-actor user">Caller</span><span class="msg">answer statement</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Caller</span><span class="arr">&#8594;</span><span class="dg-actor people">statement store</span><span class="msg">Exchange connection candidates</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Callee</span><span class="arr">&#8594;</span><span class="dg-actor people">statement store</span><span class="msg">Exchange connection candidates</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Caller</span><span class="arr">&#8594;</span><span class="dg-actor user">Callee</span><span class="msg">WebRTC media (direct or TURN relay)</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Caller</span><span class="arr">&#8594;</span><span class="dg-actor people">statement store</span><span class="msg">End call</span></div>
+</div>
+</figure>
 
 Calls are a mobile-only feature today: the Desktop app has no call UI, so voice
 and video calls are placed and received only on Android or iOS.

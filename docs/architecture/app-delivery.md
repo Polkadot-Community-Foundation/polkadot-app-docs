@@ -16,19 +16,31 @@ Delivery has a write side (publishing) and a read side (opening). The publisher
 uploads a bundle and binds a name to it once; every visitor then resolves and
 fetches that bundle independently.
 
-```mermaid
-flowchart TD
-  A[Built static app] --> B[pad CLI prepares bundle]
-  B --> C[Upload content to Bulletin]
-  C --> D[Receive content CID]
-  D --> E{DotNS on Asset Hub}
-  E -->|not owned| G[register name]
-  E -->|owned| H[use existing name]
-  G --> I[write contenthash]
-  H --> I
-  I --> J[optional Browse listing]
-  J --> K[Live: name.dot in app + https://name.dev-dot.li]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>publish pipeline</figcaption>
+<div class="dg-flow col">
+  <div class="dg-node developer"><div class="eb">Step 1</div><div class="tt">Built static app</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node developer"><div class="eb">pad CLI</div><div class="tt">Prepare bundle</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node bulletin"><div class="eb">Bulletin</div><div class="tt">Upload content</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node bulletin"><div class="eb">Bulletin</div><div class="tt">Receive content CID</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Asset Hub</div><div class="tt">DotNS</div><div class="sb">name ownership check</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-stage">
+    <div class="dg-node dotns"><div class="eb">not owned</div><div class="tt">Register name</div></div>
+    <div class="dg-node dotns"><div class="eb">owned</div><div class="tt">Use existing name</div></div>
+  </div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Naming</div><div class="tt">Write contenthash</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node gateway"><div class="eb">Browse</div><div class="tt">Optional directory listing</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node gateway"><div class="eb">Gateway</div><div class="tt">Live</div><div class="sb">name.dot in app + https://name.dev-dot.li</div></div>
+</div>
+</figure>
 
 ## Publishing with `pad`
 
@@ -88,19 +100,29 @@ loader. There is no resolution server: the host shell reads the label from the
 subdomain, resolves it, fetches the content, and renders it in a sandboxed
 iframe.
 
-```mermaid
-flowchart TD
-  U[User opens survey.dev-dot.li] --> H[Gateway reads label]
-  H --> R[Resolve survey.dot]
-  R --> C[Read contenthash]
-  C --> D[Decode to CID]
-  D --> IF[Render app in sandbox]
-  IF --> FE{Fetch content}
-  FE -->|Bulletin / light client| V[Verified path]
-  FE -->|IPFS gateway| T[Gateway path]
-  V --> RN[App uses Host API bridge]
-  T --> RN
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>open pipeline</figcaption>
+<div class="dg-flow col">
+  <div class="dg-node user"><div class="eb">User</div><div class="tt">Opens survey.dev-dot.li</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node gateway"><div class="eb">Gateway</div><div class="tt">Read label</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Naming</div><div class="tt">Resolve survey.dot</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Resolver</div><div class="tt">Read contenthash</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Resolver</div><div class="tt">Decode to CID</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node gateway"><div class="eb">Gateway</div><div class="tt">Render app in sandbox</div></div>
+  <div class="dg-edge"><span class="lb">fetch content</span></div>
+  <div class="dg-stage">
+    <div class="dg-node bulletin"><div class="eb">Bulletin / light client</div><div class="tt">Verified path</div></div>
+    <div class="dg-node gateway"><div class="eb">IPFS gateway</div><div class="tt">Gateway path</div></div>
+  </div>
+  <div class="dg-edge"></div>
+  <div class="dg-node user"><div class="eb">Host API</div><div class="tt">App uses bridge</div></div>
+</div>
+</figure>
 
 The rendered app talks to the host through a bridge for accounts, signing, chain
 connection, and scoped storage. From the user's perspective, the same name works

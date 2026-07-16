@@ -65,18 +65,27 @@ are testing how your app behaves inside the real host protocol.
 | [`@novasamatech/host-api-wrapper`](https://www.npmjs.com/package/@novasamatech/host-api-wrapper) | `npm i @novasamatech/host-api-wrapper` | Product-side runtime that connects a web app to the host bridge. |
 | [`@parity/host-api-test-sdk`](https://www.npmjs.com/package/@parity/host-api-test-sdk) | `pnpm add -D @parity/host-api-test-sdk` | Test host for end-to-end tests without launching the full app. |
 
-```mermaid
-flowchart LR
-  subgraph iframe[Product iframe]
-    P[Product code] --> W[host-api-wrapper injects injectedWeb3.spektr]
-    W --> T[Transport: SCALE codecs over postMessage]
-    T --> HA[createHostApi business methods]
-  end
-  HA -- host_* / remote_* --> HC[host-container / host-papp]
-  HC --> S[Signing UI + permissions]
-  HC --> RPC[remote chainHead / chainSpec / tx broadcast]
-  RPC --> N[(Devnet chains)]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>product iframe &#8594; host bridge &#8594; devnet chains</figcaption>
+<div class="dg-flow">
+  <div class="dg-node developer"><div class="eb">Product iframe</div><div class="tt">Product code</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Wrapper</div><div class="tt">host-api-wrapper</div><div class="sb">injects injectedWeb3.spektr</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Transport</div><div class="tt">SCALE codecs</div><div class="sb">over postMessage</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Host API</div><div class="tt">createHostApi</div><div class="sb">business methods</div></div>
+  <div class="dg-edge"><span class="lb">host_* / remote_*</span></div>
+  <div class="dg-node"><div class="eb">Host</div><div class="tt">host-container / host-papp</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-stage">
+    <div class="dg-node"><div class="eb">Permissions</div><div class="tt">Signing UI + permissions</div></div>
+    <div class="dg-node"><div class="eb">Remote RPC</div><div class="tt">chainHead / chainSpec / tx broadcast</div></div>
+  </div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Network</div><div class="tt">Devnet chains</div></div>
+</div>
+</figure>
 
 The host-side stack and shared libraries live in the
 [triangle-js-sdks](https://github.com/paritytech/triangle-js-sdks) monorepo.

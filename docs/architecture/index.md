@@ -45,40 +45,28 @@ The platform is a small set of cooperating layers:
 
 ## System diagram
 
-```mermaid
-flowchart TD
-  subgraph Clients["Entry points"]
-    APP["Polkadot app<br/>(Android / iOS / Desktop)"]
-    GW["Web gateway<br/>dev-dot.li"]
-  end
-
-  subgraph Dev["Developer tooling (npm)"]
-    SDK["@parity/product-sdk"]
-    PAD["polkadot-app-deploy (pad)"]
-    DOTNS["@polkadot-community-foundation/dotns-cli"]
-    CDM["@polkadot-community-foundation/cdm-cli"]
-  end
-
-  subgraph Net["Devnet"]
-    AH["Asset Hub (1000)<br/>pallet-revive + assets<br/>DotNS + CDM registries"]
-    PEOPLE["People (1004)<br/>identity + personhood<br/>Coinage + statement store"]
-    BULLETIN["Bulletin (1010)<br/>app bundles + chat media"]
-  end
-
-  APP -->|Host API| SDK
-  GW -->|smoldot light client| AH
-  SDK -->|host-routed RPC| AH
-  SDK --> PEOPLE
-  SDK --> BULLETIN
-
-  PAD -->|upload bundle| BULLETIN
-  PAD -->|register name + contenthash| AH
-  DOTNS -->|reserve .dot| AH
-  CDM -->|deploy + register| AH
-
-  AH -.->|contenthash = CID| BULLETIN
-  PEOPLE -.->|ring roots via XCM| AH
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>SYSTEM OVERVIEW</figcaption>
+<div class="dg-flow col">
+  <div class="dg-stage">
+    <div class="dg-node user"><div class="eb">Entry point</div><div class="tt">Polkadot app</div><div class="sb">Android / iOS / Desktop</div></div>
+    <div class="dg-node gateway"><div class="eb">Entry point</div><div class="tt">Web gateway</div><div class="sb">dev-dot.li</div></div>
+  </div>
+  <div class="dg-stage">
+    <div class="dg-node developer"><div class="eb">Dev tooling</div><div class="tt">@parity/product-sdk</div></div>
+    <div class="dg-node developer"><div class="eb">Dev tooling</div><div class="tt">polkadot-app-deploy (pad)</div></div>
+    <div class="dg-node developer"><div class="eb">Dev tooling</div><div class="tt">dotns-cli</div><div class="sb">@polkadot-community-foundation</div></div>
+    <div class="dg-node developer"><div class="eb">Dev tooling</div><div class="tt">cdm-cli</div><div class="sb">@polkadot-community-foundation</div></div>
+  </div>
+  <div class="dg-edge"><span class="lb">Host API / host-routed RPC / upload / register / deploy</span></div>
+  <div class="dg-stage">
+    <div class="dg-node assethub"><div class="eb">para 1000</div><div class="tt">Asset Hub</div><div class="sb">pallet-revive + assets, DotNS + CDM registries</div></div>
+    <div class="dg-node people"><div class="eb">para 1004</div><div class="tt">People</div><div class="sb">identity + personhood, Coinage + statement store</div></div>
+    <div class="dg-node bulletin"><div class="eb">para 1010</div><div class="tt">Bulletin</div><div class="sb">app bundles + chat media</div></div>
+  </div>
+  <div class="dg-edge dashed"><span class="lb">Asset Hub: contenthash = CID &#8594; Bulletin; People: ring roots via XCM &#8594; Asset Hub</span></div>
+</div>
+</figure>
 
 ## Request path: opening a `.dot` app
 
@@ -111,21 +99,19 @@ whether they use the web gateway or the in-app browser; the trust model differs.
    the app never manages its own node connections or keys. On-device keys sign;
    the user approves each signature in a native modal.
 
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant C as Client (app / gateway)
-    participant AH as Asset Hub (DotNS)
-    participant B as Bulletin
-    U->>C: open survey.dot
-    C->>AH: read contenthash(namehash("survey.dot"))
-    AH-->>C: 0xe301 + CIDv1
-    C->>B: fetch CID (bitswap / IPFS)
-    B-->>C: app bundle (CAR)
-    C->>C: render in sandbox + inject Host API
-    U->>C: approve signature
-    C->>AH: submit signed extrinsic / contract call
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>REQUEST PATH: OPENING survey.dot</figcaption>
+<div class="dg-seq">
+  <div class="dg-seq-step"><span class="dg-actor user">User</span><span class="arr">&#8594;</span><span class="dg-actor gateway">Client (app / gateway)</span><span class="msg">open survey.dot</span></div>
+  <div class="dg-seq-step"><span class="dg-actor gateway">Client</span><span class="arr">&#8594;</span><span class="dg-actor assethub">Asset Hub (DotNS)</span><span class="msg">read contenthash(namehash("survey.dot"))</span></div>
+  <div class="dg-seq-step"><span class="dg-actor assethub">Asset Hub</span><span class="arr">&#8594;</span><span class="dg-actor gateway">Client</span><span class="msg">0xe301 + CIDv1</span></div>
+  <div class="dg-seq-step"><span class="dg-actor gateway">Client</span><span class="arr">&#8594;</span><span class="dg-actor bulletin">Bulletin</span><span class="msg">fetch CID (bitswap / IPFS)</span></div>
+  <div class="dg-seq-step"><span class="dg-actor bulletin">Bulletin</span><span class="arr">&#8594;</span><span class="dg-actor gateway">Client</span><span class="msg">app bundle (CAR)</span></div>
+  <div class="dg-seq-step"><span class="dg-actor gateway">Client</span><span class="arr">&#8594;</span><span class="dg-actor gateway">Client</span><span class="msg">render in sandbox + inject Host API</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">User</span><span class="arr">&#8594;</span><span class="dg-actor gateway">Client</span><span class="msg">approve signature</span></div>
+  <div class="dg-seq-step"><span class="dg-actor gateway">Client</span><span class="arr">&#8594;</span><span class="dg-actor assethub">Asset Hub</span><span class="msg">submit signed extrinsic / contract call</span></div>
+</div>
+</figure>
 
 From here the running app draws on the rest of the platform: it resolves package
 names to contract addresses through the [CDM registry](contracts.md),

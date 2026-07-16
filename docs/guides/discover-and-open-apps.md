@@ -75,15 +75,24 @@ These apps are deployed on the devnet and are a good starting point:
 When you open an app, the client turns the name into content and runs that
 content in an isolated container:
 
-```mermaid
-flowchart TD
-  U[You open a .dot domain] --> R[Resolve the name]
-  R --> C[Find the published app bundle]
-  C --> A[Fetch the app content]
-  A --> S[Run in a sandboxed webview]
-  S --> H[Ask the host for accounts, signing, chain, and payments]
-  H -->|after your approval| K[Your keys stay on your device]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>open app: name &#8594; content &#8594; sandbox</figcaption>
+<div class="dg-flow col">
+  <div class="dg-node user"><div class="eb">User</div><div class="tt">You open a .dot domain</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Naming</div><div class="tt">Resolve the name</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node bulletin"><div class="eb">Storage</div><div class="tt">Find the published app bundle</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node bulletin"><div class="eb">Content</div><div class="tt">Fetch the app content</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node user"><div class="eb">Webview</div><div class="tt">Run in a sandboxed webview</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Host</div><div class="tt">Ask the host for accounts, signing, chain, and payments</div></div>
+  <div class="dg-edge"><span class="lb">after your approval</span></div>
+  <div class="dg-node user"><div class="eb">Keys</div><div class="tt">Your keys stay on your device</div></div>
+</div>
+</figure>
 
 Two properties matter for you as a user:
 

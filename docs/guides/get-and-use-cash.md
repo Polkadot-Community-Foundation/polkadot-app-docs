@@ -80,19 +80,18 @@ you approve.
     and receive CASH inside chat conversations, not from a card. Fund your
     account on the mobile app first.
 
-```mermaid
-sequenceDiagram
-  participant U as You
-  participant App as Polkadot app
-  participant P as People chain
-  U->>App: Tap "+" top-up (devnet only)
-  App->>P: Request devnet funds
-  App->>App: Prepare funds for spending
-  App-->>U: CASH balance shown
-  U->>App: Send CASH to a recipient
-  App->>P: Submit CASH transfer
-  P-->>App: Transfer complete
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>CASH top-up &amp; send</figcaption>
+<div class="dg-seq">
+  <div class="dg-seq-step"><span class="dg-actor user">You</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Tap "+" top-up (devnet only)</span></div>
+  <div class="dg-seq-step"><span class="dg-actor">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor people">People chain</span><span class="msg">Request devnet funds</span></div>
+  <div class="dg-seq-step"><span class="dg-actor">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Prepare funds for spending</span></div>
+  <div class="dg-seq-step"><span class="dg-actor">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor user">You</span><span class="msg">CASH balance shown</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">You</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Send CASH to a recipient</span></div>
+  <div class="dg-seq-step"><span class="dg-actor">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor people">People chain</span><span class="msg">Submit CASH transfer</span></div>
+  <div class="dg-seq-step"><span class="dg-actor people">People chain</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Transfer complete</span></div>
+</div>
+</figure>
 
 !!! note "Where the value lives"
     Spending CASH is separate from the native token used for fees. Keep a small

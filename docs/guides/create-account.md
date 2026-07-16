@@ -57,15 +57,15 @@ asset you already hold into CASH (on iOS, via a payment card), which can take
 time — it is not the instant faucet. For a brand-new empty account, the **+**
 button is the one to use.
 
-```mermaid
-sequenceDiagram
-    participant U as You
-    participant App as Polkadot app
-    U->>App: Open Pocket, tap "+" (top-up)
-    App->>App: Request devnet top-up
-    Note over App: Deposit settles
-    App-->>U: CASH balance updates
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>CASH top-up</figcaption>
+<div class="dg-seq">
+  <div class="dg-seq-step"><span class="dg-actor user">You</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Open Pocket, tap "+" (top-up)</span></div>
+  <div class="dg-seq-step"><span class="dg-actor">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Request devnet top-up</span></div>
+  <div class="dg-seq-step"><span class="dg-actor">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor">Polkadot app</span><span class="msg">Deposit settles</span></div>
+  <div class="dg-seq-step"><span class="dg-actor">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor user">You</span><span class="msg">CASH balance updates</span></div>
+</div>
+</figure>
 
 CASH is the balance you spend inside the app. For what it is and how to send it,
 see [Get & use CASH](get-and-use-cash.md).

@@ -23,15 +23,25 @@ Binding a name to an app means writing an IPFS content hash into the content res
 a client then reads that record and fetches the bundle from the network's IPFS / dot.li
 gateway.
 
-```mermaid
-flowchart TD
-  A["name.dot"] --> B["node = namehash(name.dot)"]
-  B --> C["DotnsRegistry.owner(node)"]
-  C -->|registered| D["DotnsContentResolver.contenthash(node)"]
-  D --> E["decode -> IPFS CID"]
-  E --> F["fetch bundle via IPFS / dot.li gateway"]
-  C -->|not registered| G["resolve fails / empty"]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>resolve name.dot</figcaption>
+<div class="dg-flow col">
+  <div class="dg-node dotns"><div class="eb">Input</div><div class="tt">name.dot</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Naming</div><div class="tt">namehash</div><div class="sb">node = namehash(name.dot)</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Registry</div><div class="tt">DotnsRegistry.owner(node)</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-stage">
+    <div class="dg-node dotns"><div class="eb">registered</div><div class="tt">DotnsContentResolver.contenthash(node)</div></div>
+    <div class="dg-node"><div class="eb">not registered</div><div class="tt">resolve fails / empty</div></div>
+  </div>
+  <div class="dg-edge"></div>
+  <div class="dg-node bulletin"><div class="eb">Decode</div><div class="tt">decode &#8594; IPFS CID</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node gateway"><div class="eb">Gateway</div><div class="tt">fetch bundle</div><div class="sb">via IPFS / dot.li gateway</div></div>
+</div>
+</figure>
 
 For the full contract topology, see the [dotns](https://github.com/paritytech/dotns)
 and [dotns-sdk](https://github.com/paritytech/dotns-sdk) repositories.

@@ -61,19 +61,31 @@ or a gateway, and the archive runs inside a sandboxed webview. The app injects a
 Host API bridge so Products can ask the host for account, signing, chain,
 permission, storage, theme, notification, payment, and navigation services.
 
-```mermaid
-flowchart TD
-  U[User opens .dot domain] --> R[Resolve through DotNS]
-  R --> A[Fetch app bundle]
-  A --> S[Run in sandboxed webview]
-  S --> C[Host API bridge]
-  C --> H[Native host services]
-  H --> ACC[accounts / signing]
-  H --> CH[chain connection by genesis hash]
-  H --> PERM[device + remote permissions]
-  H --> PAY[payment / statement store / storage / theme / notifications]
-  ACC -->|on-device key| K[Hardware-backed keystore]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>browser &#8594; host API</figcaption>
+<div class="dg-flow col">
+  <div class="dg-node user"><div class="eb">User</div><div class="tt">Opens .dot domain</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Naming</div><div class="tt">Resolve through DotNS</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node bulletin"><div class="eb">Bulletin</div><div class="tt">Fetch app bundle</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Webview</div><div class="tt">Run in sandboxed webview</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Bridge</div><div class="tt">Host API bridge</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Host</div><div class="tt">Native host services</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-stage">
+    <div class="dg-node"><div class="eb">Accounts</div><div class="tt">Accounts / signing</div></div>
+    <div class="dg-node"><div class="eb">Chain</div><div class="tt">Chain connection</div><div class="sb">by genesis hash</div></div>
+    <div class="dg-node"><div class="eb">Permissions</div><div class="tt">Device + remote permissions</div></div>
+    <div class="dg-node people"><div class="eb">Services</div><div class="tt">Payment / statement store</div><div class="sb">storage / theme / notifications</div></div>
+  </div>
+  <div class="dg-edge"><span class="lb">on-device key</span></div>
+  <div class="dg-node"><div class="eb">Keystore</div><div class="tt">Hardware-backed keystore</div></div>
+</div>
+</figure>
 
 Each platform implements the webview and bridge in its native stack, but the
 contract exposed to Products is the same Host API.
@@ -109,15 +121,23 @@ DotNS contract addresses, gateway URLs, and backend URLs from the Devnet
 configuration service. The important point for users and app developers is that
 the app does not expect Products to hardcode those values.
 
-```mermaid
-flowchart TD
-  Channel["Selected Devnet channel"] --> Config["Devnet configuration"]
-  Config --> Roles["Resolve chain roles<br/>people / bulletin / assetHub"]
-  Config --> Services["Resolve service URLs<br/>gateway / identity / storage"]
-  Roles --> App["Active app environment"]
-  Services --> App
-  App --> Products["Products use host + SDK<br/>without hardcoded endpoints"]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>network selection</figcaption>
+<div class="dg-flow col">
+  <div class="dg-node"><div class="eb">Channel</div><div class="tt">Selected Devnet channel</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Config</div><div class="tt">Devnet configuration</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-stage">
+    <div class="dg-node people"><div class="eb">Roles</div><div class="tt">Resolve chain roles</div><div class="sb">people / bulletin / assetHub</div></div>
+    <div class="dg-node gateway"><div class="eb">Services</div><div class="tt">Resolve service URLs</div><div class="sb">gateway / identity / storage</div></div>
+  </div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Environment</div><div class="tt">Active app environment</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Products</div><div class="tt">Products use host + SDK</div><div class="sb">without hardcoded endpoints</div></div>
+</div>
+</figure>
 
 If the app cannot resolve a complete environment, it fails closed instead of
 guessing. Developer tooling follows the same idea: CLIs select a named network

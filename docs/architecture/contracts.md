@@ -52,16 +52,26 @@ installers fetch it when they need the ABI.
 
 The **`cdm` CLI** drives the full pipeline. A deploy runs, in order:
 
-```mermaid
-flowchart TD
-  A[cdm deploy -n network] --> B[Resolve network preset]
-  B --> C[Build contracts]
-  C --> D[Publish metadata to Bulletin]
-  D --> E[Deploy contract to Asset Hub]
-  E --> F[Register package version]
-  F --> H[(ContractRegistry)]
-  H --> I[name -> owner + versions + metadata]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>cdm deploy pipeline</figcaption>
+<div class="dg-flow col">
+  <div class="dg-node developer"><div class="eb">Step 1</div><div class="tt">cdm deploy -n network</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Step 2</div><div class="tt">Resolve network preset</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node developer"><div class="eb">Step 3</div><div class="tt">Build contracts</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node bulletin"><div class="eb">Step 4</div><div class="tt">Publish metadata to Bulletin</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node assethub"><div class="eb">Step 5</div><div class="tt">Deploy contract to Asset Hub</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node assethub"><div class="eb">Step 6</div><div class="tt">Register package version</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node assethub"><div class="eb">Registry</div><div class="tt">ContractRegistry</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Record</div><div class="tt">name &#8594; owner + versions + metadata</div></div>
+</div>
+</figure>
 
 To deploy your own contracts:
 
@@ -105,20 +115,27 @@ At runtime an application resolves a name to an address and ABI, then makes
 typed calls. The **CDM Frontend** at <https://contracts.dev-dot.li> is a useful
 reference for browsing what has been published.
 
-```mermaid
-flowchart LR
-  subgraph Install[cdm install / pg contract install]
-    P[dependency @org/name] --> Q[registry.getVersionCount/getAddress/getMetadataUri]
-    Q --> R[(ContractRegistry)]
-    Q --> S[fetch metadata CID from Bulletin/IPFS gateway]
-    S --> T[cdm.json: address + abi + .cdm typings]
-  end
-  subgraph Runtime[Frontend / app]
-    T --> U[createContract CONTRACTS_REGISTRY_ABI @ registryAddress]
-    U --> V[getAddress / getContracts / searchContractNames]
-    V --> R
-  end
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>resolve a contract: install &amp; runtime</figcaption>
+<div class="dg-flow col">
+  <div class="dg-node developer"><div class="eb">Install</div><div class="tt">dependency @org/name</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node assethub"><div class="eb">Install</div><div class="tt">registry.getVersionCount / getAddress / getMetadataUri</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-stage">
+    <div class="dg-node assethub"><div class="eb">Registry</div><div class="tt">ContractRegistry</div></div>
+    <div class="dg-node bulletin"><div class="eb">Bulletin</div><div class="tt">fetch metadata CID from Bulletin/IPFS gateway</div></div>
+  </div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Install</div><div class="tt">cdm.json: address + abi + .cdm typings</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node assethub"><div class="eb">Runtime</div><div class="tt">createContract CONTRACTS_REGISTRY_ABI @ registryAddress</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node assethub"><div class="eb">Runtime</div><div class="tt">getAddress / getContracts / searchContractNames</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node assethub"><div class="eb">Registry</div><div class="tt">ContractRegistry</div></div>
+</div>
+</figure>
 
 In an installed application, ABIs usually come from `cdm.json` and generated
 helpers, while addresses are resolved from the registry for the target network.

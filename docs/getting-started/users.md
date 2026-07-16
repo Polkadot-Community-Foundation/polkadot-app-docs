@@ -19,15 +19,23 @@ from a browser.
 - The **Polkadot app** on mobile or desktop, or
 - The **web gateway** at [https://dev-dot.li](https://dev-dot.li).
 
-```mermaid
-flowchart TD
-  You[You] --> App["Polkadot app<br/>(mobile / desktop)"]
-  You --> Web["Web gateway<br/>dev-dot.li"]
-  App --> Acct[On-device account]
-  App --> Cash["Devnet funds (CASH)"]
-  App --> Browse["Discover apps<br/>Browse / .dot links"]
-  Web --> Browse
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>How you reach apps</figcaption>
+<div class="dg-flow col">
+<div class="dg-stage"><div class="dg-node user"><div class="eb">You</div><div class="tt">You</div></div></div>
+<div class="dg-edge"></div>
+<div class="dg-stage">
+<div class="dg-node"><div class="eb">Client</div><div class="tt">Polkadot app</div><div class="sb">mobile / desktop</div></div>
+<div class="dg-node gateway"><div class="eb">Gateway</div><div class="tt">Web gateway</div><div class="sb">dev-dot.li</div></div>
+</div>
+<div class="dg-edge"></div>
+<div class="dg-stage">
+<div class="dg-node"><div class="eb">Account</div><div class="tt">On-device account</div></div>
+<div class="dg-node people"><div class="eb">Funds</div><div class="tt">Devnet funds (CASH)</div></div>
+<div class="dg-node gateway"><div class="eb">Discover</div><div class="tt">Browse / .dot links</div></div>
+</div>
+</div>
+</figure>
 
 ## 1. Install the Polkadot app
 
@@ -110,12 +118,19 @@ can ask for approvals and use platform services. Opening an app from Browse in a
 plain web browser currently routes through the production `.dot.li` gateway; to
 stay on the devnet, open the app's `<name>.dev-dot.li` address directly.
 
-```mermaid
-flowchart LR
-  B[Browse directory] --> Pick[Pick an app]
-  Pick -->|inside Polkadot app| Host["Opens in the app host"]
-  Pick -->|in a web browser| Gateway["Opens via .dot.li gateway"]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>Opening an app from Browse</figcaption>
+<div class="dg-flow">
+<div class="dg-node gateway"><div class="eb">Directory</div><div class="tt">Browse directory</div></div>
+<div class="dg-edge"></div>
+<div class="dg-node"><div class="eb">Step</div><div class="tt">Pick an app</div></div>
+<div class="dg-edge"></div>
+<div class="dg-stage">
+<div class="dg-node"><div class="eb">inside Polkadot app</div><div class="tt">Opens in the app host</div></div>
+<div class="dg-node gateway"><div class="eb">in a web browser</div><div class="tt">Opens via .dot.li gateway</div></div>
+</div>
+</div>
+</figure>
 
 ### From a `.dot` link
 

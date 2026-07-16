@@ -51,21 +51,18 @@ same human-readable identity works across the app and app-discovery flows. That
 mirroring is operator-run infrastructure; users and Product developers normally
 do not interact with it directly.
 
-```mermaid
-sequenceDiagram
-    participant App as Polkadot app (device)
-    participant BFF as identity-backend (BFF)
-    participant Worker as Registration worker
-    participant People as People chain (people-lite)
-    participant AH as Asset Hub (dotns-gateway)
-    App->>BFF: POST /auth/token (App Attest / Play Integrity + Challenge)
-    BFF-->>App: JWT
-    App->>BFF: POST /usernames (base name + signed proof)
-    BFF-->>App: 202 Accepted (registration queued)
-    Worker->>People: Register Lite username attestation (async)
-    People-->>Worker: finalized (Lite person registered)
-    People-->>AH: username can be mirrored into .dot naming
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>Lite username registration</figcaption>
+<div class="dg-seq">
+  <div class="dg-seq-step"><span class="dg-actor user">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor people">identity-backend</span><span class="msg">POST /auth/token (App Attest / Play Integrity + Challenge)</span></div>
+  <div class="dg-seq-step"><span class="dg-actor people">identity-backend</span><span class="arr">&#8594;</span><span class="dg-actor user">Polkadot app</span><span class="msg">JWT</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Polkadot app</span><span class="arr">&#8594;</span><span class="dg-actor people">identity-backend</span><span class="msg">POST /usernames (base name + signed proof)</span></div>
+  <div class="dg-seq-step"><span class="dg-actor people">identity-backend</span><span class="arr">&#8594;</span><span class="dg-actor user">Polkadot app</span><span class="msg">202 Accepted (registration queued)</span></div>
+  <div class="dg-seq-step"><span class="dg-actor">Registration worker</span><span class="arr">&#8594;</span><span class="dg-actor people">People chain</span><span class="msg">Register Lite username attestation (async)</span></div>
+  <div class="dg-seq-step"><span class="dg-actor people">People chain</span><span class="arr">&#8594;</span><span class="dg-actor">Registration worker</span><span class="msg">finalized (Lite person registered)</span></div>
+  <div class="dg-seq-step"><span class="dg-actor people">People chain</span><span class="arr">&#8594;</span><span class="dg-actor assethub">Asset Hub</span><span class="msg">username can be mirrored into .dot naming</span></div>
+</div>
+</figure>
 
 ## Full personhood and invitation tickets
 
@@ -97,13 +94,18 @@ The returned `contextAlias` is a per-application, privacy-preserving pseudonym:
 the same person yields a different alias in a different context, which prevents
 apps from linking a user's activity across applications.
 
-```mermaid
-flowchart LR
-    People["People chain<br/>personhood state"] -- XCM --> Sub["Asset Hub context state"]
-    Sub --> PC["personhood precompile"]
-    App["PolkaVM contract / app"] -- "personhoodStatus(account, context)" --> PC
-    PC -- "status 0=None/1=Lite/2=Full + contextAlias" --> App
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>Reading personhood on-chain</figcaption>
+<div class="dg-flow">
+  <div class="dg-node people"><div class="eb">People chain</div><div class="tt">Personhood state</div></div>
+  <div class="dg-edge"><span class="lb">XCM</span></div>
+  <div class="dg-node assethub"><div class="eb">Asset Hub</div><div class="tt">Context state</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node assethub"><div class="eb">Precompile</div><div class="tt">personhood precompile</div></div>
+  <div class="dg-edge"><span class="lb">personhoodStatus(account, context) &#8594; status 0=None/1=Lite/2=Full + contextAlias</span></div>
+  <div class="dg-node assethub"><div class="eb">Contract</div><div class="tt">PolkaVM contract / app</div></div>
+</div>
+</figure>
 
 Application front-ends that run inside the Polkadot app or the web gateway at [https://dev-dot.li](https://dev-dot.li) obtain identity and host information through the app's developer packages — [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) and [`@novasamatech/host-api`](https://www.npmjs.com/package/@novasamatech/host-api). The exact surface those packages expose for username and personhood status is defined in their own repositories.
 

@@ -18,20 +18,33 @@ writes the resulting root CID as an ENS-style `contenthash` into the DotNS
 `ContentResolver` contract on Asset Hub. The web gateway resolves the name to
 that CID entirely client-side and renders the bundle.
 
-```mermaid
-flowchart TD
-  A[Built static dist/] --> B[pad: merkleize to DAG-PB CAR]
-  B --> C[Chunk ~2 MiB + skip unchanged blocks]
-  C --> D[Bulletin: TransactionStorage.store_with_cid_config]
-  D --> E[Store DAG-PB root node = content root CID]
-  E --> F{DotNS on Asset Hub}
-  F -->|not owned| G[register name]
-  F -->|owned| H[skip]
-  G --> I[setContenthash node = 0xe301 + CIDv1]
-  H --> I
-  I --> J[optional Publisher.publish label]
-  J --> K[Live at name.dot and https://name.dev-dot.li]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>publish path</figcaption>
+<div class="dg-flow col">
+  <div class="dg-node"><div class="eb">build</div><div class="tt">Built static dist/</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node developer"><div class="eb">pad</div><div class="tt">merkleize to DAG-PB CAR</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">pad</div><div class="tt">Chunk ~2 MiB</div><div class="sb">skip unchanged blocks</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node bulletin"><div class="eb">Bulletin</div><div class="tt">TransactionStorage.store_with_cid_config</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node bulletin"><div class="eb">Bulletin</div><div class="tt">Store DAG-PB root node</div><div class="sb">= content root CID</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node assethub"><div class="eb">Asset Hub</div><div class="tt">DotNS on Asset Hub</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-stage">
+    <div class="dg-node"><div class="eb">not owned</div><div class="tt">register name</div></div>
+    <div class="dg-node"><div class="eb">owned</div><div class="tt">skip</div></div>
+  </div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">DotNS</div><div class="tt">setContenthash</div><div class="sb">node = 0xe301 + CIDv1</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node developer"><div class="eb">Publisher</div><div class="tt">optional Publisher.publish label</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node gateway"><div class="eb">Gateway</div><div class="tt">Live at name.dot</div><div class="sb">https://name.dev-dot.li</div></div>
+</div>
+</figure>
 
 ## Prerequisites
 

@@ -53,21 +53,31 @@ The contract `owner()` account bypasses both the personhood gate and the rate
 limit, so the operator running the network can seed listings freely. For your
 own app you go through the gated path.
 
-```mermaid
-flowchart TD
-  A[publish label] --> B{label non-empty?}
-  B -- no --> E1[revert EmptyLabel]
-  B -- yes --> C{registrar.ownerOf == caller?}
-  C -- no --> E2[revert NotOwner]
-  C -- yes --> D{caller == owner?}
-  D -- yes --> R[record + emit Published]
-  D -- no --> P{personhood status}
-  P -- 0 None --> E3[revert NoPersonhood]
-  P -- 1 Lite cap=1/day --> Q{under rate limit?}
-  P -- '2+ Full cap=5/day' --> Q
-  Q -- no --> E4[revert RateLimitExceeded]
-  Q -- yes --> R
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>publish permission gate</figcaption>
+<div class="dg-flow col">
+  <div class="dg-node developer"><div class="eb">Actor</div><div class="tt">publish label</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node"><div class="eb">Check</div><div class="tt">label non-empty?</div></div>
+  <div class="dg-edge"><span class="lb">yes</span></div>
+  <div class="dg-node dotns"><div class="eb">Check</div><div class="tt">registrar.ownerOf == caller?</div></div>
+  <div class="dg-edge"><span class="lb">yes</span></div>
+  <div class="dg-node"><div class="eb">Check</div><div class="tt">caller == owner?</div><div class="sb">owner bypasses personhood + rate limit</div></div>
+  <div class="dg-edge"><span class="lb">no</span></div>
+  <div class="dg-node people"><div class="eb">Check</div><div class="tt">personhood status</div><div class="sb">1 Lite cap 1/day &middot; 2+ Full cap 5/day</div></div>
+  <div class="dg-edge"><span class="lb">Lite / Full</span></div>
+  <div class="dg-node"><div class="eb">Check</div><div class="tt">under rate limit?</div></div>
+  <div class="dg-edge"><span class="lb">yes</span></div>
+  <div class="dg-node assethub"><div class="eb">Result</div><div class="tt">record + emit Published</div></div>
+  <div class="dg-edge dashed"><span class="lb">no / fail at a check</span></div>
+  <div class="dg-stage">
+    <div class="dg-node"><div class="eb">empty label</div><div class="tt">revert EmptyLabel</div></div>
+    <div class="dg-node dotns"><div class="eb">wrong owner</div><div class="tt">revert NotOwner</div></div>
+    <div class="dg-node people"><div class="eb">status 0 None</div><div class="tt">revert NoPersonhood</div></div>
+    <div class="dg-node"><div class="eb">rate limited</div><div class="tt">revert RateLimitExceeded</div></div>
+  </div>
+</div>
+</figure>
 
 ## Before you start
 
@@ -143,13 +153,20 @@ card from your manifest. Selecting the card opens the app — inside the Polkado
 app it navigates to `my-app.dot`; in a plain browser it opens the app through
 the web gateway.
 
-```mermaid
-flowchart LR
-  P[Publisher.getPublished] --> L[Registrar.labelOf]
-  L --> C[ContentResolver.contenthash]
-  C --> M[ContentResolver.text manifest]
-  M --> UI[Product cards in Browse]
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>listing read path</figcaption>
+<div class="dg-flow">
+  <div class="dg-node"><div class="eb">Enumerate</div><div class="tt">Publisher.getPublished</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Resolve</div><div class="tt">Registrar.labelOf</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Hydrate</div><div class="tt">ContentResolver.contenthash</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node dotns"><div class="eb">Hydrate</div><div class="tt">ContentResolver.text manifest</div></div>
+  <div class="dg-edge"></div>
+  <div class="dg-node gateway"><div class="eb">Render</div><div class="tt">Product cards in Browse</div></div>
+</div>
+</figure>
 
 ## Removing a listing
 

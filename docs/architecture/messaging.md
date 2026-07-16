@@ -51,46 +51,44 @@ rather than embedding TURN configuration themselves.
 
 ### Outgoing call flow (Android)
 
-```mermaid
-sequenceDiagram
-  participant Caller
-  participant SS as People chain<br/>statement store
-  participant Callee
-  Caller->>Caller: Prepare WebRTC session
-  Caller->>SS: Send encrypted call offer
-  SS-->>Callee: offer statement
-  Callee->>SS: Send encrypted answer
-  SS-->>Caller: answer statement
-  Caller->>SS: Exchange connection candidates
-  Callee->>SS: Exchange connection candidates
-  Caller-->>Callee: WebRTC media (direct or TURN relay)
-  Caller->>SS: End call
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>Outgoing call flow (Android)</figcaption>
+<div class="dg-seq">
+  <div class="dg-seq-step"><span class="dg-actor user">Caller</span><span class="arr">&#8594;</span><span class="dg-actor user">Caller</span><span class="msg">Prepare WebRTC session</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Caller</span><span class="arr">&#8594;</span><span class="dg-actor people">Statement store</span><span class="msg">Send encrypted call offer</span></div>
+  <div class="dg-seq-step"><span class="dg-actor people">Statement store</span><span class="arr">&#8594;</span><span class="dg-actor user">Callee</span><span class="msg">offer statement</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Callee</span><span class="arr">&#8594;</span><span class="dg-actor people">Statement store</span><span class="msg">Send encrypted answer</span></div>
+  <div class="dg-seq-step"><span class="dg-actor people">Statement store</span><span class="arr">&#8594;</span><span class="dg-actor user">Caller</span><span class="msg">answer statement</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Caller</span><span class="arr">&#8594;</span><span class="dg-actor people">Statement store</span><span class="msg">Exchange connection candidates</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Callee</span><span class="arr">&#8594;</span><span class="dg-actor people">Statement store</span><span class="msg">Exchange connection candidates</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Caller</span><span class="arr">&#8594;</span><span class="dg-actor user">Callee</span><span class="msg">WebRTC media (direct or TURN relay)</span></div>
+  <div class="dg-seq-step"><span class="dg-actor user">Caller</span><span class="arr">&#8594;</span><span class="dg-actor people">Statement store</span><span class="msg">End call</span></div>
+</div>
+</figure>
 
 ## Data paths at a glance
 
-```mermaid
-flowchart TD
-  subgraph ClientA[Client A]
-    A1[Chat UI / ChatEngine]
-    A2[WebRTC PeerConnection]
-  end
-  subgraph ClientB[Client B]
-    B1[Chat UI / ChatEngine]
-    B2[WebRTC PeerConnection]
-  end
-  SS["People chain statement store"]
-  BC["Bulletin-backed attachment storage"]
-  TURN["STUN / TURN"]
-
-  A1 -- "E2E-encrypted statements<br/>(text + SDP/ICE call signals)" --> SS
-  SS -- subscription --> B1
-  A1 -- "chunked AES media" --> BC
-  BC -- "fetch by HopTicket" --> B1
-  A2 -- "ICE / media (audio+video)" --> TURN
-  TURN -- relay --> B2
-  A2 -. "direct P2P when possible" .- B2
-```
+<figure class="dg-figure">
+<figcaption class="dg-figcaption"><span class="dot"></span>Data paths at a glance</figcaption>
+<div class="dg-flow col">
+  <div class="dg-stage">
+    <div class="dg-node user"><div class="eb">Client A</div><div class="tt">Chat UI / ChatEngine</div></div>
+    <div class="dg-node user"><div class="eb">Client A</div><div class="tt">WebRTC PeerConnection</div></div>
+  </div>
+  <div class="dg-edge"><span class="lb">E2E-encrypted statements (text + SDP/ICE call signals) · chunked AES media · ICE / media (audio+video)</span></div>
+  <div class="dg-stage">
+    <div class="dg-node people"><div class="eb">People chain</div><div class="tt">Statement store</div></div>
+    <div class="dg-node bulletin"><div class="eb">Bulletin</div><div class="tt">Attachment storage</div></div>
+    <div class="dg-node"><div class="eb">Relay</div><div class="tt">STUN / TURN</div></div>
+  </div>
+  <div class="dg-edge"><span class="lb">subscription · fetch by HopTicket · relay</span></div>
+  <div class="dg-stage">
+    <div class="dg-node user"><div class="eb">Client B</div><div class="tt">Chat UI / ChatEngine</div></div>
+    <div class="dg-node user"><div class="eb">Client B</div><div class="tt">WebRTC PeerConnection</div></div>
+  </div>
+  <div class="dg-edge dashed"><span class="lb">WebRTC direct P2P when possible (A &#8596; B)</span></div>
+</div>
+</figure>
 
 ## Desktop specifics and device sync
 
