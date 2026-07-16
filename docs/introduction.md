@@ -5,6 +5,13 @@ app and the app platform behind it. These docs are here to help you do something
 concrete first: install the app, create an account, try Products, build one of
 your own, or understand how the platform fits together before reading source.
 
+The larger idea is simple: Products should feel like polished web experiences,
+while running on decentralized blockchain infrastructure. A Product can be named,
+published, discovered, opened, and used through Polkadot-native services instead
+of a traditional app server. The Polkadot app and web gateway provide the smooth
+entry point, while the Devnet gives developers a place to test those web3 flows
+end to end.
+
 !!! warning "This is a public Devnet"
     The Polkadot Products Devnet is an early developer preview. Tokens on it have
     **no real value**, chains and services may be reset, and flows described here
@@ -15,7 +22,7 @@ your own, or understand how the platform fits together before reading source.
 For **users**, the Devnet is the Polkadot app: a self-custodial client for
 mobile and desktop, with a web gateway at [dev-dot.li](https://dev-dot.li). You
 can create an account, claim a human-readable username, try CASH flows, chat,
-and open Products by name.
+and use Products.
 
 For **developers**, it is a way to ship a web Product into a Polkadot-native
 host. You build a frontend, give it a `.dot` name, publish the bundle, and use
@@ -23,9 +30,10 @@ host-provided services such as accounts, signing, identity, payments, contracts,
 and storage.
 
 Products are addressed by human-readable `.dot` names. A name resolves to the
-published bundle, which runs inside the Polkadot app or the web gateway. The
-Product talks to the surrounding host through the **Host API**, so the same
-bundle can run across mobile, desktop, and web entry points.
+published bundle, and the bundle runs inside the Polkadot app or the web
+gateway. The Product talks to the surrounding host through the **Host API**, so
+the same experience can run across mobile, desktop, and web entry points without
+asking users to manage raw keys, RPC endpoints, or chain-specific plumbing.
 
 ## The model to keep in your head
 

@@ -38,7 +38,7 @@ into one public preview:
 
 - **Use the Polkadot app** with an on-device account, a People Chain username,
   chat, and devnet payments.
-- **Open Products by name** through `.dot` addresses, either in the app or
+- **Use Products** through `.dot` addresses, either in the app or
   through the web gateway at
   [dev-dot.li](https://dev-dot.li).
 - **Publish your own Product** as a static web app and bind it to a `.dot` name

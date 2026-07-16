@@ -36,8 +36,7 @@ Opening a card navigates into the app either through the Polkadot app host or a
 
 ## The permission model
 
-Publishing is gated at the contract level (`Publisher.sol` in the `browse`
-repo). A non-owner caller must satisfy three conditions:
+Publishing is gated on-chain. A non-owner caller must satisfy three conditions:
 
 - **Ownership of the `.dot` label.** The contract hashes `<label>` to its
   namehash and requires `registrar.ownerOf(<label>.dot) == msg.sender`. An

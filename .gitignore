@@ -9,6 +9,9 @@ __pycache__/
 .ruff_cache/
 .coverage
 htmlcov/
+build/
+dist/
+*.egg-info/
 
 # Local environments and secrets
 .venv/
@@ -16,6 +19,10 @@ venv/
 .env
 .env.*
 !.env.example
+
+# Caches and logs
+.cache/
+*.log
 
 # Node tooling
 node_modules/

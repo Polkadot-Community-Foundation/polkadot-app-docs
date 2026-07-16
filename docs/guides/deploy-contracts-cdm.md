@@ -36,8 +36,7 @@ include `publishLatest`, `getAddress`, `getMetadataUri`, `getVersionCount`,
 `getOwner`, `getContracts` (paged), and `searchContractNames` (prefix). The
 first publisher of a name becomes its owner, and only the owner can publish new
 versions. Names must match the `@scope/pkg` shape, be ASCII, and be at most 64
-bytes
-([`contract/src/lib.rs`](https://github.com/paritytech/contract-dependency-manager)).
+bytes.
 
 ## Prerequisites
 

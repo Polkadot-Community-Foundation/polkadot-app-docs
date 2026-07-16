@@ -2,9 +2,9 @@
 
 The Polkadot app includes a built-in, self-custodial messenger. You can hold
 one-to-one chats, send media, and place voice or video calls to your contacts —
-without a central chat database that reads your messages. Text and call
-signaling travel as encrypted statements; attachments and live media use the
-supporting transport described below.
+without a central chat database that reads your messages. Text, attachments,
+and calls use different transports behind the scenes, but the app keeps that
+workflow in one conversation view.
 
 This page covers the user-facing flow and the current limits of each client.
 
@@ -35,22 +35,17 @@ contact.
 The messenger has no dedicated plaintext messaging backend. It uses two Polkadot
 chains as transport, plus WebRTC for live media:
 
-- **Text messages and call signaling** are SCALE-encoded, end-to-end encrypted,
-  and delivered through the [Polkadot statement store](https://docs.polkadot.com)
-  on the People chain over JSON-RPC (`statement_submit` /
-  `statement_subscribeStatement`).
+- **Text messages and call signaling** are end-to-end encrypted and delivered
+  through the People chain statement store.
 - **Media attachments** (images, video, files) do not go through the statement
-  store. They are chunked, AES-encrypted, and stored on the Bulletin Chain via a
-  "hop" RPC API (`hop_submit` / `hop_claim` / `hop_ack`); the chat message only
-  carries a reference (a `HopTicket`) so the recipient can fetch and decrypt the
+  store. They are encrypted and stored through Bulletin-backed storage; the chat
+  message only carries a reference so the recipient can fetch and decrypt the
   file.
 - **Voice and video calls** use WebRTC directly between the two devices. There is
   no signaling server: the SDP offer/answer and ICE candidates are sent as
   ordinary encrypted chat messages over the same statement-store channel.
 
-Encryption is per peer: the app derives a shared secret via ECDH between your key
-and your contact's key, runs it through HKDF-SHA256, and uses the result to
-AES-encrypt each message. The chain sees only ciphertext.
+Encryption is per peer. The chain sees only ciphertext.
 
 ```mermaid
 flowchart TD
@@ -62,9 +57,9 @@ flowchart TD
     B1[Chat UI / ChatEngine]
     B2[WebRTC peer connection]
   end
-  SS[People chain<br/>statement store<br/>statement_submit / subscribe]
-  BC[Bulletin chain<br/>hop_submit / hop_claim]
-  TURN[TURN relay + Google STUN]
+  SS[People chain<br/>statement store]
+  BC[Bulletin-backed<br/>attachment storage]
+  TURN[STUN / TURN]
 
   A1 -- E2E-encrypted statements<br/>text + call signals --> SS
   SS -- subscription --> B1
@@ -80,23 +75,19 @@ flowchart TD
 1. Open the app and go to the chats section.
 2. Add or select a contact. Contacts are keyed to their on-chain identity, so you
    are messaging an account, not a phone number or email address.
-3. Type your message and send it. Under the hood the app builds a SCALE
-   `Text` message, encrypts it with the per-peer key, and submits it as a
-   statement to the People chain. Delivery is retried until the statement is
-   accepted.
+3. Type your message and send it. The app encrypts the message locally and
+   submits it through the statement store.
 4. Your contact's app is subscribed to the statement store, receives the
    statement, decrypts it, and displays the message.
 
-The chat protocol also supports replies, reactions, and in-chat token transfers,
-which are carried as distinct message types over the same encrypted channel.
+The same encrypted channel supports replies, reactions, and in-chat token
+transfers.
 
 ## Send media
 
 1. In a chat, attach an image, video, or file.
-2. The app picks a Bulletin Chain hop node, chunks the file, and AES-encrypts it
-   before upload via `hop_submit`.
-3. A reference to the stored file (a `HopTicket` plus the node URL) is embedded in
-   a normal encrypted chat message.
+2. The app encrypts the file and uploads it through Bulletin-backed storage.
+3. A reference to the stored file is embedded in a normal encrypted chat message.
 4. Your contact receives the message, fetches the encrypted chunks from the
    Bulletin Chain, and decrypts them locally.
 
@@ -109,36 +100,27 @@ which are carried as distinct message types over the same encrypted channel.
 Calls are placed from the mobile app.
 
 1. Open a chat with the contact you want to call and start an audio or video call.
-2. The app creates a WebRTC peer connection. To traverse NATs it uses Google's
-   public STUN servers plus a TURN relay. On Android, short-lived TURN
-   credentials are fetched from the identity backend
-   (`POST /api/v1/turn/issue`); if that request fails, the call falls back to
-   STUN-only.
-3. The app sends an SDP offer to your contact as a `DataChannelOffer` chat
-   message (marked as an audio or video call). Your contact's app replies with a
-   `DataChannelAnswer`, and both sides exchange `DataChannelIceCandidate`
-   messages — all over the encrypted statement-store channel.
-4. Once ICE negotiation completes, audio and video flow peer to peer over WebRTC,
-   either directly or relayed through TURN. Ending the call sends a
-   `DataChannelClosed` message.
+2. The app creates a WebRTC peer connection. If the two devices cannot connect
+   directly, the app can fall back to relay infrastructure.
+3. The app sends the call offer, answer, and connection candidates as encrypted
+   chat messages over the statement-store channel.
+4. Once connection negotiation completes, audio and video flow peer to peer over
+   WebRTC, either directly or relayed through TURN.
 
 ```mermaid
 sequenceDiagram
   participant Caller
-  participant IB as Identity backend<br/>/api/v1/turn/issue
   participant SS as People chain<br/>statement store
   participant Callee
-  Caller->>IB: POST /api/v1/turn/issue (bearer)
-  IB-->>Caller: servers + username/password + ttl
-  Caller->>Caller: create WebRTC PC (STUN + TURN)
-  Caller->>SS: DataChannelOffer (SDP, audio/video)
+  Caller->>Caller: Prepare WebRTC session
+  Caller->>SS: Send encrypted call offer
   SS-->>Callee: offer statement
-  Callee->>SS: DataChannelAnswer (SDP)
+  Callee->>SS: Send encrypted answer
   SS-->>Caller: answer statement
-  Caller->>SS: DataChannelIceCandidate
-  Callee->>SS: DataChannelIceCandidate
+  Caller->>SS: Exchange connection candidates
+  Callee->>SS: Exchange connection candidates
   Caller-->>Callee: WebRTC media (direct or TURN relay)
-  Caller->>SS: DataChannelClosed (end)
+  Caller->>SS: End call
 ```
 
 On Desktop, incoming call state is folded from the same call-signal messages and
@@ -147,10 +129,9 @@ shown in the chat UI (ringing, active, finished, cancelled, missed).
 ## Device sync
 
 Desktop and mobile can keep contacts and chats in sync over an encrypted
-peer-to-peer channel. The two devices establish a WebRTC data channel — signaling
-the offer, answer, and ICE candidates through the same People-chain statement
-store — and replicate contacts and chats once the channel opens. TURN, where
-used, is configured client-side.
+peer-to-peer channel. The devices negotiate that channel through the same
+statement-store path used for calls, then replicate contacts and chats once the
+channel opens.
 
 ## Limits and honesty
 

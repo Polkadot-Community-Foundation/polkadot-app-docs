@@ -25,9 +25,8 @@ distinct human", without exposing who you are. There are two tiers:
   provides stronger, one-account-per-human assurance.
 
 Apps and smart contracts can read your tier through an on-chain interface and
-adjust what they offer accordingly. The status values are defined as
-`0 = None`, `1 = Lite`, `2 = Full`
-([`IPersonhood.sol`](https://github.com/paritytech/individuality-community/blob/main/precompiles/personhood/sol/IPersonhood.sol)).
+adjust what they offer accordingly. In practice, an app only needs to know
+whether you have no personhood, Lite personhood, or Full personhood.
 
 !!! tip "Your privacy is preserved"
     When an app checks your personhood, it does not receive your identity. It
@@ -60,21 +59,21 @@ one up yet, follow [Create an account & get funds](create-account.md) first.
 5. Wait for the registration to finalize on-chain. Once it does, you are a
    **lite person** and your username is live.
 
-Behind the scenes, the app's backend batches your registration onto the People
-chain, and a separate watcher can mirror your username into a matching `.dot`
-name so it resolves across the app.
+Behind the scenes, the app records your username on the People chain. Your
+username can also be reflected into `.dot` naming so it works across app and
+discovery flows.
 
 ```mermaid
 sequenceDiagram
     participant You as You (device)
-    participant App as Polkadot app + backend
+    participant App as Polkadot app
     participant People as People chain
     participant DotNS as Asset Hub (.dot names)
     You->>App: Choose base name, confirm
     You->>App: Sign registration on device
     App->>People: Register you as a lite person
     People-->>App: Finalized
-    People-->>DotNS: Username mirrored into a .dot name
+    People-->>DotNS: Username can be reflected into .dot naming
 ```
 
 ## Reach Full personhood (optional)
@@ -83,7 +82,7 @@ Lite personhood is enough for everyday use. Some features may require **Full**
 personhood, which you reach by taking part in the personhood game or by
 redeeming an invitation. When you have an invitation, the app can request a
 one-time ticket and use it on-chain to progress your verification. Availability
-of the game and invitations depends on the network operator, so this step may
+of the game and invitations can change between Devnet builds, so this step may
 not be active at all times.
 
 ## Why some features need personhood
@@ -100,11 +99,22 @@ may be gated behind a personhood tier, so completing this flow is what unlocks
 them. To learn how naming works, see
 [Register a .dot name](register-a-dot-name.md).
 
+## If something blocks you
+
+- **The name is unavailable.** Try another base name or accept the suffix the app
+  proposes.
+- **The registration does not finalize.** Check that your account has enough PAS
+  for fees and that you are connected to the Devnet.
+- **Full personhood is not offered.** Lite is the expected tier for most current
+  flows; Full depends on which personhood flows are active in the current build.
+- **An app does not recognize your status yet.** Wait for the on-chain update to
+  finalize, then reopen the app.
+
 ## Learn more
 
 - [Identity & personhood architecture](../architecture/identity.md)
 - [Naming (DotNS) architecture](../architecture/naming.md)
 - [Register a .dot name](register-a-dot-name.md)
-- Personhood pallets & precompile source: <https://github.com/paritytech/individuality-community>
+- Personhood source: <https://github.com/paritytech/individuality-community>
 - Identity backend source: <https://github.com/paritytech/identity-backend-community>
 - Polkadot developer docs: <https://docs.polkadot.com>
