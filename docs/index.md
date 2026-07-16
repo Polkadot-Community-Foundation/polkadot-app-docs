@@ -13,11 +13,6 @@ template: home.html
 
 <h1>Build Products for People.</h1>
 
-<div class="home-actions" markdown="1">
-[Start using the app](getting-started/users.md){ .md-button .md-button--primary }
-[Start building](getting-started/developers.md){ .md-button .md-button--primary }
-</div>
-
 </div>
 
 !!! warning "Public devnet"
