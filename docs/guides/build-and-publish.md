@@ -49,6 +49,14 @@ The publishing CLIs (`pad` and `dotns`) select a network with
 name for the public devnet is provided by the team operating the network — see
 [Networks & endpoints](../reference/networks.md).
 
+Before your first on-chain step, make sure your **signing account** is ready:
+
+- **Funded with native devnet tokens for fees.** `register` and `publish` sign
+  PolkaVM transactions on Asset Hub, so the account needs native tokens (from the
+  faucet — see the storage-authorization note below).
+- **Mapped to its EVM address.** `dotns`, `cdm`, and `pad` sign on Asset Hub's
+  PolkaVM; an account that has never been mapped fails on the first on-chain step.
+
 !!! warning "Two prerequisites for publishing"
     Your deploy account must (1) **own** the target `.dot` domain and (2) hold a
     live **Bulletin storage authorization**. `pad` never self-authorizes and fails

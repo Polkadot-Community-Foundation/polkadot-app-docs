@@ -75,7 +75,12 @@ You will need:
 
 - A built static bundle for your app (for example a Vite `dist/` directory).
 - A `.dot` domain you own on the devnet, and proof of personhood on the account
-  that will publish. See [Username & proof of personhood](username-and-personhood.md).
+  that will publish. That account must also be funded with native devnet tokens
+  for fees and mapped to its EVM address — the deploy and `Publisher.publish`
+  calls are PolkaVM transactions on Asset Hub. See
+  [Username & proof of personhood](username-and-personhood.md).
+- A Bulletin storage authorization for the upload, granted by the team operating
+  the network. Without it the deploy step cannot store your bundle.
 - The deploy CLI installed:
 
     ```bash

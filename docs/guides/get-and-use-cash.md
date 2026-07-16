@@ -10,6 +10,20 @@ flow: receive funds, see a balance, and send value to another account.
     amounts, and flows may change as the platform evolves. Never treat devnet
     funds, addresses, or backup phrases as if they were real.
 
+## Before you start
+
+To follow this guide without hitting a wall, have these ready first:
+
+- **An account.** CASH lives in your Polkadot app account. If you do not have one
+  yet, create or import it first — see [Create an account & get funds](create-account.md).
+- **Native tokens for fees — needed to *send* CASH.** Topping up CASH with the
+  in-app **"+"** button costs you nothing. But *sending* or spending CASH submits
+  an on-chain transaction, which needs a small amount of the native devnet token
+  to pay fees. Get native tokens from the [faucet](https://faucet.polkadot.io)
+  before you send CASH.
+- **The mobile app.** The **"+"** top-up is on the mobile app (devnet builds);
+  the desktop app has no CASH card.
+
 ## What CASH is
 
 "CASH" is the name the app uses for the Devnet digital-dollar balance. The app

@@ -108,17 +108,6 @@ nav:
       - getting-started/index.md
       - For users: getting-started/users.md
       - For developers: getting-started/developers.md
-  - Architecture:
-      - architecture/index.md
-      - The network: architecture/network.md
-      - The Polkadot app (client tier): architecture/client.md
-      - Naming (DotNS): architecture/naming.md
-      - App delivery: architecture/app-delivery.md
-      - Smart contracts & CDM: architecture/contracts.md
-      - Identity & personhood: architecture/identity.md
-      - Money (CASH & funding): architecture/money.md
-      - App discovery (Browse): architecture/discovery.md
-      - Messaging & calls: architecture/messaging.md
   - Guides:
       - guides/index.md
       - For users:
@@ -133,6 +122,17 @@ nav:
           - Deploy & register contracts: guides/deploy-contracts-cdm.md
           - Use platform services from the SDK: guides/platform-services-sdk.md
           - List your app in Browse: guides/list-in-browse.md
+  - Architecture:
+      - architecture/index.md
+      - The network: architecture/network.md
+      - The Polkadot app (client tier): architecture/client.md
+      - Naming (DotNS): architecture/naming.md
+      - App delivery: architecture/app-delivery.md
+      - Smart contracts & CDM: architecture/contracts.md
+      - Identity & personhood: architecture/identity.md
+      - Money (CASH & funding): architecture/money.md
+      - App discovery (Browse): architecture/discovery.md
+      - Messaging & calls: architecture/messaging.md
   - Reference:
       - reference/index.md
       - Networks & endpoints: reference/networks.md
