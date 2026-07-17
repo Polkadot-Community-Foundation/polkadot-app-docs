@@ -1,4 +1,4 @@
-# Build & publish a dApp
+# Build & Publish Applications
 
 This is the full publishing path for a first Product app: start from a Product
 SDK frontend, build a static bundle, register a `.dot` domain, and publish with
@@ -16,7 +16,7 @@ Install the SDK and the CLIs you will use:
 
 ```bash
 npm i @parity/product-sdk
-npm i -g @parity/polkadot-app-deploy   # deploy CLI (bin: pad)
+npm i -g @parity/polkadot-app-deploy   # deploy CLI (bins: pad, pad-bootstrap)
 npm i -g @polkadot-community-foundation/dotns-cli             # DotNS CLI (bin: dotns)
 npm i -g @polkadot-community-foundation/cdm-cli               # contract manifest CLI (bin: cdm)
 ```
@@ -33,37 +33,93 @@ Before your first on-chain step, make sure your **signing account** is ready:
   PolkaVM; an account that has never been mapped fails on the first on-chain step.
 
 !!! warning "Two prerequisites for publishing"
-    Your deploy account must (1) **own** the target `.dot` domain and (2) hold a
-    live **Bulletin storage authorization**. `pad` never self-authorizes and fails
-    fast if the authorization is missing or expired. See
+    Your deploy account must (1) **own** the target `.dot` domain, and (2) the
+    accounts `pad` uploads with must hold a live **Bulletin storage
+    authorization**. `pad` never self-authorizes and fails fast if the
+    authorization is missing or expired. See
     [Get storage authorization](#get-storage-authorization) below.
 
 ## Get storage authorization
 
 Publishing writes your app to the **Bulletin Chain**, and Bulletin storage is
-**authorization-based, not fee-based**. Before `pad` can upload, your deploy
-account needs a live storage *authorization*: an on-chain quota of bytes and
-transactions, recorded in `TransactionStorage.Authorizations`. You do **not** pay
-devnet tokens per upload.
+**authorization-based, not fee-based**: before `pad` can upload, the uploading
+account needs a live *authorization* — an on-chain quota of bytes and
+transactions recorded in `TransactionStorage.Authorizations`. You do **not** pay
+devnet tokens per upload, and `pad` never self-authorizes: if the authorization
+is missing or expired, it fails fast.
 
-On this Devnet you can grant one to yourself. The **Storage Faucet** in the
+One detail decides *which* account to authorize: **`pad` does not upload from
+your signing account.** It derives a small **pool** of helper accounts and
+uploads from one of those — which is why a failing deploy reports
+`pool account N is not authorized`. By default the pool is a shared, well-known
+set derived from the standard dev phrase (`//deploy/0…9`); set
+`BULLETIN_POOL_MNEMONIC` to use your own. Either way, it is the **pool** accounts
+that need authorization. There are two ways to grant it.
+
+### Option 1 — Storage Faucet (web)
+
+The **Storage Faucet** in the
 [Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet)
-authorizes a storage allowance for an account you name. The same page lists
-current authorizations and when each expires.
-
-- Storage Faucet — [Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet)
-- How authorizations work — [polkadot-bulletin-chain](https://github.com/paritytech/polkadot-bulletin-chain)
+authorizes a storage allowance for any account you name, and the same page lists
+current authorizations and when each expires. This is the quickest way to
+authorize a single account.
 
 !!! note "Two different faucets"
     The [token faucet](https://faucet.polkadot.io) provides **native devnet
     tokens** for transaction fees and account existence. The **Storage Faucet**
-    above grants a **Bulletin storage allowance**. Publishing typically needs
-    both: native tokens to sign the on-chain transactions, and an allowance to
-    upload the bundle.
+    grants a **Bulletin storage allowance**. Publishing typically needs both:
+    native tokens to sign the on-chain transactions, and an allowance to upload
+    the bundle.
 
-Authorizations are finite and expire. If a deploy account that used to work
-starts failing at the upload step, its allowance has most likely lapsed — top it
-up from the Storage Faucet and run the deploy again.
+### Option 2 — `pad-bootstrap` (self-driven)
+
+**`pad-bootstrap`** ships in the same `@parity/polkadot-app-deploy` package as
+`pad` (installed in [Prerequisites](#prerequisites) — no extra install). It
+checks every pool account `pad` will use and grants authorization to the ones
+that need it, in a single run. It signs the grants with an **authorizer** key,
+and the Devnet provides a shared, feeless one for exactly this purpose.
+
+!!! info "Devnet storage authorizer — `//Eve`"
+    The Devnet designates the well-known development account **`//Eve`** as a
+    feeless, unlimited storage authorizer, so its seed can be shared openly and
+    passed straight to `pad-bootstrap` as the `--authorizer`:
+
+    ```bash
+    export AUTHORIZER="//Eve"   # 5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw
+    ```
+
+    `//Eve` is the standard Substrate dev-phrase account, not an operator
+    secret — anyone may use it to authorize their own pool on the Devnet. It is
+    a Devnet convenience only; it authorizes nothing on any production network.
+
+Authorize the default (shared) pool that `pad … --env devnet` uses:
+
+```bash
+pad-bootstrap --env devnet --authorizer "$AUTHORIZER"
+```
+
+It prints each pool account's status, grants any that are missing or expired
+(feeless), and is idempotent — re-run it any time to top up expiring
+authorizations. Then run your deploy again.
+
+!!! warning "Always pass `--authorizer` explicitly"
+    The Devnet Bulletin identifies as a testnet, so if you omit `--authorizer`,
+    `pad-bootstrap` falls back to `//Alice` — which is **not** an authorizer here
+    and cannot grant. Always pass `//Eve` (above).
+
+Using your own pool? Pass the same mnemonic you deploy with, so `pad-bootstrap`
+authorizes the accounts your deploy actually uses:
+
+```bash
+BULLETIN_POOL_MNEMONIC="<your pool mnemonic>" \
+  pad-bootstrap --env devnet --authorizer "$AUTHORIZER"
+```
+
+### Authorizations expire
+
+Authorizations are finite and expire. If a deploy that used to work starts
+failing at the upload step, the allowance has most likely lapsed — top it up from
+the Storage Faucet or by re-running `pad-bootstrap`, then deploy again.
 
 ## 1. Scaffold with the Product SDK
 
@@ -156,3 +212,4 @@ These are working, deployed examples (source under
 - [Register a .dot domain](register-a-dot-name.md) — the full naming surface
 - [Use platform services from the SDK](platform-services-sdk.md) — once your app is live
 - [App delivery](../architecture/app-delivery.md) — how publishing works
+- [How Bulletin authorization works](https://github.com/paritytech/polkadot-bulletin-chain) — the storage pallet and quota model
