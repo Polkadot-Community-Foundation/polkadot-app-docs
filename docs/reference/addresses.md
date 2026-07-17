@@ -41,12 +41,8 @@ of system parachains. Product developers usually start with **Asset Hub (para
 | Chain | Para ID | Role |
 | --- | --- | --- |
 | Asset Hub | `1000` | Contracts (`pallet-revive`), assets, DotNS gateway |
-| Collectives | `1001` | Governance collectives |
-| Bridge Hub | `1002` | Bridging |
 | People | `1004` | Identity and proof-of-personhood |
-| Coretime (Broker) | `1005` | Coretime |
 | Bulletin | `1010` | Web-app bundle storage |
-| PAssetHub | `1111` | Interim Asset Hub + contracts |
 
 The product suite itself targets 1000 / 1004 / 1010.
 
