@@ -1,6 +1,6 @@
 | Platform | Where to get it |
 | --- | --- |
-| Android (direct APK) | <https://get.polkadotcommunity.foundation/android/latest.apk> |
+| Android (APK) | [latest Android release](https://github.com/Polkadot-Community-Foundation/polkadot-android-community/releases/latest) |
 | iOS (TestFlight) | [latest iOS release](https://github.com/Polkadot-Community-Foundation/polkadot-ios-community/releases/latest) |
 | Desktop (macOS / Windows / Linux) | [latest desktop release](https://github.com/Polkadot-Community-Foundation/polkadot-desktop-community/releases/latest) |
 | Web gateway (no install) | <https://dev-dot.li> |
