@@ -645,6 +645,26 @@ body:has(.home-hero) .home-hero { max-width: none; }
   opacity: 1;
 }
 
+/* Feedback link (left of the search bar). */
+.md-header__feedback {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  height: 34px;
+  padding: 0 0.85rem;
+  margin-right: 0.1rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+.md-header__feedback:hover {
+  background: var(--color-surface-secondary);
+  color: var(--color-text-primary);
+}
+
 /* --- Admonitions / callouts (scheme-aware, accent-bordered) ------------- */
 .md-typeset .admonition,
 .md-typeset details {

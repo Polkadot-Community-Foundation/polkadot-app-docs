@@ -23,6 +23,7 @@
     {% if config.extra.alternate %}
       {% include "partials/alternate.html" %}
     {% endif %}
+    <a href="https://forms.gle/qw74bWN7B6RvqMUu7" title="Share feedback" class="md-header__feedback" target="_blank" rel="noopener">Feedback</a>
     {% if "material/search" in config.plugins %}
       {% set search = config.plugins["material/search"] | attr("config") %}
       {% if search.enabled %}
