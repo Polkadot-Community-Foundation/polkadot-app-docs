@@ -53,16 +53,26 @@ blocks and updates the name to point at the new content.
 ### Bulletin storage and upload authorization
 
 Content is stored on the Bulletin chain. Uploads are authorization-based rather
-than fee-based: the deploy account needs upload quota, but does not pay devnet
+than fee-based: the uploading account needs upload quota, but does not pay devnet
 tokens for each bundle. Quota is granted by an **authorizer** via
-`authorize_account`. On this Devnet the
+`authorize_account`. In practice `pad` uploads from a small pool of derived
+helper accounts (not your signing account), so it is those that get authorized —
+either from the **Storage Faucet** in the
 [Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet)
-exposes that as a **Storage Faucet** signing with a dev account, so you can
-authorize your own deploy account; the same page lists current grants and their
-expiry.
+(authorize any account you name; the page also lists current grants and their
+expiry) or with the `pad-bootstrap` command, which authorizes the whole pool at
+once using a shared Devnet authorizer.
 See [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization)
 for the practical steps. This is separate from the token
 [faucet](https://faucet.polkadot.io), which only provides native tokens for fees.
+
+**Why storage is gated — and why this Devnet keeps it open.** Writing to Bulletin
+is permissioned (reading is always open — authorization gates storing, not
+retrieval). In production that write-gate is typically tied to **proof of
+personhood** or an **operator-run authorizer**, to keep an un-metered public
+store from being spammed. This Devnet leaves it open — a public Storage Faucet
+and a shared authorizer — so any developer can self-serve an allowance without a
+personhood check.
 
 !!! note
     Authorizations are finite and expire. If a previously working deploy
@@ -123,4 +133,4 @@ Polkadot app it is `<label>.dot`.
 
 - [polkadot-app-deploy](https://github.com/paritytech/polkadot-app-deploy) — source for the `pad` CLI
 - [dotli-community](https://github.com/paritytech/dotli-community) — the gateway loader
-- [Build & publish a dApp](../guides/build-and-publish.md) — do it
+- [Build & Publish Applications](../guides/build-and-publish.md) — do it

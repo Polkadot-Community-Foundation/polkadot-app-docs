@@ -79,18 +79,13 @@ checks every pool account `pad` will use and grants authorization to the ones
 that need it, in a single run. It signs the grants with an **authorizer** key,
 and the Devnet provides a shared, feeless one for exactly this purpose.
 
-!!! info "Devnet storage authorizer — `//Eve`"
-    The Devnet designates the well-known development account **`//Eve`** as a
-    feeless, unlimited storage authorizer, so its seed can be shared openly and
-    passed straight to `pad-bootstrap` as the `--authorizer`:
+!!! info "Devnet storage authorizer"
+    The Devnet provides a shared storage authorizer for `pad-bootstrap`. Pass it
+    as `--authorizer`; it can be rotated, so check here for the current value.
 
     ```bash
-    export AUTHORIZER="//Eve"   # 5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw
+    export AUTHORIZER="//Eve"   # Devnet storage authorizer (rotatable)
     ```
-
-    `//Eve` is the standard Substrate dev-phrase account, not an operator
-    secret — anyone may use it to authorize their own pool on the Devnet. It is
-    a Devnet convenience only; it authorizes nothing on any production network.
 
 Authorize the default (shared) pool that `pad … --env devnet` uses:
 

@@ -28,7 +28,7 @@ Before running the commands below, make sure you have:
 
 - **The tooling installed** — the Product SDK and the CLIs (`dotns`, `pad`, `cdm`); Step 1 covers this.
 - **A funded, mapped signing account** — an account with native devnet tokens for fees (from the faucet) whose EVM address is mapped on Asset Hub. `dotns`, `pad`, and `cdm` all sign PolkaVM transactions on Asset Hub with it.
-- **Storage authorization to publish** — the publish step (Step 5) also needs a Bulletin storage allowance, which you grant yourself from the [Storage Faucet](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet).
+- **Storage authorization to publish** — the publish step (Step 5) also needs a Bulletin storage allowance, granted either from the [Storage Faucet](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet) or with the `pad-bootstrap` CLI. See [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization).
 
 ## 1. Install the tooling
 
@@ -43,7 +43,7 @@ npm i @novasamatech/host-api
 
 # CLIs (install globally)
 npm i -g @polkadot-community-foundation/dotns-cli          # dotns — register/manage .dot domains
-npm i -g @parity/polkadot-app-deploy # pad   — publish app bundles
+npm i -g @parity/polkadot-app-deploy # pad, pad-bootstrap — publish bundles + authorize storage
 npm i -g @polkadot-community-foundation/cdm-cli            # cdm    — build/deploy/register contracts
 ```
 
@@ -140,6 +140,6 @@ To test as an end user, install the app and fund an account — see
 
 ## Learn more
 
-- [Build & publish a dApp](../guides/build-and-publish.md) — the full publishing path
+- [Build & Publish Applications](../guides/build-and-publish.md) — the full publishing path
 - [Use platform services from the SDK](../guides/platform-services-sdk.md) — chains, storage, contracts, identity
 - [dotli-starter](https://github.com/paritytech/dotli-starter) — a template to start from
