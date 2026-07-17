@@ -2,8 +2,8 @@
 
 A `.dot` domain is a human-readable handle on the Polkadot Products Devnet. It maps to
 an owner account and, optionally, to an application bundle — so that visiting
-`your-app.dot` in the [Polkadot app](https://polkadotcommunity.foundation/desktop/)
-or the [web gateway](https://dev-dot.li) loads your app.
+`your-app.dot` in the [Polkadot app](../reference/resources.md) or the
+[web gateway](https://dev-dot.li) loads your app.
 
 You can register and manage names with the DotNS CLI (`@polkadot-community-foundation/dotns-cli`).
 Short and reserved names have extra gates; ordinary app names follow the normal

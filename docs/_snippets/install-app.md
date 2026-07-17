@@ -2,7 +2,7 @@
 | --- | --- |
 | Android (direct APK) | <https://get.polkadotcommunity.foundation/android/latest.apk> |
 | iOS (TestFlight) | [latest iOS release](https://github.com/Polkadot-Community-Foundation/polkadot-ios-community/releases/latest) |
-| Desktop (macOS / Windows / Linux) | <https://polkadotcommunity.foundation/desktop/> |
+| Desktop (macOS / Windows / Linux) | [latest desktop release](https://github.com/Polkadot-Community-Foundation/polkadot-desktop-community/releases/latest) |
 | Web gateway (no install) | <https://dev-dot.li> |
 
 iOS distribution is TestFlight-only: the release notes carry the current join
