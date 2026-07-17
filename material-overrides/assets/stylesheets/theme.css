@@ -95,7 +95,11 @@
   --md-default-fg-color--lighter: var(--color-border-strong);
   --md-default-fg-color--lightest: var(--color-surface-secondary);
   --md-typeset-color: var(--color-text-secondary);
-  --md-typeset-a-color: var(--accent-default);
+  /* Links read in the primary text colour, distinguished from body copy by
+     being brighter plus underlined; the accent is the *interaction* colour and
+     appears on hover/focus. Body links at the accent pink measured 3.50:1 on the
+     light scheme — below the 4.5:1 WCAG AA floor. This is AAA in both schemes. */
+  --md-typeset-a-color: var(--color-text-primary);
   --md-primary-fg-color: var(--color-bg);
   --md-primary-bg-color: var(--color-text-primary);
   --md-accent-fg-color: var(--accent-default);
@@ -138,7 +142,11 @@
   --md-default-fg-color--lighter: var(--color-surface-secondary);
   --md-default-fg-color--lightest: var(--color-bg);
   --md-typeset-color: var(--color-text-secondary);
-  --md-typeset-a-color: var(--accent-default);
+  /* Links read in the primary text colour, distinguished from body copy by
+     being brighter plus underlined; the accent is the *interaction* colour and
+     appears on hover/focus. Body links at the accent pink measured 3.50:1 on the
+     light scheme — below the 4.5:1 WCAG AA floor. This is AAA in both schemes. */
+  --md-typeset-a-color: var(--color-text-primary);
   --md-primary-fg-color: var(--color-bg);
   --md-primary-bg-color: var(--color-text-primary);
   --md-accent-fg-color: var(--accent-default);
@@ -447,10 +455,17 @@ body:has(.home-hero) .home-hero { max-width: none; }
   margin: 0 0 1rem;
 }
 
+/* Home-card CTAs drop the underline, so they need the accent to read as links
+   at all — body links carry their affordance in the underline instead. */
 .md-typeset .home-card a {
   margin-top: auto;
   font-weight: 700;
   text-decoration: none;
+  color: var(--accent-default);
+}
+
+.md-typeset .home-card a:hover {
+  color: var(--accent-hover);
 }
 
 .home-link-list {
