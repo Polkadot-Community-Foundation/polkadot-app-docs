@@ -19,6 +19,17 @@ source repositories are available under [github.com/paritytech](https://github.c
 | `personhood` precompile | A pallet-revive precompile that lets any PolkaVM contract read an account's personhood tier and a per-app alias. | [individuality-community](https://github.com/paritytech/individuality-community) |
 | `attestation-protocol` | An EAS-style, permissionless attestation suite (`SchemaRegistry` + `AttestationService`) for general claims. | [attestation-protocol](https://github.com/paritytech/attestation-protocol) |
 
+!!! note "The identity backend is centralized today"
+    Every other component above is on-chain. `identity-backend` is not: it is an
+    operator-run HTTP service with its own database, and the Lite tier depends on
+    it to attest devices, allocate usernames, and submit the registration. It
+    holds no user keys and cannot sign as a user, but it is a trusted party — and
+    while it is down, username registration stops.
+
+    This is a devnet shortcut, not the intended end state. Running this role in a
+    decentralized fashion is desirable future work; the Devnet does not
+    demonstrate it, so do not read the current shape as the final architecture.
+
 ## Sessions: proving the device, not the person
 
 Before a client can register anything, it obtains a JWT through a device-attestation handshake. The backend never sees a password; it verifies that a request comes from a genuine, unmodified instance of the app on a genuine device.
