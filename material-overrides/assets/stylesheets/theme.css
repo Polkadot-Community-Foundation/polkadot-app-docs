@@ -511,6 +511,120 @@ body:has(.home-hero) .home-hero { max-width: none; }
   }
 }
 
+/* =============================================================================
+   Intro CTA — the "pick where to start" cards
+   -----------------------------------------------------------------------------
+   Two path cards used on the introduction page (users vs developers). Each card
+   carries a single accent via the --cta token: the users card keeps the accent
+   pink, the developers card takes the Asset Hub indigo. The icon badge tint and
+   the hover border are both derived from --cta, so a card is re-themed by
+   setting one variable. Colours are mixed against the current surface/border
+   tokens, so the same markup reads correctly in light and dark. */
+.intro-cta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0 0;
+}
+
+.md-typeset .intro-cta__card {
+  --cta: var(--accent-default);
+  display: flex;
+  flex-direction: column;
+  padding: 1.4rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--rounded-xl);
+  background: var(--color-surface);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.md-typeset .intro-cta__card--dev {
+  --cta: var(--dg-assethub);
+}
+
+.md-typeset .intro-cta__card:hover {
+  border-color: var(--cta);
+  transform: translateY(-2px);
+}
+
+.intro-cta__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.intro-cta__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  color: var(--cta);
+  background: color-mix(in srgb, var(--cta) 14%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--cta) 34%, var(--color-border));
+}
+
+.intro-cta__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.md-typeset .intro-cta__tag {
+  font-family: var(--md-code-font);
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.md-typeset .intro-cta__title {
+  font-family: var(--md-text-font);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0;
+  color: var(--color-text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.md-typeset .intro-cta__desc {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.1rem;
+}
+
+.md-typeset .intro-cta__desc code {
+  font-size: 0.8em;
+}
+
+.intro-cta__go {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: auto;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--cta);
+}
+
+.intro-cta__go span {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+@media screen and (max-width: 50em) {
+  .intro-cta {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Inline code pills */
 .md-typeset code {
   border-radius: var(--rounded-sm);

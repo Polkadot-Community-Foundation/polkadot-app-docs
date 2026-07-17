@@ -89,7 +89,28 @@ The developer loop is four steps, and only the first three are required:
 3. Publish the bundle with `pad`.
 4. Add contracts with CDM when your Product needs custom on-chain logic.
 
-<div class="dg-actions" markdown="1">
-[Start using the app](getting-started/users.md){ .md-button .md-button--primary }
-[Start building](getting-started/developers.md){ .md-button .md-button--primary }
+Pick where to start:
+
+<div class="intro-cta" markdown>
+
+<a class="intro-cta__card intro-cta__card--user" href="../getting-started/users/">
+  <span class="intro-cta__top">
+    <span class="intro-cta__icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/></svg></span>
+    <span class="intro-cta__tag">For users</span>
+  </span>
+  <span class="intro-cta__title">Start using the app</span>
+  <span class="intro-cta__desc">Install the Polkadot app, claim a username, and open Products people have built.</span>
+  <span class="intro-cta__go">Get the app <span>&rarr;</span></span>
+</a>
+
+<a class="intro-cta__card intro-cta__card--dev" href="../getting-started/developers/">
+  <span class="intro-cta__top">
+    <span class="intro-cta__icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg></span>
+    <span class="intro-cta__tag">For developers</span>
+  </span>
+  <span class="intro-cta__title">Start building</span>
+  <span class="intro-cta__desc">Ship a static web app to a <code>.dot</code> domain and call host services from the SDK.</span>
+  <span class="intro-cta__go">Read the dev guide <span>&rarr;</span></span>
+</a>
+
 </div>
