@@ -598,6 +598,10 @@ body:has(.home-hero) .home-hero { max-width: none; }
   line-height: 1.5;
   color: var(--color-text-secondary);
   margin-bottom: 1.1rem;
+  /* Reserve a consistent description block (up to three wrapped lines) so the
+     two cards stay the same height even when stacked, where each description
+     otherwise wraps to a different number of lines. */
+  min-height: 3lh;
 }
 
 .md-typeset .intro-cta__desc code {
