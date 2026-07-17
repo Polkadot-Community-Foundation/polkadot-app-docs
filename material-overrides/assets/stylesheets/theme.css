@@ -319,8 +319,13 @@ body:has(.home-hero) .md-main__inner {
   display: block;
 }
 
-body:has(.home-hero) .md-sidebar {
-  display: none !important;
+/* Desktop only. Below Material's 76.25em breakpoint the primary sidebar is the
+   navigation drawer behind the header's burger button, so hiding it there would
+   leave mobile visitors with no navigation at all. */
+@media screen and (min-width: 76.25em) {
+  body:has(.home-hero) .md-sidebar {
+    display: none !important;
+  }
 }
 
 body:has(.home-hero) .md-content {
