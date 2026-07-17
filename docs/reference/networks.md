@@ -44,8 +44,7 @@ value matters.
 
 Product development targets **Asset Hub (1000)**, **People (1004)**, and
 **Bulletin (1010)**. Other system parachains share the relay but are not part of
-the Product surface; the full list is in
-[Addresses & registries](./addresses.md).
+the Product surface.
 
 ## Public endpoints and gateways
 
