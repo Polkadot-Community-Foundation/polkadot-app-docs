@@ -32,14 +32,14 @@ flowchart TD
 
 ## Publishing with `pad`
 
-The deploy CLI is [`@parity/polkadot-app-deploy`](https://www.npmjs.com/package/@parity/polkadot-app-deploy),
+The deploy CLI is [`@polkadot-community-foundation/polkadot-app-deploy`](https://www.npmjs.com/package/@polkadot-community-foundation/polkadot-app-deploy),
 which ships the `pad` binary (alongside `polkadot-app-deploy` and
 `polkadot-app-bootstrap`). `pad` selects a network with `--env devnet`. After
 building your frontend, a publish is a single invocation over the output
 directory:
 
 ```bash
-npm i -g @parity/polkadot-app-deploy
+npm i -g @polkadot-community-foundation/polkadot-app-deploy
 pad ./dist my-app.dot --env devnet
 ```
 

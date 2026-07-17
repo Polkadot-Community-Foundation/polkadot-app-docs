@@ -77,7 +77,7 @@ flowchart TD
 ```
 
 Listing is not a separate deploy step. The `pad` deploy CLI
-([`@parity/polkadot-app-deploy`](https://www.npmjs.com/package/@parity/polkadot-app-deploy))
+([`@polkadot-community-foundation/polkadot-app-deploy`](https://www.npmjs.com/package/@polkadot-community-foundation/polkadot-app-deploy))
 can call `Publisher.publish(label)` as part of a deploy when you pass `--publish`, right
 after it writes the name's contenthash. See
 [Delivery: how apps ship](./app-delivery.md) for that pipeline.

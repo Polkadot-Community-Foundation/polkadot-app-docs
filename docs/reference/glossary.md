@@ -100,7 +100,7 @@ as accounts, signing, storage, chat, payments, or remote chain access.
 
 ### Deploy CLI (`pad`)
 
-`@parity/polkadot-app-deploy` (bin: `pad`) is the CLI that publishes a built
+`@polkadot-community-foundation/polkadot-app-deploy` (bin: `pad`) is the CLI that publishes a built
 static bundle and points a `.dot` domain at it.
 
 !!! tip

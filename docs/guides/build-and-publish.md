@@ -16,7 +16,7 @@ Install the SDK and the CLIs you will use:
 
 ```bash
 npm i @parity/product-sdk
-npm i -g @parity/polkadot-app-deploy   # deploy CLI (bins: pad, pad-bootstrap)
+npm i -g @polkadot-community-foundation/polkadot-app-deploy   # deploy CLI (bins: pad, pad-bootstrap)
 npm i -g @polkadot-community-foundation/dotns-cli             # DotNS CLI (bin: dotns)
 npm i -g @polkadot-community-foundation/cdm-cli               # contract manifest CLI (bin: cdm)
 ```
@@ -73,7 +73,7 @@ authorize a single account.
 
 ### Option 2 — `pad-bootstrap` (self-driven)
 
-**`pad-bootstrap`** ships in the same `@parity/polkadot-app-deploy` package as
+**`pad-bootstrap`** ships in the same `@polkadot-community-foundation/polkadot-app-deploy` package as
 `pad` (installed in [Prerequisites](#prerequisites) — no extra install). It
 checks every pool account `pad` will use and grants authorization to the ones
 that need it, in a single run. It signs the grants with an **authorizer** key,
@@ -187,8 +187,9 @@ Hub.
     pass `--mnemonic` (see `pad --help`), preferably from an environment
     variable, and never commit or print it.
 
-Add `--publish` to also list the app in the on-chain Publisher registry so
-directory apps such as [Browse](https://browse.dev-dot.li) can enumerate it:
+When Browse self-serve listing is available, add `--publish` to list the app in
+the on-chain Publisher registry so directory apps such as
+[Browse](https://browse.dev-dot.li) can enumerate it:
 
 ```bash
 pad ./dist <name>.dot --env devnet --publish
@@ -196,11 +197,11 @@ pad ./dist <name>.dot --env devnet --publish
 
 !!! warning "Browse `--publish` is not available on the public devnet yet"
     Listing calls the devnet Browse `Publisher` contract, but no published `pad`
-    build carries the devnet `Publisher` address yet, so `--publish --env devnet`
-    prints `Publish: not supported on this environment` and is silently skipped —
-    the deploy still succeeds, the app just isn't listed in Browse. Once
-    self-serve listing is enabled it will also require proof of personhood on the
-    publishing account.
+    build carries that contract address yet. For now, `--publish --env devnet`
+    prints `Publish: not supported on this environment` and skips the listing
+    step. The deploy still succeeds; the app just is not listed in Browse. Once
+    self-serve listing is enabled, the publishing account will also need proof
+    of personhood.
 
 Once the transaction settles, the app is live at `<name>.dot` in the Polkadot
 app and at `https://<name>.dev-dot.li` on the web gateway. See

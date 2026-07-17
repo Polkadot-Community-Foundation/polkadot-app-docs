@@ -15,7 +15,7 @@ Most projects only need a few direct dependencies:
 | [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) | `npm i @parity/product-sdk` | TypeScript SDK for building apps: multi-chain access, transactions, signing, contract calls, cloud storage, and identity. | — |
 | [`@novasamatech/host-api`](https://www.npmjs.com/package/@novasamatech/host-api) | `npm i @novasamatech/host-api` | Host↔product transport protocol and typed business methods used by apps running inside the Polkadot app. | — |
 | [`@polkadot-community-foundation/dotns-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli) | `npm i -g @polkadot-community-foundation/dotns-cli` | CLI for the `.dot` naming system: register names, set content/address records, manage reverse names and stores. | `dotns` |
-| [`@parity/polkadot-app-deploy`](https://www.npmjs.com/package/@parity/polkadot-app-deploy) | `npm i -g @parity/polkadot-app-deploy` | Deploy CLI: uploads a built static bundle to Bulletin, binds it to a `.dot` domain, and optionally lists it. `pad-bootstrap` (same package) authorizes the Bulletin storage pool. | `pad`, `pad-bootstrap` |
+| [`@polkadot-community-foundation/polkadot-app-deploy`](https://www.npmjs.com/package/@polkadot-community-foundation/polkadot-app-deploy) | `npm i -g @polkadot-community-foundation/polkadot-app-deploy` | Deploy CLI: uploads a built static bundle to Bulletin, binds it to a `.dot` domain, and optionally lists it. `pad-bootstrap` (same package) authorizes the Bulletin storage pool. | `pad`, `pad-bootstrap` |
 | [`@polkadot-community-foundation/cdm-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-cli) | `npm i -g @polkadot-community-foundation/cdm-cli` | Contract Dependency Manager: build, deploy, publish, register, and install PolkaVM contracts. | `cdm` |
 | [`@polkadot-community-foundation/cdm-env`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-env) | `npm i @polkadot-community-foundation/cdm-env` | Maps a network name to its Asset Hub / Bulletin RPCs, IPFS gateway, and CDM registry address. | — |
 
@@ -79,8 +79,8 @@ The host-side stack and shared libraries live in the
 
 | CLI | Package | Bin | What it does |
 |-----|---------|-----|--------------|
-| Deploy | `@parity/polkadot-app-deploy` | `pad` | Publishes a built static bundle, stores it on Bulletin, and points a `.dot` domain at it. |
-| Storage bootstrap | `@parity/polkadot-app-deploy` | `pad-bootstrap` | Authorizes the Bulletin storage pool `pad` uploads with, using an authorizer key. Ships in the same package as `pad`. |
+| Deploy | `@polkadot-community-foundation/polkadot-app-deploy` | `pad` | Publishes a built static bundle, stores it on Bulletin, and points a `.dot` domain at it. |
+| Storage bootstrap | `@polkadot-community-foundation/polkadot-app-deploy` | `pad-bootstrap` | Authorizes the Bulletin storage pool `pad` uploads with, using an authorizer key. Ships in the same package as `pad`. |
 | DotNS | `@polkadot-community-foundation/dotns-cli` | `dotns` | Registers and manages `.dot` domains: `register`, `lookup`, `content`, `primary`, `transfer`, `store`, `pop`, and more. |
 | CDM | `@polkadot-community-foundation/cdm-cli` | `cdm` | Builds, deploys, publishes, and registers PolkaVM contracts. |
 

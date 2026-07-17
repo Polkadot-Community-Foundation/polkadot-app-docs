@@ -5,6 +5,12 @@ your app means publishing a small on-chain record that points directory clients
 back to the `.dot` domain and its manifest. This page covers the permission model,
 the CLI path, and how to verify or retract a listing.
 
+!!! warning "Self-serve listing is not available on the public devnet yet"
+    No published `pad` build currently ships the devnet Browse `Publisher`
+    address. `pad --publish --env devnet` therefore prints
+    `Publish: not supported on this environment` and skips the listing step. The
+    deploy can still succeed; the app just is not listed in Browse.
+
 ## What "listing" actually is
 
 Listing records almost nothing on-chain: the `Publisher` contract stores only a
@@ -12,8 +18,8 @@ labelhash, the publisher address, and a timestamp. Everything Browse displays �
 name, description, icon — is read from your DotNS `manifest` record at load
 time. See [App discovery (Browse)](../architecture/discovery.md) for the model.
 
-So listing has two parts: your app is already deployed to a `.dot` domain, and
-you call `Publisher.publish("<label>")` so directory clients can enumerate it.
+Listing has two parts: your app is already deployed to a `.dot` domain, and you
+call `Publisher.publish("<label>")` so directory clients can enumerate it.
 
 ## What publishing requires
 
@@ -34,9 +40,9 @@ You will need:
 
 - A built static bundle for your app (for example a Vite `dist/` directory).
 - A `.dot` domain you own on the devnet, and proof of personhood on the account
-  that will publish. That account must also be funded with native devnet tokens
-  for fees and mapped to its EVM address — the deploy and `Publisher.publish`
-  calls are PolkaVM transactions on Asset Hub. See
+  that will publish once listing is enabled. That account must also be funded
+  with native devnet tokens for fees and mapped to its EVM address — the deploy
+  and `Publisher.publish` calls are PolkaVM transactions on Asset Hub. See
   [Username & proof of personhood](username-and-personhood.md).
 - A Bulletin storage allowance for the upload, from the
   [Storage Faucet](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet).
@@ -44,14 +50,12 @@ You will need:
 - The deploy CLI installed:
 
     ```bash
-    npm i -g @parity/polkadot-app-deploy
+    npm i -g @polkadot-community-foundation/polkadot-app-deploy
     ```
 
-    This installs the `pad` (and `polkadot-app-deploy`) binary. Listing is the
-    `--publish` flag, and it needs the devnet Browse `Publisher` address.
-    **Heads-up:** no published `pad` build ships that address for the public
-    devnet yet, so `--publish --env devnet` currently reports
-    `Publish: not supported on this environment` and is skipped (see Step 2).
+    This installs the `pad` (and `polkadot-app-deploy`) binary. Listing uses
+    the `--publish` flag, which only works when the selected environment carries
+    a Browse `Publisher` address.
 
 - The network preset: `pad` takes it via `--env devnet`. The `--publish` step
   only takes effect when that preset carries a `Publisher` contract address.
@@ -93,17 +97,16 @@ pad ./dist my-app.dot --env devnet --publish
 After the contenthash is set, this calls `Publisher.publish("my-app")`. If the
 selected `--env` preset carries no `Publisher` address, the publish step prints
 `Publish: not supported on this environment` and is skipped rather than failing
-the deploy — so a deploy can "succeed" without listing. On the public **devnet**
-that is the current behaviour: no published `pad` yet ships the devnet Publisher
-address, so self-serve Browse listing isn't available there yet.
+the deploy. That is the current public **devnet** behaviour.
 
 Publishing is idempotent. Re-running it on an already-listed label refreshes the
 publisher and timestamp in place rather than creating a duplicate entry, so it
 is safe to include `--publish` on every deploy.
 
-## Step 3 — Verify it appears
+## Step 3 — Verify the listing
 
-Open the Browse reference app and search for your app:
+Once self-serve listing is enabled and the publish step succeeds, open the Browse
+reference app and search for your app:
 
 - <https://browse.dev-dot.li>
 
@@ -114,8 +117,8 @@ the web gateway.
 
 ## Removing a listing
 
-To retract a listing, unpublish it. This is a standalone operation that skips
-the deploy:
+To retract an existing listing, unpublish it. This is a standalone operation that
+skips the deploy:
 
 ```bash
 pad --unpublish my-app.dot --env devnet

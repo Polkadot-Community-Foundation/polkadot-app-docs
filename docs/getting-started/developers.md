@@ -44,7 +44,7 @@ npm i @novasamatech/host-api
 
 # CLIs (install globally)
 npm i -g @polkadot-community-foundation/dotns-cli          # dotns — register/manage .dot domains
-npm i -g @parity/polkadot-app-deploy # pad, pad-bootstrap — publish bundles + authorize storage
+npm i -g @polkadot-community-foundation/polkadot-app-deploy # pad, pad-bootstrap — publish bundles + authorize storage
 npm i -g @polkadot-community-foundation/cdm-cli            # cdm    — build/deploy/register contracts
 ```
 
@@ -133,11 +133,11 @@ pad ./dist my-app.dot --env devnet
 Your app is now reachable as `my-app.dot` in the Polkadot app and at
 `https://my-app.dev-dot.li` on the gateway.
 
-To also list it in the **Browse** directory, add `--publish` — but note this is
-**not available on the public devnet yet**: no published `pad` build carries the
-devnet Browse `Publisher` address, so `pad --publish --env devnet` prints
-`Publish: not supported on this environment` and is skipped. Your deploy still
-succeeds and the app works; it just isn't listed in Browse. See
+Browse self-serve listing is **not available on the public devnet yet**. No
+published `pad` build carries the devnet Browse `Publisher` address, so
+`pad --publish --env devnet` prints `Publish: not supported on this environment`
+and skips the listing step. The deploy still succeeds and the app works; it just
+isn't listed in Browse. See
 [List your app in Browse](../guides/list-in-browse.md).
 
 ## 6. Optional — deploy contracts with `cdm`

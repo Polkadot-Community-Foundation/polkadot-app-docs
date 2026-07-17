@@ -27,7 +27,7 @@ below are recorded in the deployments register.
 The CLIs all select a network preset, but CDM uses a different flag name:
 
 ```bash
-pad ./dist my-app.dot --env devnet      # @parity/polkadot-app-deploy
+pad ./dist my-app.dot --env devnet      # @polkadot-community-foundation/polkadot-app-deploy
 dotns ... --env devnet                  # @polkadot-community-foundation/dotns-cli
 cdm ...  -n devnet                      # @polkadot-community-foundation/cdm-cli
 ```
