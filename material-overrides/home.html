@@ -1,6 +1,14 @@
-{% extends "main.html" %}
+{#-
+  Home page: a full-bleed landing with no sidebar column.
 
-{% block site_nav %}{% endblock %}
+  There is deliberately no `{% block site_nav %}{% endblock %}` override here.
+  Emptying that block removes the primary sidebar markup entirely — and on mobile
+  the primary sidebar *is* the navigation drawer, so overriding it leaves the
+  header's burger button opening nothing. The sidebar column is hidden on desktop
+  from CSS instead (`body:has(.home-hero) .md-sidebar`, behind a min-width media
+  query), which keeps the drawer working on small screens.
+-#}
+{% extends "main.html" %}
 
 {% block container %}
   <div class="md-content md-grid" data-md-component="content">
