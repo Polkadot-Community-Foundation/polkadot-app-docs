@@ -81,7 +81,7 @@ and terms used across the docs.
 - [Create an account & get funds](guides/create-account.md)
 - [Get & use CASH](guides/get-and-use-cash.md)
 - [Discover & open apps](guides/discover-and-open-apps.md)
-- [Build & publish a dApp](guides/build-and-publish.md)
+- [Build & Publish Applications](guides/build-and-publish.md)
 - [Register a `.dot` domain](guides/register-a-dot-name.md)
 - [Use platform services from the SDK](guides/platform-services-sdk.md)
 

@@ -122,7 +122,7 @@ nav:
           - Username & proof of personhood: guides/username-and-personhood.md
           - Discover & open apps: guides/discover-and-open-apps.md
       - For developers:
-          - Build & publish a dApp: guides/build-and-publish.md
+          - Build & Publish Applications: guides/build-and-publish.md
           - Register a .dot domain: guides/register-a-dot-name.md
           - Deploy & register contracts: guides/deploy-contracts-cdm.md
           - Use platform services from the SDK: guides/platform-services-sdk.md

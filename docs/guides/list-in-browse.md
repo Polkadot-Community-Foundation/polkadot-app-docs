@@ -120,6 +120,6 @@ or rate limit on removal.
 
 ## Learn more
 
-- [Build & publish a dApp](build-and-publish.md) — get the app deployed first
+- [Build & Publish Applications](build-and-publish.md) — get the app deployed first
 - [Username & proof of personhood](username-and-personhood.md) — publishing needs a tier
 - [App discovery (Browse)](../architecture/discovery.md) — the permission and hydration model

@@ -134,5 +134,5 @@ at `0x…0a010000`, moves [CASH](money.md), or lists itself in
 
 - New here? Start with the [Introduction](../introduction.md).
 - Building an app? Read [App delivery](app-delivery.md), then
-  [Build & publish a dApp](../guides/build-and-publish.md).
+  [Build & Publish Applications](../guides/build-and-publish.md).
 - Want addresses and endpoints? See [Reference](../reference/index.md).

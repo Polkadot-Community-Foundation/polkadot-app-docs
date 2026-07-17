@@ -104,7 +104,7 @@ dotns lookup name my-cool-app --env devnet    # full record view
 
 ## Bind a name to a bundle
 
-Once you have deployed your app (see [Build & publish a dApp](build-and-publish.md)) you will have an
+Once you have deployed your app (see [Build & Publish Applications](build-and-publish.md)) you will have an
 IPFS CID for the bundle. Write it into the content resolver to make the name resolve to
 your app:
 
@@ -138,4 +138,4 @@ dotns register subname --env devnet
 
 - [Naming (DotNS)](../architecture/naming.md) — resolution, contract topology, and the naming rules
 - [DotNS UI](https://dotns.dev-dot.li) — the same lookups in a browser
-- [Build & publish a dApp](build-and-publish.md) — bind the name to a bundle
+- [Build & Publish Applications](build-and-publish.md) — bind the name to a bundle

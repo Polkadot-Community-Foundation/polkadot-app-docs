@@ -28,7 +28,7 @@ work with a static web app, the Product SDK, and a few CLIs:
     This Devnet is the `devnet` preset: `pad` and `dotns` take `--env devnet`,
     CDM takes `-n devnet`. See [Networks & endpoints](../reference/networks.md).
 
-- [Build & publish a dApp](build-and-publish.md) — scaffold an app on the
+- [Build & Publish Applications](build-and-publish.md) — scaffold an app on the
   Product SDK and publish it with the `pad` deploy CLI.
 - [Register a .dot domain](register-a-dot-name.md) — reserve and configure a
   DotNS name with the `@polkadot-community-foundation/dotns-cli`.
