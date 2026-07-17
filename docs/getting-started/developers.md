@@ -28,6 +28,7 @@ Before running the commands below, make sure you have:
 
 - **The tooling installed** — the Product SDK and the CLIs (`dotns`, `pad`, `cdm`); Step 1 covers this.
 - **A funded, mapped signing account** — an account with native devnet tokens for fees (from the faucet) whose EVM address is mapped on Asset Hub. `dotns`, `pad`, and `cdm` all sign PolkaVM transactions on Asset Hub with it.
+- **A signing key configured for the CLIs** — set up the dotns keystore with `dotns auth set` (or export `DOTNS_MNEMONIC` / `DOTNS_KEY_URI`) **before** registering a name. Without it, `dotns` signs with a shared public dev account that anyone can control. `pad` is separate again — it takes its own `--mnemonic`. See [Set up an account](../guides/register-a-dot-name.md#set-up-an-account).
 - **Storage authorization to publish** — the publish step (Step 5) also needs a Bulletin storage allowance, granted either from the [Storage Faucet](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet) or with the `pad-bootstrap` CLI. See [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization).
 
 ## 1. Install the tooling
@@ -85,7 +86,22 @@ Build your app to a static directory (the reference template uses `vite build` �
 ## 4. Register a `.dot` domain
 
 Your deploy account must **own** the `.dot` domain before you can publish to it.
-Register it with the DotNS CLI.
+
+First give the DotNS CLI its own signing key — it keeps a keystore separate from
+the Polkadot app:
+
+```bash
+dotns auth set          # store your mnemonic (or export DOTNS_MNEMONIC)
+dotns account address   # confirm the active account
+```
+
+!!! danger "Register from your own key, not the shared default"
+    If you skip `dotns auth set` (and set no `DOTNS_MNEMONIC` / `DOTNS_KEY_URI`),
+    `dotns` signs with a **shared public dev account anyone can control**, and a
+    name registered to it is not really yours. `dotns` warns whenever it falls
+    back to that account.
+
+Then register it with the DotNS CLI:
 
 ```bash
 dotns register domain --name my-app --env devnet
@@ -109,9 +125,20 @@ pad ./dist my-app.dot --env devnet
     app content on the Devnet. If publishing fails because storage authorization
     is missing or expired, refresh that authorization and run the command again.
 
-To list your app in the Browse directory, add `--publish`. Your app is then
-reachable as `my-app.dot` in the Polkadot app and at
+!!! note "`pad` uses its own signing key"
+    Unlike `dotns`, `pad` does **not** read the dotns keystore. Give it a signer
+    explicitly — pass `--mnemonic` (check `pad --help` for the exact options),
+    preferably from an environment variable, and never commit or print it.
+
+Your app is now reachable as `my-app.dot` in the Polkadot app and at
 `https://my-app.dev-dot.li` on the gateway.
+
+To also list it in the **Browse** directory, add `--publish`. That needs a `pad`
+build with the devnet Browse Publisher wired, plus proof of personhood on the
+publishing account. If `pad --publish --env devnet` prints
+`Publish: not supported on this environment`, your `pad` predates the wiring —
+upgrade to the latest `@parity/polkadot-app-deploy`. See
+[List your app in Browse](../guides/list-in-browse.md).
 
 ## 6. Optional — deploy contracts with `cdm`
 

@@ -48,10 +48,13 @@ You will need:
     ```
 
     This installs the `pad` (and `polkadot-app-deploy`) binary. Listing support
-    was added to this CLI via the `--publish` flag, so use a recent version.
+    is the `--publish` flag, and it must know the devnet Browse `Publisher`
+    address — **use the latest version**. If `--publish` prints
+    `Publish: not supported on this environment`, your `pad` predates the devnet
+    Publisher wiring; upgrade.
 
 - The network preset: `pad` takes it via `--env devnet`. The `--publish` step
-  only takes effect on an environment that has a `Publisher` contract deployed.
+  only takes effect when that preset carries a `Publisher` contract address.
 
 !!! note "Metadata comes from a manifest"
     Browse shows your app using a root manifest with `displayName`,
@@ -87,9 +90,12 @@ You can list the app as part of a deploy by adding `--publish`:
 pad ./dist my-app.dot --env devnet --publish
 ```
 
-After the contenthash is set, this calls `Publisher.publish("my-app")`. On an
-environment that has no `Publisher` contract configured, the publish step is
-skipped rather than failing the deploy.
+After the contenthash is set, this calls `Publisher.publish("my-app")`. If the
+selected `--env` preset carries no `Publisher` address, the publish step prints
+`Publish: not supported on this environment` and is skipped rather than failing
+the deploy — so a deploy can "succeed" without listing. If you see that on
+`--env devnet`, upgrade `pad` (older builds shipped the devnet preset without
+the Publisher).
 
 Publishing is idempotent. Re-running it on an already-listed label refreshes the
 publisher and timestamp in place rather than creating a duplicate entry, so it

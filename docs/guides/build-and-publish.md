@@ -180,12 +180,27 @@ pad ./dist <name>.dot --env devnet
 
 `pad` uploads the bundle to Bulletin (skipping unchanged blocks on repeat
 deploys), registers the name if needed, and writes the content hash on Asset
-Hub. Add `--publish` to also list the app in the on-chain Publisher registry so
+Hub.
+
+!!! note "`pad` uses its own signing key"
+    `pad` does **not** read the dotns keystore. Give it a signer explicitly —
+    pass `--mnemonic` (see `pad --help`), preferably from an environment
+    variable, and never commit or print it.
+
+Add `--publish` to also list the app in the on-chain Publisher registry so
 directory apps such as [Browse](https://browse.dev-dot.li) can enumerate it:
 
 ```bash
 pad ./dist <name>.dot --env devnet --publish
 ```
+
+!!! warning "Browse listing needs a Publisher-aware `pad`"
+    Listing calls the devnet Browse `Publisher` contract. If your `pad` build
+    predates the devnet Publisher wiring, `--publish` prints
+    `Publish: not supported on this environment` and is silently skipped — the
+    deploy still succeeds, but the app is not listed. Upgrade to the latest
+    `@parity/polkadot-app-deploy`, and note listing also requires proof of
+    personhood on the publishing account.
 
 Once the transaction settles, the app is live at `<name>.dot` in the Polkadot
 app and at `https://<name>.dev-dot.li` on the web gateway. See

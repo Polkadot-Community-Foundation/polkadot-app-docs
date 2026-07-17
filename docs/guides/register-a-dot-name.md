@@ -27,8 +27,9 @@ variable).
 
 ## Set up an account
 
-The CLI signs with a per-account keystore. Store a mnemonic once, then reference it by
-name:
+The CLI keeps its **own** keystore, separate from any account in the Polkadot
+app. Configure it **before** you register anything — store a mnemonic once, then
+reference it by name:
 
 ```bash
 # Encrypt and store a mnemonic (or key-uri) into the keystore
@@ -38,6 +39,13 @@ dotns auth set
 dotns account address
 dotns account info --env devnet
 ```
+
+!!! danger "Without a keystore you sign with a shared public account"
+    If you have not run `dotns auth set` — and have set neither `DOTNS_MNEMONIC`
+    nor `DOTNS_KEY_URI` — `dotns` falls back to a **shared public dev account
+    that anyone can control**, and prints a warning saying exactly that on every
+    command. A `.dot` name registered from that account is **not yours**: anyone
+    can transfer it away. Always configure your own key first.
 
 Registration signs a PolkaVM transaction, so your account needs a mapped EVM address
 and a small devnet balance:
@@ -49,6 +57,12 @@ dotns account map --env devnet
 # Check whether an address is already mapped
 dotns account is-mapped <address> --env devnet
 ```
+
+!!! note
+    `dotns account is-mapped` checks the **address you pass in**. Its connection
+    banner still announces the CLI's default signer, so it may show the shared
+    dev account even when your keystore is configured — the authoritative answer
+    is the `mapped:` line for the address you asked about, not the banner.
 
 If your account has no balance, request devnet funds from the
 [faucet](https://faucet.polkadot.io).
