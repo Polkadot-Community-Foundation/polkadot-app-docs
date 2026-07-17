@@ -99,7 +99,7 @@ Pick where to start:
     <span class="intro-cta__tag">For users</span>
   </span>
   <span class="intro-cta__title">Start using the app</span>
-  <span class="intro-cta__desc">Install the Polkadot app, claim a username, and open Products people have built.</span>
+  <span class="intro-cta__desc">Install the Polkadot app, claim a username, and enjoy a decentralized web experience.</span>
   <span class="intro-cta__go">Get the app <span>&rarr;</span></span>
 </a>
 
@@ -109,7 +109,7 @@ Pick where to start:
     <span class="intro-cta__tag">For developers</span>
   </span>
   <span class="intro-cta__title">Start building</span>
-  <span class="intro-cta__desc">Ship a static web app to a <code>.dot</code> domain and call host services from the SDK.</span>
+  <span class="intro-cta__desc">Ship an application to a <code>.dot</code> site, create new decentralized experiences.</span>
   <span class="intro-cta__go">Read the dev guide <span>&rarr;</span></span>
 </a>
 
