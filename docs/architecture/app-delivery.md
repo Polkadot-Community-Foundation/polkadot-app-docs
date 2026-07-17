@@ -54,10 +54,12 @@ blocks and updates the name to point at the new content.
 
 Content is stored on the Bulletin chain. Uploads are authorization-based rather
 than fee-based: the deploy account needs upload quota, but does not pay devnet
-tokens for each bundle. Quota is granted by the network's **authorizer** (an
-operator role) via `authorize_account`; a publisher cannot self-authorize. On the
-devnet you request authorization for your deploy account from the operators, and
-can inspect it in the [Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations).
+tokens for each bundle. Quota is granted by an **authorizer** via
+`authorize_account`. On this Devnet the
+[Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet)
+exposes that as a **Storage Faucet** signing with a dev account, so you can
+authorize your own deploy account; the same page lists current grants and their
+expiry.
 See [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization)
 for the practical steps. This is separate from the token
 [faucet](https://faucet.polkadot.io), which only provides native tokens for fees.

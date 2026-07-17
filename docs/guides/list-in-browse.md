@@ -38,8 +38,9 @@ You will need:
   for fees and mapped to its EVM address — the deploy and `Publisher.publish`
   calls are PolkaVM transactions on Asset Hub. See
   [Username & proof of personhood](username-and-personhood.md).
-- A Bulletin storage authorization for the upload, granted by the team operating
-  the network. Without it the deploy step cannot store your bundle.
+- A Bulletin storage allowance for the upload, from the
+  [Storage Faucet](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet).
+  Without it the deploy step cannot store your bundle.
 - The deploy CLI installed:
 
     ```bash

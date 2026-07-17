@@ -92,8 +92,9 @@ pad ./dist my-app.dot --env devnet
 !!! warning
     The deploy account must already hold a live Bulletin storage authorization —
     `pad` never self-authorizes and fails fast if the authorization is missing or
-    expired. Authorizations are granted by the network's authorizer, an operator
-    action.
+    expired. Grant one from the
+    [Storage Faucet](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet)
+    in the Bulletin Chain Console.
 
 ### CDM libraries
 

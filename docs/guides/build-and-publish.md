@@ -46,24 +46,24 @@ account needs a live storage *authorization*: an on-chain quota of bytes and
 transactions, recorded in `TransactionStorage.Authorizations`. You do **not** pay
 devnet tokens per upload.
 
-You cannot grant this to yourself. Authorizations are issued by the network's
-**authorizer** — an operator role — with the `authorize_account(who, transactions,
-bytes)` call. On the devnet, request authorization for your deploy account from the
-team operating the network; they run the grant for you. You can check whether an
-account is authorized, and when its grant expires, in the Bulletin Chain Console:
+On this Devnet you can grant one to yourself. The **Storage Faucet** in the
+[Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet)
+authorizes a storage allowance for an account you name. The same page lists
+current authorizations and when each expires.
 
-- Bulletin Chain Console — [authorizations view](https://paritytech.github.io/polkadot-bulletin-chain/authorizations)
+- Storage Faucet — [Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet)
 - How authorizations work — [polkadot-bulletin-chain](https://github.com/paritytech/polkadot-bulletin-chain)
 
-!!! note "Authorization is not the faucet"
-    The [faucet](https://faucet.polkadot.io) provides **native devnet tokens** for
-    transaction fees and account existence — it does **not** grant storage
-    authorization. Publishing typically needs both: native tokens to sign the
-    on-chain transactions, and a Bulletin authorization to upload the bundle.
+!!! note "Two different faucets"
+    The [token faucet](https://faucet.polkadot.io) provides **native devnet
+    tokens** for transaction fees and account existence. The **Storage Faucet**
+    above grants a **Bulletin storage allowance**. Publishing typically needs
+    both: native tokens to sign the on-chain transactions, and an allowance to
+    upload the bundle.
 
-Authorizations are finite and expire; refreshing them is also an authorizer
-action. If a deploy account that used to work starts failing at the upload step,
-its authorization has most likely lapsed — ask the operator to refresh it.
+Authorizations are finite and expire. If a deploy account that used to work
+starts failing at the upload step, its allowance has most likely lapsed — top it
+up from the Storage Faucet and run the deploy again.
 
 ## 1. Scaffold with the Product SDK
 

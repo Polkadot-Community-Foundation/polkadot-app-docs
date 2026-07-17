@@ -28,7 +28,7 @@ Before running the commands below, make sure you have:
 
 - **The tooling installed** — the Product SDK and the CLIs (`dotns`, `pad`, `cdm`); Step 1 covers this.
 - **A funded, mapped signing account** — an account with native devnet tokens for fees (from the faucet) whose EVM address is mapped on Asset Hub. `dotns`, `pad`, and `cdm` all sign PolkaVM transactions on Asset Hub with it.
-- **Storage authorization to publish** — the publish step (Step 5) also needs a Bulletin storage authorization granted by the network operator.
+- **Storage authorization to publish** — the publish step (Step 5) also needs a Bulletin storage allowance, which you grant yourself from the [Storage Faucet](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet).
 
 ## 1. Install the tooling
 

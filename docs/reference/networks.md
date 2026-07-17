@@ -71,10 +71,10 @@ Devnet accounts can be funded from the Polkadot faucet at
 
 Publishing an app writes to the Bulletin Chain, which is **authorization-based**,
 not fee-based. A deploy account needs an authorization grant (a byte / transaction
-quota) issued by the network's authorizer — it is not obtained from the faucet and
-cannot be self-granted. Request it from the network operators, and inspect an
-account's grant in the
-[Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations).
+quota). Grant one to yourself from the **Storage Faucet** in the
+[Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet),
+which also lists current grants and their expiry. It does not come from the token
+faucet.
 See [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization).
 
 ### Node RPC endpoints
