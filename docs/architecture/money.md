@@ -104,5 +104,6 @@ addresses are supplied by the Devnet operators.
 
 ## Learn more
 
-- [paseo-network/runtimes](https://github.com/paseo-network/runtimes) — the Coinage pallet and asset definitions
+- [`pallet-coinage`](https://github.com/paritytech/individuality-community/blob/main/pallets/coinage/src/lib.rs) — the source: how CASH is represented as coins, held, and transferred
+- [paseo-network/runtimes](https://github.com/paseo-network/runtimes) — the chain runtimes and asset definitions
 - [Get & use CASH](../guides/get-and-use-cash.md) — do it
