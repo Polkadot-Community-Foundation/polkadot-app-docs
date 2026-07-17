@@ -3,10 +3,6 @@
 Find Products on the Polkadot Products Devnet and open them from the app, from
 Browse, or from a `dev-dot.li` link.
 
-!!! note "This is a devnet"
-    The Polkadot Products Devnet is a public developer preview. Any tokens you
-    hold here have no real value, and flows may change as the platform evolves.
-
 ## Ways to reach a Product
 
 There are three practical entry points:
@@ -16,7 +12,7 @@ There are three practical entry points:
 - **A `.dot` domain** — each published app has a name such as `survey.dot`. On the
   desktop app you can type it into the address bar. The mobile app has no
   general address bar, so on mobile you open apps from Browse or by following a
-  `.dot` / `.dot.li` link.
+  `.dot` / `.dev-dot.li` link.
 - **A `dev-dot.li` link** — the web gateway serves each app at
   `https://<name>.dev-dot.li` (for example
   <https://survey.dev-dot.li>). Open it in an ordinary browser.
@@ -60,15 +56,7 @@ name: `https://survey.dev-dot.li`.
 
 These apps are deployed on the devnet and are a good starting point:
 
-| App | Link |
-| --- | --- |
-| DotNS UI (manage `.dot` domains) | <https://dotns.dev-dot.li> |
-| Simple Survey | <https://survey.dev-dot.li> |
-| Playground template | <https://playground-template.dev-dot.li> |
-| CDM Frontend (contracts) | <https://contracts.dev-dot.li> |
-| Playground | <https://playground.dev-dot.li> |
-| Mercado marketplace | <https://mercado.dev-dot.li> |
-| localdot marketplace | <https://localmarket.dev-dot.li> |
+--8<-- "reference-apps.md"
 
 ## What happens when you open an app
 
@@ -95,16 +83,10 @@ Two properties matter for you as a user:
 
 !!! tip "Opening one app from another"
     Inside the Polkadot app, app-to-app navigation stays inside the host. In a
-    plain browser, the same action opens the app's web-gateway link instead —
-    but note that Browse's plain-web-browser cards currently point at the
-    production `.dot.li` gateway. To stay on the devnet, open the
-    `https://<name>.dev-dot.li` address instead.
+    plain browser, the same action opens the app at its
+    `https://<name>.dev-dot.li` address.
 
 ## Learn more
 
-- [Discovery architecture](../architecture/discovery.md)
-- [Naming architecture (DotNS)](../architecture/naming.md)
-- [App delivery architecture](../architecture/app-delivery.md)
-- [Create an account & get funds](create-account.md)
-- Browse source: <https://github.com/paritytech/browse>
-- Polkadot developer docs: <https://docs.polkadot.com>
+- [App discovery (Browse)](../architecture/discovery.md) — how the directory is built
+- [Create an account & get funds](create-account.md) — needed before most apps do anything

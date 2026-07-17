@@ -6,19 +6,18 @@ without a central chat database that reads your messages. Text, attachments,
 and calls use different transports behind the scenes, but the app keeps that
 workflow in one conversation view.
 
-This page covers the user-facing flow and the current limits of each client.
+There is no plaintext messaging backend: text and call signals travel encrypted
+over the People chain statement store, attachments go through Bulletin-backed
+storage, and call media flows peer-to-peer over WebRTC. The chain only ever sees
+ciphertext. For how that fits together, see
+[Messaging & calls](../architecture/messaging.md).
 
-!!! note
-    This is the Polkadot Products Devnet, a public developer preview. Devnet
-    tokens have no real value and flows may change between builds.
+This page covers the user-facing flow and the current limits of each client.
 
 ## Before you start
 
-You will need the Polkadot app installed and an on-device account:
-
-- Android APK: <https://get.polkadotcommunity.foundation/android/latest.apk>
-- iOS (TestFlight): <https://testflight.apple.com/join/VvC8SHVE>
-- Desktop: <https://polkadotcommunity.foundation/desktop/>
+You will need the [Polkadot app](../reference/resources.md) installed and an
+on-device account.
 
 Messaging is tied to your on-chain identity, so both you and the person you want
 to reach need an account and, in practice, to have added each other as a
@@ -27,46 +26,6 @@ contact.
 !!! tip
     Voice and video calls are a mobile-only feature today. You place and receive
     them on Android or iOS; the Desktop app has no call UI. Desktop is for chats.
-
-## How messaging works
-
-The messenger has no dedicated plaintext messaging backend. It uses two Polkadot
-chains as transport, plus WebRTC for live media:
-
-- **Text messages and call signaling** are end-to-end encrypted and delivered
-  through the People chain statement store.
-- **Media attachments** (images, video, files) do not go through the statement
-  store. They are encrypted and stored through Bulletin-backed storage; the chat
-  message only carries a reference so the recipient can fetch and decrypt the
-  file.
-- **Voice and video calls** use WebRTC directly between the two devices. There is
-  no signaling server: the SDP offer/answer and ICE candidates are sent as
-  ordinary encrypted chat messages over the same statement-store channel.
-
-Encryption is per peer. The chain sees only ciphertext.
-
-```mermaid
-flowchart TD
-  subgraph You
-    A1[Chat UI / ChatEngine]
-    A2[WebRTC peer connection]
-  end
-  subgraph Contact
-    B1[Chat UI / ChatEngine]
-    B2[WebRTC peer connection]
-  end
-  SS[People chain<br/>statement store]
-  BC[Bulletin-backed<br/>attachment storage]
-  TURN[STUN / TURN]
-
-  A1 -- E2E-encrypted statements<br/>text + call signals --> SS
-  SS -- subscription --> B1
-  A1 -- chunked AES media --> BC
-  BC -- fetch by HopTicket --> B1
-  A2 -- ICE / audio+video --> TURN
-  TURN -- relay --> B2
-  A2 -. direct P2P when possible .- B2
-```
 
 ## Start a chat and send messages
 
@@ -105,22 +64,6 @@ Calls are placed from the mobile app.
 4. Once connection negotiation completes, audio and video flow peer to peer over
    WebRTC, either directly or relayed through TURN.
 
-```mermaid
-sequenceDiagram
-  participant Caller
-  participant SS as People chain<br/>statement store
-  participant Callee
-  Caller->>Caller: Prepare WebRTC session
-  Caller->>SS: Send encrypted call offer
-  SS-->>Callee: offer statement
-  Callee->>SS: Send encrypted answer
-  SS-->>Caller: answer statement
-  Caller->>SS: Exchange connection candidates
-  Callee->>SS: Exchange connection candidates
-  Caller-->>Callee: WebRTC media (direct or TURN relay)
-  Caller->>SS: End call
-```
-
 Calls are a mobile-only feature today: the Desktop app has no call UI, so voice
 and video calls are placed and received only on Android or iOS.
 
@@ -131,20 +74,15 @@ peer-to-peer channel. The devices negotiate that channel through the same
 statement-store path used for calls, then replicate contacts and chats once the
 channel opens.
 
-## Limits and honesty
+## Current limits
 
 - Voice/video calls are a mobile-only feature today; the Desktop app has no call
   UI, and Desktop attachment sending is not yet available.
 - Whether a specific call is peer-to-peer or TURN-relayed depends on your
   network; the app degrades gracefully to relaying when a direct path is not
   possible.
-- This is a devnet. Identities, messages, and flows are for evaluation and may
-  change.
 
 ## Learn more
 
-- Polkadot Android (source): <https://github.com/Polkadot-Community-Foundation/polkadot-android-community>
-- Polkadot Desktop (source): <https://github.com/Polkadot-Community-Foundation/polkadot-desktop-community>
-- Polkadot iOS (source): <https://github.com/Polkadot-Community-Foundation/polkadot-ios-community>
-- Polkadot developer docs: <https://docs.polkadot.com>
-- Web gateway: <https://dev-dot.li>
+- [Messaging & calls](../architecture/messaging.md) — the transports behind chat and calls
+- [Polkadot Android](https://github.com/Polkadot-Community-Foundation/polkadot-android-community) — source

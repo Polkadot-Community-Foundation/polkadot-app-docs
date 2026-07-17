@@ -11,13 +11,6 @@ gateway, and Product tooling. The useful idea for readers is that names are
 on-chain records: if the record changes, every client that resolves the name sees
 the new target.
 
-!!! note
-    This is a public developer preview. Devnet tokens have no real value, and
-    contract addresses may change as the network is redeployed. Where this page
-    shows a concrete address, treat it as an example — the authoritative address
-    book for each network is carried in the tooling and provided by the team
-    operating the network.
-
 ## The name model
 
 Each `.dot` domain has two important pieces of state:
@@ -63,8 +56,7 @@ and how the contenthash gets written is covered in
 
 !!! tip
     Because resolution is a plain contract read, you can verify any name yourself
-    with the DotNS CLI: `dotns content view <name> --env <network>`. The concrete
-    `--env` value is provided by the team operating the network.
+    with the DotNS CLI: `dotns content view <name> --env devnet`.
 
 ## Contract topology
 
@@ -128,9 +120,6 @@ contracts directly.
 
 ## Learn more
 
-- DotNS contracts: <https://github.com/paritytech/dotns>
-- DotNS SDK — CLI and reference UI: <https://github.com/paritytech/dotns-sdk>
-- `@polkadot-community-foundation/dotns-cli` on npm: <https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli>
-- DotNS reference UI (devnet): <https://dotns.dev-dot.li>
-- Web gateway: <https://dev-dot.li>
-- Polkadot developer docs: <https://docs.polkadot.com>
+- [dotns](https://github.com/paritytech/dotns) — the contracts
+- [dotns-sdk](https://github.com/paritytech/dotns-sdk) — the CLI and reference UI
+- [Register a .dot domain](../guides/register-a-dot-name.md) — do it

@@ -5,10 +5,6 @@ Smart contracts on the Polkadot Products Devnet run on **PolkaVM (PVM)** through
 the **Contract Dependency Manager (CDM)**: you publish a contract under a package
 name, and other apps resolve that name to the current address and ABI.
 
-!!! note
-    This is a public developer preview. Devnet tokens have no real value, and
-    deployed contracts, registry addresses, and flows may change without notice.
-
 ## What CDM helps you do
 
 CDM gives Product developers a package-like workflow for contracts:
@@ -38,9 +34,9 @@ Apps should read the address for their selected preset at runtime instead of
 copying addresses into source.
 
 !!! warning
-    The concrete `--env` name for the live devnet and the registry backing it
-    are supplied by the team operating the network. Confirm the address for your
-    target network rather than hard-coding a known preset.
+    Registry addresses differ per network. Resolve the address for your target
+    network with `getRegistryAddress("devnet")` rather than copying one between
+    environments.
 
 ## Metadata on the Bulletin Chain
 
@@ -76,7 +72,7 @@ To deploy your own contracts:
 3. Deploy against your network:
 
     ```bash
-    cdm deploy -n <network>
+    cdm deploy -n devnet
     ```
 
 4. On a fresh network, the registry must exist before packages can be published.
@@ -141,11 +137,6 @@ declare dependencies and consume registry-installed contracts.
 
 ## Learn more
 
-- CDM source: <https://github.com/paritytech/contract-dependency-manager>
-- Shared system contracts: <https://github.com/paritytech/contract-developer-tools>
-- playground-cli source: <https://github.com/paritytech/playground-cli>
-- `@polkadot-community-foundation/cdm-cli` on npm: <https://www.npmjs.com/package/@polkadot-community-foundation/cdm-cli>
-- `@polkadot-community-foundation/cdm-env` on npm: <https://www.npmjs.com/package/@polkadot-community-foundation/cdm-env>
-- `@parity/product-sdk-contracts` on npm: <https://www.npmjs.com/package/@parity/product-sdk-contracts>
-- CDM Frontend (devnet): <https://contracts.dev-dot.li>
-- Polkadot smart contracts documentation: <https://docs.polkadot.com>
+- [contract-dependency-manager](https://github.com/paritytech/contract-dependency-manager) — CDM source
+- [contract-developer-tools](https://github.com/paritytech/contract-developer-tools) — shared PVM contracts, and how packages declare dependencies
+- [Deploy & register contracts](../guides/deploy-contracts-cdm.md) — do it

@@ -12,11 +12,6 @@ contract's metadata (ABI plus readme) to the Bulletin chain as a
 content-addressed CID, and records a global `@org/name -> address + metadata`
 mapping in an on-chain `ContractRegistry` contract.
 
-!!! note
-    This is a public developer preview. Devnet tokens have no real value, and
-    flows may change. Never paste a seed phrase or private key into a shared
-    terminal or config that could be committed.
-
 ## How the pieces fit
 
 ```mermaid
@@ -49,10 +44,8 @@ bytes.
 2. Have a funded account on the devnet Asset Hub. You can request tokens from
    the [faucet](https://faucet.polkadot.io).
 
-3. Know the network preset name for the devnet you are targeting. Every CDM
-   command selects a network with `-n <name>` (also spelled `--name`); the
-   concrete preset name and its registry address are supplied by the team
-   operating the network.
+3. Target the right network. Every CDM command selects one with `-n <name>`
+   (also spelled `--name`); this Devnet is `-n devnet`.
 
 !!! note
     The CDM CLI runs TypeScript directly and builds Rust PVM contracts with
@@ -84,7 +77,7 @@ contract's metadata to Bulletin, and submits the instantiations together with
 `registry.publishLatest` in an atomic `Utility.batch_all`.
 
 ```bash
-cdm deploy -n <network> --suri "<your-secret-uri>"
+cdm deploy -n devnet --suri "<your-secret-uri>"
 ```
 
 The signer is resolved in the order `--suri` > a saved account for the preset >
@@ -114,26 +107,11 @@ Downstream projects depend on a published contract by name. From a project that
 has (or will have) a `cdm.json`:
 
 ```bash
-cdm install @org/name -n <network>
+cdm install @org/name -n devnet
 # or a pinned version:
-cdm install @org/name:3 -n <network>
+cdm install @org/name:3 -n devnet
 # or install everything listed in cdm.json:
-cdm install -n <network>
-```
-
-```mermaid
-flowchart LR
-  subgraph Install[cdm install]
-    P[dependency @org/name] --> Q[registry.getVersionCount/getAddress/getMetadataUri]
-    Q --> R[(ContractRegistry)]
-    Q --> S[fetch metadata CID from Bulletin/IPFS gateway]
-    S --> T[cdm.json: address + abi + .cdm typings]
-  end
-  subgraph Runtime[Frontend / app]
-    T --> U[createContract CONTRACTS_REGISTRY_ABI @ registryAddress]
-    U --> V[getAddress / getContracts / searchContractNames]
-    V --> R
-  end
+cdm install -n devnet
 ```
 
 `install` builds a registry handle from `CONTRACTS_REGISTRY_ABI` at the
@@ -191,15 +169,11 @@ npm i @polkadot-community-foundation/cdm-env @parity/product-sdk-contracts
 
 !!! tip
     The registry address is per-network. Always take it from
-    `getRegistryAddress(<preset>)` rather than hard-coding it, since it differs
+    `getRegistryAddress("devnet")` rather than hard-coding it, since it differs
     across networks and can change on a devnet.
 
 ## Learn more
 
-- [contract-dependency-manager](https://github.com/paritytech/contract-dependency-manager)
-- [contract-developer-tools](https://github.com/paritytech/contract-developer-tools)
-- [`@polkadot-community-foundation/cdm-cli` on npm](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-cli)
-- [`@polkadot-community-foundation/cdm-env` on npm](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-env)
-- [`@parity/product-sdk-contracts` on npm](https://www.npmjs.com/package/@parity/product-sdk-contracts)
-- [CDM Frontend (devnet)](https://contracts.dev-dot.li)
-- [Polkadot smart contracts docs](https://docs.polkadot.com)
+- [contract-dependency-manager](https://github.com/paritytech/contract-dependency-manager) — CDM source and toolchain setup
+- [CDM Frontend](https://contracts.dev-dot.li) — browse what is already published
+- [Smart contracts & CDM](../architecture/contracts.md) — the registry model

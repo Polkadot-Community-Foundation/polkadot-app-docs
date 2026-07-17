@@ -6,12 +6,6 @@ install the Product SDK for app code, use the Host API when you need to speak
 directly to the Polkadot app host, and use the CLIs to register names, publish
 bundles, and manage contracts.
 
-!!! note
-    This is a public developer preview. Package versions, published names, and
-    the concrete network you target may change. Never put a mnemonic, seed
-    phrase, or private key into a command line or config file that could be
-    committed.
-
 ## Developer packages
 
 Most projects only need a few direct dependencies:
@@ -111,48 +105,13 @@ The `cdm` CLI is built on shared libraries that apps and other tools can reuse:
 | `@parity/cdm-builder` | `npm i @parity/cdm-builder` | Shared build, deploy, publish, and install pipeline. |
 | [`@parity/product-sdk-contracts`](https://www.npmjs.com/package/@parity/product-sdk-contracts) | `npm i @parity/product-sdk-contracts` | Runtime contract resolution and ABI use from Product apps. |
 
-## End-user entry points
+## Where your app runs
 
-These are the applications end users install, not developer packages, but they
-are the environment your app runs in.
-
-| Entry point | Link |
-|-------------|------|
-| Polkadot app — Android APK | <https://get.polkadotcommunity.foundation/android/latest.apk> |
-| Polkadot app — iOS TestFlight | <https://testflight.apple.com/join/VvC8SHVE> |
-| Polkadot app — Desktop | <https://polkadotcommunity.foundation/desktop/> |
-| Web gateway | <https://dev-dot.li> |
-| Devnet faucet | <https://faucet.polkadot.io> |
-
-## Reference apps
-
-Working examples deployed on the Devnet. They double as usage references for
-the packages above.
-
-| App | URL |
-|-----|-----|
-| Browse (app directory) | <https://browse.dev-dot.li> |
-| DotNS UI | <https://dotns.dev-dot.li> |
-| CDM Frontend | <https://contracts.dev-dot.li> |
-| Playground template | <https://playground-template.dev-dot.li> |
-| Playground | <https://playground.dev-dot.li> |
-| Simple Survey | <https://survey.dev-dot.li> |
-| Mercado (marketplace) | <https://mercado.dev-dot.li> |
-| localdot (local marketplace) | <https://localmarket.dev-dot.li> |
-
-## Source repositories
-
-Use source repositories when you need implementation detail that is too specific
-for this reference page. Product and tooling repositories are linked under
-`paritytech`; app client repositories keep their app-specific source links.
+Your Product runs inside the Polkadot app or the web gateway. For download
+links, deployed reference Products, and source repositories, see
+[More resources](./resources.md).
 
 ## Learn more
 
-- Product SDK source: <https://github.com/paritytech/product-sdk>
-- Host API / host-side source (triangle-js-sdks): <https://github.com/paritytech/triangle-js-sdks>
-- Test host source (host-api-test-sdk): <https://github.com/paritytech/host-api-test-sdk>
-- DotNS contracts and SDK: <https://github.com/paritytech/dotns> · <https://github.com/paritytech/dotns-sdk>
-- Deploy CLI source: <https://github.com/paritytech/polkadot-app-deploy>
-- CDM source: <https://github.com/paritytech/contract-dependency-manager>
-- npm: [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) · [`@novasamatech/host-api`](https://www.npmjs.com/package/@novasamatech/host-api) · [`@polkadot-community-foundation/dotns-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli) · [`@parity/polkadot-app-deploy`](https://www.npmjs.com/package/@parity/polkadot-app-deploy) · [`@polkadot-community-foundation/cdm-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-cli) · [`@polkadot-community-foundation/cdm-env`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-env)
-- Official Polkadot developer docs: <https://docs.polkadot.com>
+- Source: [product-sdk](https://github.com/paritytech/product-sdk) · [triangle-js-sdks](https://github.com/paritytech/triangle-js-sdks) · [polkadot-app-deploy](https://github.com/paritytech/polkadot-app-deploy) · [dotns-sdk](https://github.com/paritytech/dotns-sdk) · [CDM](https://github.com/paritytech/contract-dependency-manager)
+- [Networks & endpoints](./networks.md) — which network these tools target

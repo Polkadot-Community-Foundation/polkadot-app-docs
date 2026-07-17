@@ -17,25 +17,17 @@ community-operated Paseo network, with Product developers mainly using Asset Hub
 for contracts and assets, People for identity, and Bulletin for app bundle
 storage.
 
-!!! note
-    Devnet tokens carry no monetary value, and behaviour may change between
-    preview iterations.
-
 ### Polkadot app
 
 The end-user client for the platform, available on mobile and desktop. Apps run
 inside it, and the app brokers signing, storage, chain access, and identity on
-the user's behalf. Installs:
+the user's behalf. Download links are in [More resources](resources.md).
 
-- Android APK: <https://get.polkadotcommunity.foundation/android/latest.apk>
-- iOS TestFlight: <https://testflight.apple.com/join/VvC8SHVE>
-- Desktop: <https://polkadotcommunity.foundation/desktop/>
+### dev-dot.li
 
-### dot.li
-
-The web gateway that serves `.dot` apps in an ordinary browser. On this Devnet
-it is reachable at <https://dev-dot.li>. The gateway resolves a `.dot` domain,
-fetches the app bundle, and renders it in a sandboxed iframe.
+The web gateway that serves `.dot` apps in an ordinary browser, reachable at
+<https://dev-dot.li>. It resolves a `.dot` domain, fetches the app bundle, and
+renders it in a sandboxed iframe.
 
 ## Naming and discovery
 
@@ -98,11 +90,7 @@ Uploads require storage authorization, and stored content is addressed by CID.
 `@parity/product-sdk` is the main TypeScript SDK for building Products. It gives
 your app access to host-provided wallet, chain, storage, contract, and identity
 services. The SDK is designed to run inside the Polkadot app or the web gateway,
-not as a standalone wallet.
-
-```bash
-npm i @parity/product-sdk
-```
+not as a standalone wallet. See [Packages & tools](packages.md).
 
 ### Host API
 
@@ -110,18 +98,10 @@ npm i @parity/product-sdk
 host. Use it directly when you need lower-level access to host capabilities such
 as accounts, signing, storage, chat, payments, or remote chain access.
 
-```bash
-npm i @novasamatech/host-api
-```
-
 ### Deploy CLI (`pad`)
 
 `@parity/polkadot-app-deploy` (bin: `pad`) is the CLI that publishes a built
 static bundle and points a `.dot` domain at it.
-
-```bash
-npm i -g @parity/polkadot-app-deploy
-```
 
 !!! tip
     Use the `devnet` preset for this environment. `pad` and `dotns` take it with
@@ -148,15 +128,8 @@ The end-user display name for a Devnet digital-dollar asset. Users can obtain
 CASH through in-app flows, rewards, or supporting faucet flows, depending on the
 current build.
 
-!!! warning
-    CASH is a Devnet asset with no real-world value.
-
 ## Learn more
 
-- Product SDK: <https://www.npmjs.com/package/@parity/product-sdk>
-- Host API: <https://www.npmjs.com/package/@novasamatech/host-api>
-- Deploy CLI: <https://www.npmjs.com/package/@parity/polkadot-app-deploy>
-- DotNS CLI: <https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli>
-- CDM CLI: <https://www.npmjs.com/package/@polkadot-community-foundation/cdm-cli>
-- Chain runtimes (paseo-network): <https://github.com/paseo-network/runtimes>
-- Official Polkadot developer docs: <https://docs.polkadot.com>
+- [Packages & tools](packages.md) — what to install
+- [Networks & endpoints](networks.md) — chains, the `devnet` preset, and endpoints
+- [More resources](resources.md) — apps, downloads, and source

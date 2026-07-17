@@ -23,6 +23,7 @@
     {% if config.extra.alternate %}
       {% include "partials/alternate.html" %}
     {% endif %}
+    <a href="https://forms.gle/qw74bWN7B6RvqMUu7" title="Share feedback" class="md-header__feedback" target="_blank" rel="noopener">Feedback</a>
     {% if "material/search" in config.plugins %}
       {% set search = config.plugins["material/search"] | attr("config") %}
       {% if search.enabled %}
@@ -42,9 +43,9 @@
       {% include "partials/javascripts/palette.html" %}
     {% endif %}
     {% if config.repo_url %}
-      <div class="md-header__source">
-        {% include "partials/source.html" %}
-      </div>
+      <a href="{{ config.repo_url }}" title="{{ config.repo_name | d('GitHub', true) }}" class="md-header__button md-icon" target="_blank" rel="noopener">
+        {% include ".icons/fontawesome/brands/github.svg" %}
+      </a>
     {% endif %}
   </nav>
 </header>

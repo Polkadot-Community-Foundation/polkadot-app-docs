@@ -10,10 +10,6 @@ This page is the map. It follows one request — a user opening a `.dot` app —
 from a name to chain storage and back, then points to the subsystem pages where
 the source-level detail lives.
 
-!!! note "This is a devnet"
-    Tokens have no real value and flows may change. Never enter a real seed
-    phrase or private key that holds value on any mainnet.
-
 ## The pieces
 
 The platform is a small set of cooperating layers:
@@ -136,16 +132,7 @@ at `0x…0a010000`, moves [CASH](money.md), or lists itself in
 
 ## Where to go next
 
-- New here? Start with [Getting started](../getting-started/index.md).
-- Building an app? Read [App delivery](app-delivery.md) and the
-  [Product SDK](client.md), then
+- New here? Start with the [Introduction](../introduction.md).
+- Building an app? Read [App delivery](app-delivery.md), then
   [Build & publish a dApp](../guides/build-and-publish.md).
 - Want addresses and endpoints? See [Reference](../reference/index.md).
-
-## Learn more
-
-- Product SDK on npm: <https://www.npmjs.com/package/@parity/product-sdk>
-- Deploy CLI (`pad`): <https://www.npmjs.com/package/@parity/polkadot-app-deploy>
-- Chain runtimes (paseo-network): <https://github.com/paseo-network/runtimes>
-- dotli gateway: <https://github.com/paritytech/dotli-community>
-- Polkadot developer docs: <https://docs.polkadot.com>

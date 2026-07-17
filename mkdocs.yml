@@ -28,6 +28,8 @@ validation:
 exclude_docs: |
   AGENTS.md
   README.md
+  AUTHORING-diagrams.md
+  _snippets/
 
 theme:
   name: material
@@ -48,17 +50,19 @@ theme:
     - content.tooltips
     - search.suggest
     - search.highlight
+  # Dark scheme is the default; the toggle lets readers switch to light. The
+  # first entry is what loads first, so polkadot-dark leads. (No prefers-color-
+  # scheme media queries — the docs open dark for everyone, matching the new
+  # black-and-white-forward identity with per-chain diagram colour.)
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: polkadot-light
-      toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: polkadot-dark
+    - scheme: polkadot-dark
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
+    - scheme: polkadot-light
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
 
 markdown_extensions:
   - abbr
@@ -79,7 +83,12 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.keys
-  - pymdownx.snippets
+  # Single-source blocks live in docs/_snippets/ and are pulled in with `--8<--`.
+  # Facts that appear on more than one page belong there, not in a second copy.
+  - pymdownx.snippets:
+      base_path:
+        - docs/_snippets
+      check_paths: true
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.superfences:
@@ -92,30 +101,18 @@ plugins:
   - search
 
 extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/paritytech
-      name: GitHub
+  # No `social:` block on purpose. The header already carries a GitHub link (to
+  # this repo, via repo_url); a second one in the footer pointing at a different
+  # org is noise. Source links for individual projects live in
+  # docs/reference/resources.md.
   generator: false
 
 nav:
   - Home: index.md
   - Introduction: introduction.md
   - Getting started:
-      - getting-started/index.md
       - For users: getting-started/users.md
       - For developers: getting-started/developers.md
-  - Architecture:
-      - architecture/index.md
-      - The network: architecture/network.md
-      - The Polkadot app (client tier): architecture/client.md
-      - Naming (DotNS): architecture/naming.md
-      - App delivery: architecture/app-delivery.md
-      - Smart contracts & CDM: architecture/contracts.md
-      - Identity & personhood: architecture/identity.md
-      - Money (CASH & funding): architecture/money.md
-      - App discovery (Browse): architecture/discovery.md
-      - Messaging & calls: architecture/messaging.md
   - Guides:
       - guides/index.md
       - For users:
@@ -130,6 +127,17 @@ nav:
           - Deploy & register contracts: guides/deploy-contracts-cdm.md
           - Use platform services from the SDK: guides/platform-services-sdk.md
           - List your app in Browse: guides/list-in-browse.md
+  - Architecture:
+      - architecture/index.md
+      - The network: architecture/network.md
+      - The Polkadot app (client tier): architecture/client.md
+      - Naming (DotNS): architecture/naming.md
+      - App delivery: architecture/app-delivery.md
+      - Smart contracts & CDM: architecture/contracts.md
+      - Identity & personhood: architecture/identity.md
+      - Money (CASH & funding): architecture/money.md
+      - App discovery (Browse): architecture/discovery.md
+      - Messaging & calls: architecture/messaging.md
   - Reference:
       - reference/index.md
       - Networks & endpoints: reference/networks.md

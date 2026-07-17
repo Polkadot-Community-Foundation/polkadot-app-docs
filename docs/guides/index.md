@@ -4,10 +4,6 @@ These guides are organized around the jobs people actually come here to do:
 create an account, get funds, open Products, publish a Product, use platform
 services, and deploy contracts on the Polkadot Products Devnet.
 
-!!! note "Devnet"
-    This is a public developer preview. Devnet tokens have no real value, and
-    flows may change as the platform evolves.
-
 ## For users
 
 Use these guides when you want to try the Polkadot app or open Products through
@@ -28,17 +24,9 @@ the web gateway at [dev-dot.li](https://dev-dot.li).
 Use these guides when you are building a Product for the app. You will mostly
 work with a static web app, the Product SDK, and a few CLIs:
 
-```bash
-npm i @parity/product-sdk
-npm i -g @parity/polkadot-app-deploy   # deploy CLI (bin: pad)
-npm i -g @polkadot-community-foundation/dotns-cli             # DotNS CLI
-npm i -g @polkadot-community-foundation/cdm-cli               # contract manifest CLI (bin: cdm)
-```
-
 !!! tip "Choosing a network"
-    `pad` and `dotns` take `--env <network>`; CDM uses `-n/--name <network>`.
-    The concrete preset name is provided by the team operating the network —
-    see [Networks & endpoints](../reference/networks.md).
+    This Devnet is the `devnet` preset: `pad` and `dotns` take `--env devnet`,
+    CDM takes `-n devnet`. See [Networks & endpoints](../reference/networks.md).
 
 - [Build & publish a dApp](build-and-publish.md) — scaffold an app on the
   Product SDK and publish it with the `pad` deploy CLI.
@@ -54,8 +42,6 @@ npm i -g @polkadot-community-foundation/cdm-cli               # contract manifes
 
 ## Learn more
 
-- [Getting started](../getting-started/index.md)
+- [Getting started for developers](../getting-started/developers.md)
 - [Architecture](../architecture/index.md)
 - [Reference](../reference/index.md)
-- [Polkadot developer docs](https://docs.polkadot.com)
-- [Source on GitHub](https://github.com/paritytech)

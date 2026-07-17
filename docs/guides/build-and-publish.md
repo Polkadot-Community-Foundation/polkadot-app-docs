@@ -5,33 +5,10 @@ SDK frontend, build a static bundle, register a `.dot` domain, and publish with
 the `pad` deploy CLI. When it works, the app is reachable as `<name>.dot` inside
 the Polkadot app and at `https://<name>.dev-dot.li` on the web gateway.
 
-!!! note "This is a devnet"
-    The Polkadot Products Devnet is a public developer preview. Devnet tokens
-    have no real value, and flows may change. Never paste a mnemonic or private
-    key into a shared terminal, a config file you commit, or a support request.
-
-## How publishing works
-
-An app is a static bundle. The `pad` CLI merkleizes your build directory into a
-content-addressed DAG-PB archive, uploads its blocks to the Bulletin Chain, then
-writes the resulting root CID as an ENS-style `contenthash` into the DotNS
-`ContentResolver` contract on Asset Hub. The web gateway resolves the name to
-that CID entirely client-side and renders the bundle.
-
-```mermaid
-flowchart TD
-  A[Built static dist/] --> B[pad: merkleize to DAG-PB CAR]
-  B --> C[Chunk ~2 MiB + skip unchanged blocks]
-  C --> D[Bulletin: TransactionStorage.store_with_cid_config]
-  D --> E[Store DAG-PB root node = content root CID]
-  E --> F{DotNS on Asset Hub}
-  F -->|not owned| G[register name]
-  F -->|owned| H[skip]
-  G --> I[setContenthash node = 0xe301 + CIDv1]
-  H --> I
-  I --> J[optional Publisher.publish label]
-  J --> K[Live at name.dot and https://name.dev-dot.li]
-```
+An app is a static bundle. `pad` uploads it to the Bulletin Chain and points
+your `.dot` domain at the result; the gateway resolves that name client-side and
+renders the bundle. For the full pipeline, see
+[App delivery](../architecture/app-delivery.md).
 
 ## Prerequisites
 
@@ -44,10 +21,16 @@ npm i -g @polkadot-community-foundation/dotns-cli             # DotNS CLI (bin: 
 npm i -g @polkadot-community-foundation/cdm-cli               # contract manifest CLI (bin: cdm)
 ```
 
-The publishing CLIs (`pad` and `dotns`) select a network with
-`--env <network>`. CDM uses `-n/--name <network>` instead. The concrete preset
-name for the public devnet is provided by the team operating the network — see
-[Networks & endpoints](../reference/networks.md).
+The publishing CLIs (`pad` and `dotns`) select the network with `--env devnet`;
+CDM uses `-n devnet`.
+
+Before your first on-chain step, make sure your **signing account** is ready:
+
+- **Funded with native devnet tokens for fees.** `register` and `publish` sign
+  PolkaVM transactions on Asset Hub, so the account needs native tokens (from the
+  faucet — see the storage-authorization note below).
+- **Mapped to its EVM address.** `dotns`, `cdm`, and `pad` sign on Asset Hub's
+  PolkaVM; an account that has never been mapped fails on the first on-chain step.
 
 !!! warning "Two prerequisites for publishing"
     Your deploy account must (1) **own** the target `.dot` domain and (2) hold a
@@ -122,8 +105,8 @@ Names are `.dot` domains managed by DotNS. Check availability and register with
 the DotNS CLI:
 
 ```bash
-dotns lookup <name>.dot --env <network>
-dotns register <name>.dot --env <network>
+dotns lookup <name>.dot --env devnet
+dotns register <name>.dot --env devnet
 ```
 
 Label eligibility depends on length and personhood tier — short or reserved
@@ -141,7 +124,7 @@ names are gated behind proof of personhood. See
 Point `pad` at your build directory and the target name:
 
 ```bash
-pad ./dist <name>.dot --env <network>
+pad ./dist <name>.dot --env devnet
 ```
 
 `pad` uploads the bundle to Bulletin (skipping unchanged blocks on repeat
@@ -150,7 +133,7 @@ Hub. Add `--publish` to also list the app in the on-chain Publisher registry so
 directory apps such as [Browse](https://browse.dev-dot.li) can enumerate it:
 
 ```bash
-pad ./dist <name>.dot --env <network> --publish
+pad ./dist <name>.dot --env devnet --publish
 ```
 
 Once the transaction settles, the app is live at `<name>.dot` in the Polkadot
@@ -170,14 +153,6 @@ These are working, deployed examples (source under
 
 ## Learn more
 
-- [Register a .dot domain](register-a-dot-name.md)
-- [Deploy & register contracts](deploy-contracts-cdm.md)
-- [Use platform services from the SDK](platform-services-sdk.md)
-- [App delivery architecture](../architecture/app-delivery.md)
-- npm: [@parity/product-sdk](https://www.npmjs.com/package/@parity/product-sdk),
-  [@parity/polkadot-app-deploy](https://www.npmjs.com/package/@parity/polkadot-app-deploy),
-  [@polkadot-community-foundation/dotns-cli](https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli)
-- Source: [product-sdk](https://github.com/paritytech/product-sdk),
-  [polkadot-app-deploy](https://github.com/paritytech/polkadot-app-deploy),
-  [dotli-starter](https://github.com/paritytech/dotli-starter)
-- [Polkadot developer docs](https://docs.polkadot.com)
+- [Register a .dot domain](register-a-dot-name.md) — the full naming surface
+- [Use platform services from the SDK](platform-services-sdk.md) — once your app is live
+- [App delivery](../architecture/app-delivery.md) — how publishing works

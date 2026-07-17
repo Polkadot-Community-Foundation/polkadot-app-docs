@@ -4,10 +4,6 @@ This path is for building a first Product on the **Polkadot Products Devnet**.
 The basic loop is small: build a static web app, give it a `.dot` domain, publish
 the bundle, and use the SDK when the app needs platform services.
 
-!!! note "This is a devnet"
-    Tokens on this network have no real value, and flows may change. Never
-    commit or print mnemonics, seed phrases, or private keys.
-
 ## The shape of a first app
 
 ```mermaid
@@ -25,6 +21,14 @@ host — the Polkadot app or the web gateway at
 [https://dev-dot.li](https://dev-dot.li) — which provides the wallet, signing
 prompts, storage, and chain access. Publishing means making the bundle available
 on the Devnet and pointing a `.dot` domain at it.
+
+## Before you start
+
+Before running the commands below, make sure you have:
+
+- **The tooling installed** — the Product SDK and the CLIs (`dotns`, `pad`, `cdm`); Step 1 covers this.
+- **A funded, mapped signing account** — an account with native devnet tokens for fees (from the faucet) whose EVM address is mapped on Asset Hub. `dotns`, `pad`, and `cdm` all sign PolkaVM transactions on Asset Hub with it.
+- **Storage authorization to publish** — the publish step (Step 5) also needs a Bulletin storage authorization granted by the network operator.
 
 ## 1. Install the tooling
 
@@ -45,15 +49,15 @@ npm i -g @polkadot-community-foundation/cdm-cli            # cdm    — build/de
 
 ## 2. Choose a network preset
 
-Each CLI selects a network with a preset flag. Use the preset provided for the
-public Polkadot Products Devnet and keep it consistent across tools.
+Every CLI takes the network as a flag, and this Devnet is **`devnet`**:
 
-- `pad` and `dotns` take `--env <network>`.
-- `cdm` takes `-n/--name <preset>` instead (for example `-n paseo`).
+- `pad` and `dotns` take `--env devnet`.
+- `cdm` takes `-n devnet` (also spelled `--name`).
 
-!!! tip
-    Ask the network operator which preset maps to the public `dev-dot.li`
-    Products Devnet, then use it consistently across every command below.
+!!! warning "Do not use the `paseo` preset"
+    The CLIs also ship `paseo` and `paseo-next` presets. Those point at
+    different networks — picking one silently targets the wrong chain, and your
+    app will not appear on this Devnet.
 
 ## 3. Build a web app with the Product SDK
 
@@ -84,7 +88,7 @@ Your deploy account must **own** the `.dot` domain before you can publish to it.
 Register it with the DotNS CLI.
 
 ```bash
-dotns register domain --name my-app --env <network>
+dotns register domain --name my-app --env devnet
 ```
 
 Public names go through a commit-reveal flow and must be at least three
@@ -97,7 +101,7 @@ characters. Short or reserved names are gated by proof of personhood. See
 which bundle to open.
 
 ```bash
-pad ./dist my-app.dot --env <network>
+pad ./dist my-app.dot --env devnet
 ```
 
 !!! note "Two prerequisites"
@@ -116,8 +120,8 @@ Dependency Manager helps you build, deploy, publish metadata, and register
 addresses so downstream apps can find the contracts they depend on.
 
 ```bash
-cdm init -n <preset>       # scaffold a project
-cdm deploy -n <preset>     # build, deploy, publish metadata, register
+cdm init -n devnet       # scaffold a project
+cdm deploy -n devnet     # build, deploy, publish metadata, register
 ```
 
 Downstream projects can consume a published contract package with `cdm install`.
@@ -126,22 +130,16 @@ Browse published contracts at
 
 ## Try the reference apps
 
-- Browse (app directory) — [https://browse.dev-dot.li](https://browse.dev-dot.li)
-- DotNS UI — [https://dotns.dev-dot.li](https://dotns.dev-dot.li)
-- Playground — [https://playground.dev-dot.li](https://playground.dev-dot.li)
-- Simple Survey — [https://survey.dev-dot.li](https://survey.dev-dot.li)
-- Mercado (marketplace) — [https://mercado.dev-dot.li](https://mercado.dev-dot.li)
-- localdot (local marketplace) — [https://localmarket.dev-dot.li](https://localmarket.dev-dot.li)
+Working examples are the fastest way to see the shape of a Product — start with
+[Playground](https://playground.dev-dot.li) or
+[Simple Survey](https://survey.dev-dot.li); the full list is in
+[More resources](../reference/resources.md).
 
-To test as an end user, install the app: [Android APK](https://get.polkadotcommunity.foundation/android/latest.apk), [iOS TestFlight](https://testflight.apple.com/join/VvC8SHVE), or [Desktop](https://polkadotcommunity.foundation/desktop/). Fund a devnet account at the [faucet](https://faucet.polkadot.io) for native tokens, or use the in-app CASH top-up. See [Getting started for users](users.md).
+To test as an end user, install the app and fund an account — see
+[Getting started for users](users.md).
 
 ## Learn more
 
-- Guide: [Build & publish a dApp](../guides/build-and-publish.md)
-- Guide: [Register a .dot domain](../guides/register-a-dot-name.md)
-- Guide: [Deploy & register contracts](../guides/deploy-contracts-cdm.md)
-- Guide: [Use platform services from the SDK](../guides/platform-services-sdk.md)
-- Architecture: [App delivery](../architecture/app-delivery.md) · [Naming (DotNS)](../architecture/naming.md) · [Smart contracts & CDM](../architecture/contracts.md)
-- Reference: [Networks & endpoints](../reference/networks.md) · [Packages & tools](../reference/packages.md)
-- [Product SDK on npm](https://www.npmjs.com/package/@parity/product-sdk) · [Product SDK source](https://github.com/paritytech/product-sdk) · [polkadot-app-deploy source](https://github.com/paritytech/polkadot-app-deploy) · [dotli-starter template](https://github.com/paritytech/dotli-starter)
-- [Official Polkadot developer docs](https://docs.polkadot.com)
+- [Build & publish a dApp](../guides/build-and-publish.md) — the full publishing path
+- [Use platform services from the SDK](../guides/platform-services-sdk.md) — chains, storage, contracts, identity
+- [dotli-starter](https://github.com/paritytech/dotli-starter) — a template to start from

@@ -5,23 +5,15 @@ collects the public entry points you are likely to use. It is written for two
 moments: when you need to know which chain a feature belongs to, and when you
 need to find the current endpoint or gateway without digging through source.
 
-!!! note
-    This is a public developer preview. Devnet tokens have no real value, flows
-    may still change, and endpoints can be re-homed. Treat the
-    [deployments register](#the-deployments-register) as the source of truth for
-    concrete addresses and RPC endpoints, and never paste secrets (mnemonics,
-    seed phrases, private keys) into any tool or page.
+!!! note "Endpoints get re-homed"
+    Treat the [deployments register](#the-deployments-register) as the source of
+    truth for concrete addresses and RPC endpoints.
 
 ## The Devnet at a glance
 
-The Polkadot Products Devnet is a public developer preview that runs on the
-community-operated **Paseo** network: a Paseo relay chain plus a set of system
-parachains. Applications are built against three of those chains — **Asset Hub**,
-**People**, and **Bulletin**. End users reach deployed apps through the Polkadot
-app (mobile and desktop) or the web gateway at
-[https://dev-dot.li](https://dev-dot.li).
-
-The values below are recorded in the deployments register.
+The suite runs on the community-operated **Paseo** network. For what each chain
+is responsible for, see [The network](../architecture/network.md); the values
+below are recorded in the deployments register.
 
 | Parameter | Value |
 | --- | --- |
@@ -50,17 +42,9 @@ value matters.
 
 ## Parachains and para IDs
 
-The product suite mainly targets three parachains:
-
-| Chain | Para ID | Role for app developers |
-| --- | --- | --- |
-| Asset Hub | 1000 | Contracts (`pallet-revive`, PolkaVM/EVM), assets, DotNS gateway |
-| People | 1004 | Identity and proof-of-personhood |
-| Bulletin | 1010 | Web-app content storage (auth-gated, no token cost) |
-
-Other system parachains exist on the same relay, but they are not part of the
-main Product development surface. If you are building an app, start with Asset
-Hub, People, and Bulletin.
+Product development targets **Asset Hub (1000)**, **People (1004)**, and
+**Bulletin (1010)**. Other system parachains share the relay but are not part of
+the Product surface.
 
 ## Public endpoints and gateways
 
@@ -72,31 +56,10 @@ The web gateway is a client-side resolver that serves `.dot` apps over HTTPS:
 - Any deployed app resolves at `https://<label>.dev-dot.li` (for example
   `https://survey.dev-dot.li`).
 
-### Reference apps
+### Reference apps and app installs
 
-These first-party apps run on the Devnet and are useful for exploring the
-platform:
-
-| App | URL |
-| --- | --- |
-| Browse (app directory) | [https://browse.dev-dot.li](https://browse.dev-dot.li) |
-| DotNS UI | [https://dotns.dev-dot.li](https://dotns.dev-dot.li) |
-| CDM Frontend | [https://contracts.dev-dot.li](https://contracts.dev-dot.li) |
-| Playground template | [https://playground-template.dev-dot.li](https://playground-template.dev-dot.li) |
-| Playground | [https://playground.dev-dot.li](https://playground.dev-dot.li) |
-| Simple Survey | [https://survey.dev-dot.li](https://survey.dev-dot.li) |
-| Mercado (marketplace) | [https://mercado.dev-dot.li](https://mercado.dev-dot.li) |
-| localdot (local marketplace) | [https://localmarket.dev-dot.li](https://localmarket.dev-dot.li) |
-
-### App installs
-
-To use the Devnet as an end user, install the Polkadot app:
-
-| Platform | Link |
-| --- | --- |
-| Android (APK) | [get.polkadotcommunity.foundation/android/latest.apk](https://get.polkadotcommunity.foundation/android/latest.apk) |
-| iOS (TestFlight) | [testflight.apple.com/join/VvC8SHVE](https://testflight.apple.com/join/VvC8SHVE) |
-| Desktop | [polkadotcommunity.foundation/desktop/](https://polkadotcommunity.foundation/desktop/) |
+Deployed reference Products and the Polkadot app download links are listed in
+[More resources](./resources.md).
 
 ### Faucet
 
@@ -147,10 +110,6 @@ precompiles, or runtime constants.
 
 ## Learn more
 
-- [Network architecture](../architecture/network.md)
-- [Packages & tools](./packages.md)
-- [Addresses & registries](./addresses.md)
-- [paseo-network/runtimes — chain runtimes](https://github.com/paseo-network/runtimes)
-- [summit-net-deployments — deployments register](https://github.com/paritytech/summit-net-deployments)
-- [Polkadot developer documentation](https://docs.polkadot.com)
-- [Web gateway (public developer preview)](https://dev-dot.li)
+- [The network](../architecture/network.md) — what each chain is responsible for
+- [Addresses & registries](./addresses.md) — concrete contract addresses
+- [summit-net-deployments](https://github.com/paritytech/summit-net-deployments) — the register

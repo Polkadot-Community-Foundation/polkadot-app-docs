@@ -1,8 +1,24 @@
 /* Self-hosted DM Sans (variable weight) — replaces the Google Fonts CDN load.
    Vendored from @fontsource-variable/dm-sans (woff2 in ../fonts/dm-sans/).
    Keeps visitor IP off fonts.googleapis.com / fonts.gstatic.com (GDPR).
-   DM Sans is the only web font actually used by the theme (body text via
-   --md-text-font). Headers fall back to system serif as before. */
+   DM Sans is the body font (via --md-text-font). DM Serif Display is used for
+   the home hero title. Both are self-hosted (no Google Fonts CDN). */
+
+/* DM Serif Display — used for the home hero title. */
+@font-face {
+  font-family: "DM Serif Display";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/dm-serif-display/dm-serif-display-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "DM Serif Display";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/dm-serif-display/dm-serif-display-latin-400-italic.woff2") format("woff2");
+}
 
 /* latin */
 @font-face {

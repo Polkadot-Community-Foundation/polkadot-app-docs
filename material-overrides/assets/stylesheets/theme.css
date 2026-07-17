@@ -5,6 +5,10 @@
    look, edit the design tokens in :root and the two colour schemes below; no
    template or component changes are required. Palette and typography are
    adapted from the Polkadot Developer Docs (docs.polkadot.com) style guide.
+
+   2026 revamp: dark scheme is the default (set in mkdocs.yml), and Mermaid
+   diagrams get a modern, per-chain colour system — see the "Mermaid diagrams"
+   section at the bottom of this file.
    ============================================================================= */
 
 :root {
@@ -34,6 +38,19 @@
   --success: #059669;
   --error: #dc2626;
   --warning: #d97706;
+
+  /* Diagram / Mermaid category hues — shared by every diagram in the docs.
+     Each system chain / actor gets a stable colour so readers learn it once.
+     Fills and strokes are derived from these with color-mix against the current
+     surface + border tokens, so the same hue works in light and dark. */
+  --dg-relay: var(--accent-default);   /* relay chain / root of trust  */
+  --dg-assethub: #6366f1;              /* Asset Hub (para 1000)        */
+  --dg-people: #0ea5e9;                /* People (para 1004)           */
+  --dg-bulletin: #14b8a6;              /* Bulletin (para 1010)         */
+  --dg-developer: #f59e0b;             /* developer / author actor     */
+  --dg-dotns: #8b5cf6;                 /* DotNS naming                 */
+  --dg-gateway: #0ea5e9;              /* web gateway                   */
+  --dg-user: #22c55e;                  /* end user actor               */
 
   /* Fonts */
   --md-text-font: "DM Sans", sans-serif;
@@ -69,6 +86,9 @@
   --color-tooltip-underline: var(--grey-500);
   --color-text-hover: var(--accent-default);
 
+  /* The logo PNG is a white monochrome mark; invert it to black in light mode. */
+  --logo-filter: invert(1);
+
   --md-default-bg-color: var(--color-bg);
   --md-default-fg-color: var(--color-text-primary);
   --md-default-fg-color--light: var(--color-text-secondary);
@@ -89,14 +109,14 @@
   --md-footer-fg-color--light: var(--color-text-secondary);
 
   --md-typeset-table-color: var(--color-border-strong);
-  --md-mermaid-edge-color: var(--color-text-secondary);
+  --md-mermaid-edge-color: var(--color-border-strong);
   --md-mermaid-node-bg-color: var(--color-surface);
   --md-mermaid-node-fg-color: var(--color-text-primary);
-  --md-mermaid-label-bg-color: var(--color-surface-secondary);
-  --md-mermaid-label-fg-color: var(--color-text-primary);
+  --md-mermaid-label-bg-color: var(--color-surface);
+  --md-mermaid-label-fg-color: var(--color-text-secondary);
 }
 
-/* --- Dark scheme ---------------------------------------------------------- */
+/* --- Dark scheme (default) ------------------------------------------------ */
 [data-md-color-scheme="polkadot-dark"] {
   --color-bg: var(--grey-950);
   --color-surface: var(--grey-900);
@@ -108,6 +128,9 @@
   --color-border-strong: var(--grey-700);
   --color-tooltip-underline: var(--grey-600);
   --color-text-hover: var(--accent-default);
+
+  /* Logo is already white — no inversion needed in dark mode. */
+  --logo-filter: none;
 
   --md-default-bg-color: var(--color-bg);
   --md-default-fg-color: var(--color-text-primary);
@@ -129,11 +152,11 @@
   --md-footer-fg-color--light: var(--color-text-secondary);
 
   --md-typeset-table-color: var(--color-border-strong);
-  --md-mermaid-edge-color: var(--color-text-secondary);
+  --md-mermaid-edge-color: var(--color-border-strong);
   --md-mermaid-node-bg-color: var(--color-surface);
   --md-mermaid-node-fg-color: var(--color-text-primary);
-  --md-mermaid-label-bg-color: var(--color-surface-secondary);
-  --md-mermaid-label-fg-color: var(--color-text-primary);
+  --md-mermaid-label-bg-color: var(--color-surface);
+  --md-mermaid-label-fg-color: var(--color-text-secondary);
 }
 
 /* --- Typography ----------------------------------------------------------- */
@@ -216,6 +239,7 @@
 .md-header__button.md-logo svg {
   height: 36px;
   width: auto;
+  filter: var(--logo-filter);
 }
 
 .md-header__button:hover {
@@ -271,9 +295,12 @@
 }
 
 /* --- Accents -------------------------------------------------------------- */
+/* Selected nav / TOC items read in the primary text colour (white in dark),
+   not pink — the accent is reserved for links, buttons, and diagram highlights. */
 .md-nav__link--active,
 .md-nav__item .md-nav__link--active {
-  color: var(--accent-default);
+  color: var(--color-text-primary);
+  font-weight: 700;
 }
 
 .md-typeset .md-button--primary {
@@ -301,37 +328,61 @@ body:has(.home-hero) .md-content {
   margin: 0 auto;
 }
 
+/* The hero spans the full home width; the content below it reads in a narrower,
+   centred column. */
+body:has(.home-hero) .md-content__inner > *:not(.home-hero) {
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Keep the hero full width even though its siblings are constrained. */
+body:has(.home-hero) .home-hero { max-width: none; }
+
+/* Image-backed hero (chrome / datamosh). Always dark, with a left-to-right dark
+   gradient over the image so the left-aligned title stays legible. Drop the
+   background into material-overrides/assets/images/hero-chrome.png (or swap the
+   url below for hero-datamosh.png). If the image is absent, the accent glow +
+   dark base render as a graceful fallback. */
 .home-hero {
-  min-height: 420px;
+  position: relative;
+  min-height: 23rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  margin: -1.5rem 0 2rem;
-  padding: 5rem 1.5rem 4rem;
-  border-bottom: 1px solid var(--color-border);
+  margin: 0.25rem 0 2.5rem;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  border: 1px solid var(--grey-800);
+  border-radius: 16px;
+  overflow: hidden;
+  color: var(--grey-50);
   background:
-    radial-gradient(circle at 50% 22%, var(--accent-soft), transparent 34rem),
-    linear-gradient(180deg, var(--color-surface), var(--color-bg));
-  text-align: center;
+    linear-gradient(90deg, var(--grey-950) 0%, color-mix(in srgb, var(--grey-950) 55%, transparent) 44%, transparent 74%),
+    url("../images/hero-datamosh.webp") center / cover no-repeat,
+    radial-gradient(55rem 40rem at 80% 15%, color-mix(in srgb, var(--accent-default) 22%, transparent), transparent 60%),
+    radial-gradient(45rem 35rem at 96% 96%, color-mix(in srgb, var(--dg-assethub) 16%, transparent), transparent 55%),
+    var(--grey-950);
 }
 
 .md-typeset .home-eyebrow {
-  margin: 0 0 1rem;
+  margin: 0 0 1.1rem;
   color: var(--accent-default);
-  font-size: 0.78rem;
+  font-family: var(--md-code-font);
+  font-size: 0.66rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .md-typeset .home-hero h1 {
-  max-width: 72rem;
-  margin: 0 auto 1rem;
-  color: var(--color-text-primary);
-  font-size: clamp(2.35rem, 6.5vw, 4.6rem);
-  line-height: 1.04;
-  letter-spacing: 0;
+  max-width: 40rem;
+  margin: 0;
+  color: #fff;
+  font-family: "DM Serif Display", "DM Sans", serif;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 6vw, 3.7rem);
+  line-height: 1.03;
+  letter-spacing: -0.01em;
 }
 
 .md-typeset .home-tagline {
@@ -342,13 +393,16 @@ body:has(.home-hero) .md-content {
   line-height: 1.6;
 }
 
-.home-actions {
+/* Centred call-to-action row. Not home-specific — works in any md-content
+   column. Wrap the buttons in <div class="dg-actions" markdown="1">. */
+.dg-actions {
   display: flex;
   justify-content: center;
   width: 100%;
+  margin: 2rem 0 0;
 }
 
-.md-typeset .home-actions p {
+.md-typeset .dg-actions p {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
@@ -422,12 +476,12 @@ body:has(.home-hero) .md-content {
     font-size: 1rem;
   }
 
-  .md-typeset .home-actions p {
+  .md-typeset .dg-actions p {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .home-actions .md-button {
+  .dg-actions .md-button {
     width: 100%;
     text-align: center;
   }
@@ -453,4 +507,497 @@ body:has(.home-hero) .md-content {
 .md-typeset table:not([class]) th {
   background-color: var(--color-surface-secondary);
   color: var(--color-text-primary);
+}
+
+/* =============================================================================
+   Design-audit component skin
+   -----------------------------------------------------------------------------
+   Skins Material's built-in components (headings, admonitions, sidebar, TOC,
+   breadcrumb, search, header icons, tables) to match the bespoke design mockup,
+   and adds content-level helpers (.dg-figure, .dg-chip, .dg-cards, .dg-links)
+   pages can opt into. Everything is scheme-aware.
+   ============================================================================= */
+
+/* Short aliases used by hand-authored HTML/SVG figures. */
+:root {
+  --acc: var(--accent-default);
+  --bg: var(--color-bg);
+  --surface: var(--color-surface);
+  --surface2: var(--color-surface-secondary);
+  --ink: var(--color-text-primary);
+  --ink2: var(--color-text-secondary);
+  --ink3: var(--color-text-tertiary);
+  --border: var(--color-border);
+  --border2: var(--color-border-strong);
+  --pad: 12px 15px;
+}
+
+/* --- Typography: sans-serif headings, mockup scale ---------------------- */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  font-family: var(--md-text-font);
+}
+.md-typeset h1 {
+  font-weight: 700;
+  font-size: 2.1rem;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+  margin: 0 0 0.9rem;
+}
+.md-typeset h2 {
+  font-weight: 700;
+  font-size: 1.35rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 2.2rem 0 0.6rem;
+}
+.md-typeset h3 {
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  margin: 1.5rem 0 0.5rem;
+}
+.md-typeset p,
+.md-typeset li { line-height: 1.7; }
+
+/* --- Breadcrumb --------------------------------------------------------- */
+.md-path {
+  font-family: var(--md-code-font);
+  font-size: 0.66rem;
+  color: var(--color-text-tertiary);
+}
+.md-path__link { color: var(--color-text-tertiary); }
+.md-path__link:hover { color: var(--color-text-secondary); }
+
+/* --- Left sidebar (primary nav) ----------------------------------------- */
+.md-sidebar--primary .md-nav__title {
+  font-family: var(--md-code-font);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+.md-nav--primary .md-nav__link {
+  border-radius: 7px;
+  padding: 0.3rem 0.6rem;
+  margin: 1px 0;
+  font-size: 0.76rem;
+  color: var(--color-text-secondary);
+}
+.md-nav--primary .md-nav__link:hover {
+  background: var(--color-surface-secondary);
+  color: var(--color-text-primary);
+}
+.md-nav--primary .md-nav__link--active {
+  background: var(--color-surface-secondary);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* --- Right TOC (secondary nav) ------------------------------------------ */
+.md-sidebar--secondary .md-nav__title {
+  font-family: var(--md-code-font);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+.md-nav--secondary .md-nav__list { border-left: 1px solid var(--color-border); }
+.md-nav--secondary .md-nav__item .md-nav__link {
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  padding-left: 0.85rem;
+  font-size: 0.72rem;
+  color: var(--color-text-secondary);
+}
+.md-nav--secondary .md-nav__link--active {
+  border-left-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* --- Search bar (pill) -------------------------------------------------- */
+.md-search__form {
+  height: 34px;
+  border-radius: 999px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  box-shadow: none;
+}
+.md-search__form:hover { background: var(--color-bg); opacity: 0.9; }
+.md-search__input { color: var(--color-text-secondary); }
+.md-search__input::placeholder { color: var(--color-text-tertiary); }
+.md-search__icon { color: var(--color-text-tertiary); }
+
+/* --- Header icon buttons ------------------------------------------------ */
+.md-header__button {
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+}
+.md-header__button:hover {
+  background: var(--color-surface-secondary);
+  color: var(--color-text-primary);
+  opacity: 1;
+}
+
+/* Feedback link (left of the search bar). */
+.md-header__feedback {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  height: 34px;
+  padding: 0 0.85rem;
+  margin-right: 0.1rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+.md-header__feedback:hover {
+  background: var(--color-surface-secondary);
+  color: var(--color-text-primary);
+}
+
+/* --- Admonitions / callouts (scheme-aware, accent-bordered) ------------- */
+.md-typeset .admonition,
+.md-typeset details {
+  font-size: 0.76rem;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--accent-default);
+  border-radius: 10px;
+  background: var(--color-surface);
+  box-shadow: none;
+  color: var(--color-text-secondary);
+}
+.md-typeset .admonition-title,
+.md-typeset summary {
+  background: transparent !important;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  margin: 0;
+}
+.md-typeset .admonition.note { border-left-color: var(--dg-people); }
+.md-typeset .admonition.note > .admonition-title::before { background-color: var(--dg-people); }
+.md-typeset .admonition.warning { border-left-color: var(--warning); }
+.md-typeset .admonition.warning > .admonition-title::before { background-color: var(--warning); }
+.md-typeset .admonition.tip { border-left-color: var(--success); }
+.md-typeset .admonition.tip > .admonition-title::before { background-color: var(--success); }
+
+/* --- Tables (mockup density) -------------------------------------------- */
+.md-typeset table:not([class]) {
+  border-radius: 14px;
+  font-size: 0.78rem;
+}
+.md-typeset table:not([class]) th,
+.md-typeset table:not([class]) td { padding: 0.6rem 0.9rem; }
+
+/* --- Content helpers: figures, chips, cards, link lists ----------------- */
+.md-typeset .dg-figure {
+  display: block;
+  width: 100%;
+  margin: 1.4rem 0 1rem;
+  padding: 1.4rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 12px 32px -12px rgba(16, 24, 40, 0.08);
+  overflow: hidden;
+  text-align: left;
+}
+.md-typeset .dg-figcaption {
+  display: flex; align-items: center; gap: 8px; margin: 0 0 0.4rem;
+  font-family: var(--md-code-font); font-size: 0.66rem; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-tertiary);
+}
+.md-typeset .dg-figcaption .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--accent-default); }
+.md-typeset .dg-chip {
+  display: inline-block; margin-left: 0.45rem; padding: 3px 8px; border-radius: 6px;
+  font-family: var(--md-code-font); font-size: 0.62rem; font-weight: 500; vertical-align: middle;
+  color: var(--chip, var(--accent-default));
+  background: color-mix(in srgb, var(--chip, var(--accent-default)) 12%, transparent);
+}
+.md-typeset .dg-cards {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; margin: 1rem 0 1.6rem;
+}
+.md-typeset .dg-card {
+  padding: 0.9rem 1rem; border: 1px solid var(--color-border); border-radius: 12px; background: var(--color-surface);
+}
+.md-typeset .dg-card b, .md-typeset .dg-card strong {
+  display: block; font-family: var(--md-code-font); font-size: 0.76rem; color: var(--color-text-primary); margin-bottom: 0.3rem;
+}
+.md-typeset .dg-links { display: flex; flex-direction: column; gap: 2px; }
+.md-typeset .dg-links a {
+  display: flex; align-items: center; gap: 10px; padding: 0.5rem 0.7rem; border-radius: 9px;
+  font-size: 0.82rem; color: var(--color-text-secondary); text-decoration: none;
+}
+.md-typeset .dg-links a::before {
+  content: ""; width: 5px; height: 5px; border-radius: 999px; background: var(--accent-default); flex: 0 0 auto;
+}
+.md-typeset .dg-links a:hover { background: var(--color-surface-secondary); color: var(--accent-default); }
+@media screen and (max-width: 60em) { .md-typeset .dg-cards { grid-template-columns: 1fr; } }
+
+/* =============================================================================
+   Diagram primitives — CSS-laid-out node/flow/sequence diagrams
+   -----------------------------------------------------------------------------
+   A reliable, coordinate-free way to author the mockup's coloured-card diagrams:
+   pages write semantic markup, CSS handles layout. Colour a node/actor with a
+   chain class (.relay .assethub .people .bulletin .developer .dotns .gateway
+   .user) or an inline --n:<hue>. See docs/AUTHORING-diagrams.md.
+   ============================================================================= */
+
+/* Flow: a row (default) or column of stages connected by edges. */
+.md-typeset .dg-flow {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 0.55rem 0.4rem;
+}
+.md-typeset .dg-flow.col { flex-direction: column; align-items: center; }
+.md-typeset .dg-stage { display: flex; flex-direction: column; flex-wrap: wrap; gap: 0.5rem; max-width: 100%; }
+.md-typeset .dg-flow.col .dg-stage { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+
+/* Node card. */
+.md-typeset .dg-node {
+  position: relative;
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  min-width: 8.5rem;
+  background: color-mix(in srgb, var(--n, var(--color-text-tertiary)) 9%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--n, var(--color-text-tertiary)) 32%, var(--color-border));
+}
+.md-typeset .dg-node .eb {
+  font-family: var(--md-code-font); font-size: 0.58rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--n, var(--color-text-tertiary));
+}
+.md-typeset .dg-node .tt { margin-top: 0.25rem; font-weight: 600; font-size: 0.84rem; color: var(--color-text-primary); line-height: 1.2; }
+.md-typeset .dg-node .sb { margin-top: 0.15rem; font-size: 0.72rem; color: var(--color-text-secondary); line-height: 1.35; }
+
+.md-typeset .dg-node.relay { --n: var(--dg-relay); }
+.md-typeset .dg-node.assethub { --n: var(--dg-assethub); }
+.md-typeset .dg-node.people { --n: var(--dg-people); }
+.md-typeset .dg-node.bulletin { --n: var(--dg-bulletin); }
+.md-typeset .dg-node.developer { --n: var(--dg-developer); }
+.md-typeset .dg-node.dotns { --n: var(--dg-dotns); }
+.md-typeset .dg-node.gateway { --n: var(--dg-gateway); }
+.md-typeset .dg-node.user { --n: var(--dg-user); }
+
+/* Edge connector with optional pill label. */
+.md-typeset .dg-edge {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
+  color: var(--color-text-tertiary); font-family: var(--md-code-font); font-size: 0.6rem;
+}
+.md-typeset .dg-edge::before { content: "\2192"; font-size: 1.05rem; line-height: 1; }
+.md-typeset .dg-flow.col > .dg-edge::before { content: "\2193"; }
+.md-typeset .dg-edge.dashed::before { opacity: 0.55; }
+.md-typeset .dg-edge .lb {
+  padding: 1px 7px; border: 1px solid var(--color-border); border-radius: 999px;
+  background: var(--color-surface); white-space: nowrap; color: var(--color-text-secondary);
+}
+
+/* Sequence: vertical list of from -> to : message steps. */
+.md-typeset .dg-seq { display: flex; flex-direction: column; gap: 0.4rem; }
+.md-typeset .dg-seq-step {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem;
+  padding: 0.45rem 0.65rem; border: 1px solid var(--color-border); border-radius: 10px;
+  background: var(--color-surface);
+}
+.md-typeset .dg-actor {
+  font-family: var(--md-code-font); font-size: 0.64rem; font-weight: 600;
+  padding: 2px 7px; border-radius: 6px; white-space: nowrap;
+  color: var(--n, var(--color-text-primary));
+  background: color-mix(in srgb, var(--n, var(--color-text-tertiary)) 13%, transparent);
+}
+.md-typeset .dg-actor.relay { --n: var(--dg-relay); }
+.md-typeset .dg-actor.assethub { --n: var(--dg-assethub); }
+.md-typeset .dg-actor.people { --n: var(--dg-people); }
+.md-typeset .dg-actor.bulletin { --n: var(--dg-bulletin); }
+.md-typeset .dg-actor.developer { --n: var(--dg-developer); }
+.md-typeset .dg-actor.dotns { --n: var(--dg-dotns); }
+.md-typeset .dg-actor.gateway { --n: var(--dg-gateway); }
+.md-typeset .dg-actor.user { --n: var(--dg-user); }
+.md-typeset .dg-seq-step .arr { color: var(--color-text-tertiary); font-family: var(--md-code-font); }
+.md-typeset .dg-seq-step .msg { font-size: 0.78rem; color: var(--color-text-secondary); }
+
+/* =============================================================================
+   Mermaid diagrams
+   -----------------------------------------------------------------------------
+   Two layers of styling:
+
+   1. GLOBAL — applies to EVERY diagram automatically (no per-diagram edits):
+      rounded nodes, surface-matched fills, quieter edges, and pill-shaped
+      edge labels. This alone modernises all 39 diagrams in the docs.
+
+   2. PER-CHAIN COLOUR — an opt-in convention. In a diagram, register the
+      shared classes and assign them to nodes:
+
+        classDef relayNode    stroke-width:1px;
+        classDef assethubNode stroke-width:1px;
+        classDef peopleNode   stroke-width:1px;
+        classDef bulletinNode stroke-width:1px;
+        classDef developerNode stroke-width:1px;
+        classDef dotnsNode    stroke-width:1px;
+        classDef gatewayNode  stroke-width:1px;
+        classDef userNode     stroke-width:1px;
+
+        class Relay relayNode
+        class AH assethubNode
+        ...
+
+      The colours themselves stay HERE (derived from the --dg-* tokens), so the
+      palette is centralised and scheme-aware. See docs/architecture/network.md
+      for the reference implementation.
+
+   NOTE: Mermaid selector names are stable across v10.x but do verify with
+   `mkdocs serve` after upgrading mkdocs-material / mermaid.
+   ============================================================================= */
+
+.md-typeset .mermaid {
+  margin: 1.5rem 0;
+  padding: 1.4rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 12px 32px -12px rgba(16, 24, 40, 0.08);
+  overflow: hidden;
+}
+
+/* Node shells — rounded, matched to the current surface. */
+.md-typeset .mermaid .node > rect,
+.md-typeset .mermaid .node > polygon,
+.md-typeset .mermaid .node > path,
+.md-typeset .mermaid .node > circle {
+  rx: 12px;
+  ry: 12px;
+  stroke-width: 1px;
+  fill: var(--color-surface);
+  stroke: var(--color-border-strong);
+}
+
+.md-typeset .mermaid .node .nodeLabel {
+  font-family: var(--md-text-font);
+  color: var(--color-text-primary);
+}
+
+/* Subgraph clusters. */
+.md-typeset .mermaid .cluster > rect {
+  rx: 16px;
+  ry: 16px;
+  fill: color-mix(in srgb, var(--color-text-tertiary) 6%, transparent) !important;
+  stroke: var(--color-border) !important;
+  stroke-dasharray: 4 4;
+}
+
+.md-typeset .mermaid .cluster .nodeLabel,
+.md-typeset .mermaid .cluster-label .nodeLabel {
+  font-family: var(--md-code-font);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+/* Edges + arrowheads. */
+.md-typeset .mermaid .edgePath .path,
+.md-typeset .mermaid .flowchart-link {
+  stroke: var(--color-border-strong) !important;
+  stroke-width: 1.4px !important;
+}
+
+.md-typeset .mermaid marker path,
+.md-typeset .mermaid .marker {
+  fill: var(--color-text-tertiary) !important;
+  stroke: var(--color-text-tertiary) !important;
+}
+
+/* Edge labels as monospace pills. */
+.md-typeset .mermaid .edgeLabel,
+.md-typeset .mermaid .edgeLabel p {
+  background: var(--color-surface) !important;
+  color: var(--color-text-secondary) !important;
+  font-family: var(--md-code-font);
+  font-size: 0.72rem;
+}
+.md-typeset .mermaid .edgeLabel foreignObject > div {
+  background: transparent;
+}
+
+/* ---- Per-chain colour classes (opt-in, see convention above) ------------- */
+.md-typeset .mermaid .relayNode > rect,
+.md-typeset .mermaid .relayNode > polygon,
+.md-typeset .mermaid .relayNode > path {
+  fill: color-mix(in srgb, var(--dg-relay) 15%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-relay) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .assethubNode > rect,
+.md-typeset .mermaid .assethubNode > polygon,
+.md-typeset .mermaid .assethubNode > path {
+  fill: color-mix(in srgb, var(--dg-assethub) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-assethub) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .peopleNode > rect,
+.md-typeset .mermaid .peopleNode > polygon,
+.md-typeset .mermaid .peopleNode > path {
+  fill: color-mix(in srgb, var(--dg-people) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-people) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .bulletinNode > rect,
+.md-typeset .mermaid .bulletinNode > polygon,
+.md-typeset .mermaid .bulletinNode > path {
+  fill: color-mix(in srgb, var(--dg-bulletin) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-bulletin) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .developerNode > rect,
+.md-typeset .mermaid .developerNode > polygon,
+.md-typeset .mermaid .developerNode > path {
+  fill: color-mix(in srgb, var(--dg-developer) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-developer) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .dotnsNode > rect,
+.md-typeset .mermaid .dotnsNode > polygon,
+.md-typeset .mermaid .dotnsNode > path {
+  fill: color-mix(in srgb, var(--dg-dotns) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-dotns) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .gatewayNode > rect,
+.md-typeset .mermaid .gatewayNode > polygon,
+.md-typeset .mermaid .gatewayNode > path {
+  fill: color-mix(in srgb, var(--dg-gateway) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-gateway) 55%, var(--color-border)) !important;
+}
+.md-typeset .mermaid .userNode > rect,
+.md-typeset .mermaid .userNode > polygon,
+.md-typeset .mermaid .userNode > path {
+  fill: color-mix(in srgb, var(--dg-user) 14%, var(--color-surface)) !important;
+  stroke: color-mix(in srgb, var(--dg-user) 55%, var(--color-border)) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Site-wide devnet banner (material-overrides/main.html).
+
+   The devnet caveat is stated here once for the whole site so page bodies do
+   not have to repeat it. Kept quiet on purpose: it is standing context, not a
+   per-page alarm, and it must not out-shout the in-page admonitions that carry
+   a real consequence.
+   --------------------------------------------------------------------------- */
+.md-banner {
+  background-color: var(--color-surface-secondary);
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dg-announce {
+  font-size: 0.7rem;
+  line-height: 1.5;
+  text-align: center;
+  padding: 0.3rem 0.8rem;
+}
+
+.dg-announce strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
 }
