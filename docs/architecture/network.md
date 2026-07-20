@@ -84,14 +84,14 @@ The Bulletin chain stores published web-app bundles that the gateway serves.
 
 ## The deployments register
 
-Concrete addresses, endpoints, and CIDs for a given deployment are recorded in the
-[`summit-net-deployments`](https://github.com/paritytech/summit-net-deployments)
-register, not hard-coded in this documentation. Treat that register, plus the
-tooling address books, as the source of truth for live Devnet addresses.
+Concrete addresses, endpoints, and CIDs are network-specific: they change when a
+network is redeployed, so nothing in the platform hard-codes them. Instead, each
+command-line tool selects a network preset — `--env devnet` for `pad` and
+`dotns`, `-n devnet` for CDM — and the preset carries the endpoints and address
+book for that network.
 
-Command-line tools select a network preset — `--env devnet` for `pad` and
-`dotns`, `-n devnet` for CDM. Read addresses and CIDs from the register files
-rather than assuming them.
+For the addresses themselves, see
+[Addresses & registries](../reference/addresses.md).
 
 ## Deploy and serve flow
 
@@ -139,5 +139,4 @@ For how contracts and naming fit together, see the
 ## Learn more
 
 - [paseo-network/runtimes](https://github.com/paseo-network/runtimes) — the chain runtimes
-- [summit-net-deployments](https://github.com/paritytech/summit-net-deployments) — the deployments register
 - [pallet-revive](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/revive) — the PolkaVM contract environment

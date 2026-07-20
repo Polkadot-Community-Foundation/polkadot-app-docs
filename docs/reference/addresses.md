@@ -7,29 +7,14 @@ source of truth before you build anything around a fixed value.
 
 !!! warning "Every address here is a snapshot"
     Addresses are **network-specific** and change when a network is redeployed.
-    Before you hard-code one, read it back from the deployments register or the
-    tooling address book for the network you target.
+    Before you hard-code one, read it back from the `devnet` preset in the
+    tooling address book, or resolve it on chain.
 
 !!! note
     Only public identifiers appear here: parachain IDs, asset IDs, and contract
     addresses. Account keys, mnemonics, and seeds are never published — the
     platform signs on the device, and operator secrets live outside every source
     repository.
-
-## The deployments register (authoritative)
-
-The authoritative list of live addresses, CIDs, genesis hashes, RPC endpoints,
-and `.dot` domains is the
-[`summit-net-deployments`](https://github.com/paritytech/summit-net-deployments)
-register:
-
-- **`DEVNET.md`** records the current Devnet — parachains
-  1000 / 1004 / 1010, genesis hashes, RPC/ETH-RPC/IPFS endpoints, stablecoin
-  asset IDs, and the live contract and app addresses reproduced below.
-- **`README.md`** records the now-decommissioned Summit network, retained for
-  historical reference.
-
-When the register and this page disagree, the register wins.
 
 ## Key chains and identifiers
 
@@ -53,8 +38,6 @@ The product suite itself targets 1000 / 1004 / 1010.
 | SS58 prefix (Devnet) | `42` |
 | Web gateway | [dev-dot.li](https://dev-dot.li) |
 
-The network fields above are taken from the deployments register.
-
 ## Native token and stablecoins
 
 The end-user **CASH** display name maps to a Devnet digital-dollar asset. On
@@ -66,8 +49,7 @@ represented on the People chain for app-facing CASH flows.
 | pUSD (Digital Dollar / "CASH") | `50000413` | 6 | The main CASH asset used by the Devnet |
 | USDt (Tether USD) | `1984` | 6 | |
 
-Asset IDs and People-chain representations are recorded in the register's
-`DEVNET.md`. The native token is PAS with 10 decimals; Devnet tokens carry no
+The native token is PAS with 10 decimals; Devnet tokens carry no
 value. You can obtain Devnet funds from the
 [Polkadot faucet](https://faucet.polkadot.io).
 
@@ -99,7 +81,8 @@ gateway uses that record to load the app.
 | Multicall3 | `0x929EdB8d61461c29d07deC834ef747EbFDcf0B74` |
 
 Some supporting DotNS contracts vary by network and are not reproduced here.
-Read them from the register or the `dotns-sdk` address book when you need them.
+Read them from the `dotns-sdk` address book for the `devnet` preset when you
+need them.
 
 See [Naming (DotNS)](../architecture/naming.md) for how these contracts fit
 together.
@@ -123,8 +106,8 @@ Shared system contracts registered in it:
 | `@polkadot/threads` | `0xFa1AB6B6aCBb056F5D9952EEDC5C67F1F3162f3A` |
 | `@mock/reputation` | `0x94a9099379EeA0C5093F93E9934a7f6605E7922f` |
 
-These are the kind of values you should read back from the on-chain registry or
-the deployments register rather than hard-code. See
+These are the kind of values you should resolve from the on-chain
+`ContractRegistry` rather than hard-code. See
 [Smart contracts & CDM](../architecture/contracts.md).
 
 ### Browse `Publisher`
@@ -137,8 +120,8 @@ discoverable; display metadata lives in DotNS records.
 | Publisher | `0xaab42efbe8ea4d4228c3a11e973f94c17b9a0f2c` |
 
 Browse also reads attestation-resolver contracts for compliance badges. Those
-addresses are network-specific, so read them from the register or the Browse
-address book for the network you target. See
+addresses are network-specific, so read them from the Browse address book for
+the network you target. See
 [App discovery (Browse)](../architecture/discovery.md).
 
 ### Attestation protocol
@@ -148,8 +131,7 @@ general, permissionless attestations used by Browse compliance badges and other
 consumers. Both contracts run on Asset Hub via `pallet-revive`.
 
 The concrete `SchemaRegistry` and `AttestationService` addresses are
-network-specific and are not reproduced here — read them from the register's
-`DEVNET.md` or from the
+network-specific and are not reproduced here — read them from the
 [`attestation-protocol`](https://github.com/paritytech/attestation-protocol)
 deployment records for the network you target.
 
@@ -171,11 +153,9 @@ You rarely paste these addresses by hand. CLIs select the `devnet` network
 preset (`--env devnet` for `pad` and `dotns`, `-n devnet` for CDM), and that
 preset carries the RPC endpoints and the full address book. Apps and
 frontends resolve names to addresses at runtime through the registries above.
-When you need a value directly, read it from the deployments
-register rather than assuming it.
+When you need a value directly, read it from the preset rather than assuming it.
 
 ## Sources
 
-- [summit-net-deployments](https://github.com/paritytech/summit-net-deployments) — the authoritative register
 - [paseo-network/runtimes](https://github.com/paseo-network/runtimes) — parachains, assets, precompiles
 - Contract source: [dotns](https://github.com/paritytech/dotns) · [CDM](https://github.com/paritytech/contract-dependency-manager) · [browse](https://github.com/paritytech/browse) · [attestation-protocol](https://github.com/paritytech/attestation-protocol)

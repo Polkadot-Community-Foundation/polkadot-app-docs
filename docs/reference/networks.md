@@ -6,14 +6,13 @@ moments: when you need to know which chain a feature belongs to, and when you
 need to find the current endpoint or gateway without digging through source.
 
 !!! note "Endpoints get re-homed"
-    Treat the [deployments register](#the-deployments-register) as the source of
-    truth for concrete addresses and RPC endpoints.
+    Paseo endpoints are community-operated and change over time. The `devnet`
+    CLI preset tracks a working set, so prefer it over pasting a URL by hand.
 
 ## The Devnet at a glance
 
 The suite runs on the community-operated **Paseo** network. For what each chain
-is responsible for, see [The network](../architecture/network.md); the values
-below are recorded in the deployments register.
+is responsible for, see [The network](../architecture/network.md).
 
 | Parameter | Value |
 | --- | --- |
@@ -79,24 +78,61 @@ See [Get storage authorization](../guides/build-and-publish.md#get-storage-autho
 
 ### Node RPC endpoints
 
-RPC, ETH-RPC, and IPFS-gateway endpoints can change over time, so this page does
-not hard-code them. The current values are recorded in the deployments register
-alongside the genesis hashes for each chain. Read them from there when you need
-to configure a tool or debug a network issue.
+The `devnet` preset already carries an endpoint for each chain, so the CLIs
+connect without configuration. Use the lists below when you need to point a tool
+or a browser explorer at a chain directly, or when the endpoint a preset picked
+is down.
 
-## The deployments register
+Paseo is community-operated: each chain is served by several independent
+providers, and any single endpoint can go offline or be re-homed. If one fails,
+try another in the same list.
 
-Concrete addresses, endpoints, genesis hashes, stablecoin asset IDs, and app CIDs
-are recorded in the
-[`summit-net-deployments`](https://github.com/paritytech/summit-net-deployments)
-register, not in this documentation:
+**Relay**
 
-- `DEVNET.md` records the current public **Devnet**: para IDs, genesis
-  hashes, RPC / ETH-RPC / IPFS endpoints, the gateway, stablecoin asset IDs, and
-  live DotNS, CDM, and app addresses.
-- `README.md` records the now-decommissioned **Summit** network (EVM chain id
-  `420420417`, token SUM at 10 decimals, RPC
-  `wss://summit-asset-hub-rpc.polkadot.io`), kept for historical reference.
+- `wss://paseo-rpc.n.dwellir.com`
+- `wss://paseo-v2.rpc.turboflakes.io`
+- `wss://rpc-paseo.stakeworld.io`
+- `wss://rpc.interweb-it.com/paseo`
+
+**Asset Hub (1000)**
+
+- `wss://asset-hub-paseo-rpc.n.dwellir.com`
+- `wss://sys.turboflakes.io/asset-hub-paseo`
+
+**People (1004)**
+
+- `wss://people-paseo.rotko.net`
+- `wss://people-paseo.gatotech.network`
+- `wss://rpc.interweb-it.com/people-paseo`
+
+**Bulletin (1010)**
+
+- `wss://bulletin-paseo.tservices.es:8443`
+- `wss://bulletin-paseo-02.tservices.es:9443`
+- `wss://bullet.sik.rocks`
+- `wss://bullet.tunastaking.eu`
+
+#### Ethereum JSON-RPC
+
+Contract tooling that speaks Ethereum JSON-RPC (Hardhat, `cast`, viem) needs the
+ETH-RPC endpoint for Asset Hub rather than a Substrate WebSocket endpoint:
+
+- `https://paseo-assethub-rpc.laissez-faire.trade`
+
+See [Deploy contracts with CDM](../guides/deploy-contracts-cdm.md) for how this
+is used.
+
+#### Bulletin IPFS gateways
+
+An app bundle stored on Bulletin is addressed by CID. Serving it over HTTP takes
+an IPFS gateway peered to a Bulletin node — the Bulletin RPC endpoints above do
+**not** serve `/ipfs/` themselves:
+
+- `https://devnet-ipfs.api.polkadotcommunity.foundation` — operated by the
+  Polkadot Community Foundation, and the gateway the deploy tooling defaults to
+- `https://bulletin-kubo.tservices.es:9443`
+
+Tools append `/ipfs/<cid>` to these bare origins.
 
 For a curated list of the contract and registry addresses, see the
 [Addresses & registries](./addresses.md) reference page.
@@ -112,4 +148,3 @@ precompiles, or runtime constants.
 
 - [The network](../architecture/network.md) — what each chain is responsible for
 - [Addresses & registries](./addresses.md) — concrete contract addresses
-- [summit-net-deployments](https://github.com/paritytech/summit-net-deployments) — the register
