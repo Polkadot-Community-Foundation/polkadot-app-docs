@@ -105,8 +105,8 @@ Useful options:
 If the process is interrupted between commit and reveal, resume it:
 
 ```bash
-dotns register domain retry my-cool-app --env devnet
-dotns register domain list --env devnet     # inspect cached commitments
+dotns register retry my-cool-app --env devnet
+dotns register list --env devnet     # inspect cached commitments
 ```
 
 Verify ownership:

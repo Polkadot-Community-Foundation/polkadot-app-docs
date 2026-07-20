@@ -156,9 +156,11 @@ Names are `.dot` domains managed by DotNS. Check availability and register with
 the DotNS CLI:
 
 ```bash
-dotns lookup <name>.dot --env devnet
-dotns register <name>.dot --env devnet
+dotns lookup name <name> --env devnet
+dotns register domain -n <name> --env devnet
 ```
+
+Pass the **label without the `.dot` suffix** — `my-cool-app`, not `my-cool-app.dot`.
 
 Label eligibility depends on length and personhood tier — short or reserved
 names are gated behind proof of personhood. See
