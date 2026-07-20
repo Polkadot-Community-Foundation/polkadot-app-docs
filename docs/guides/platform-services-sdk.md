@@ -12,7 +12,7 @@ Install the SDK into your app:
 npm i @parity/product-sdk
 ```
 
-The Product SDK is a TypeScript umbrella package (v0.17.0) that re-exports a
+The Product SDK is a TypeScript umbrella package that re-exports a
 family of `@parity/product-sdk-*` workspaces. It exposes subpath entry points
 you can import from directly, including `./chain`, `./cloud-storage`,
 `./contracts`, `./identity`, `./host`, `./wallet`, `./local-storage`,
@@ -48,26 +48,38 @@ client.individuality; /* People-chain access */
 client.raw; /* lower-level PAPI handles */
 ```
 
-Only the live environments `paseo`, `summit`, and `devnet` are accepted; other
-values throw a "not yet available" error. The client caches connections by each
-chain's genesis-hash fingerprint.
+Only the live environments `paseo` and `devnet` are accepted; other values throw
+a "not yet available" error. The client caches connections by each chain's
+genesis-hash fingerprint.
 
 **Bring your own descriptors.** If you need a specific or pre-release chain, pass
 descriptors from `@parity/product-sdk-descriptors` yourself:
 
 ```ts
 import { createChainClient } from "@parity/product-sdk/chain";
-import { paseo_asset_hub } from "@parity/product-sdk-descriptors/paseo-asset-hub";
-import { paseo_bulletin } from "@parity/product-sdk-descriptors/paseo-bulletin";
+import { devnet_asset_hub } from "@parity/product-sdk-descriptors/devnet-asset-hub";
+import { devnet_bulletin } from "@parity/product-sdk-descriptors/devnet-bulletin";
 
 const client = createChainClient({
-  chains: { assetHub: paseo_asset_hub, bulletin: paseo_bulletin },
+  chains: { assetHub: devnet_asset_hub, bulletin: devnet_bulletin },
 });
 ```
 
+The `devnet-*` descriptors need `@parity/product-sdk-descriptors` **0.7.0 or
+later** (or the `@polkadot-community-foundation` fork at 0.6.2 or later). On an
+older pin the subpath does not exist and the import fails to resolve at build
+time — upgrade rather than rewriting the import.
+
+!!! warning "The descriptor chooses the chain"
+    A descriptor passed to `createChainClient` **is** the network selection —
+    passing `paseo_asset_hub` here connects your app to Paseo Next, not this
+    Devnet, whatever `--env` you deployed with. The failure is quiet: the app
+    builds and loads, then throws `ChainNotSupportedError` at runtime. Match the
+    descriptor prefix to your target network.
+
 ```mermaid
 flowchart TD
-  A[App: getChainAPI env] --> B{env in paseo/summit/devnet?}
+  A[App: getChainAPI env] --> B{env in paseo/devnet?}
   B -- no --> X[throw: not yet available]
   B -- yes --> C[loadDescriptors: assetHub + bulletin + individuality]
   C --> D[createChainClient: cache by genesis fingerprint]
