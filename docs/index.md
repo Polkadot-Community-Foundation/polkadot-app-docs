@@ -15,6 +15,10 @@ template: home.html
 
 <h1>Build Products<br>for People.</h1>
 
+<div class="home-hero__actions">
+<a class="hero-btn hero-btn--primary" href="introduction/">Get Started</a>
+</div>
+
 </div>
 
 ## Choose a path
