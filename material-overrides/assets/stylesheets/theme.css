@@ -494,7 +494,7 @@ body:has(.home-hero) .home-hero { max-width: none; }
    dark base render as a graceful fallback. */
 .home-hero {
   position: relative;
-  min-height: 26rem;
+  min-height: 34rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -503,28 +503,25 @@ body:has(.home-hero) .home-hero { max-width: none; }
      The negative left/right margins reach the viewport edges regardless of the
      column width; inner content stays aligned to the page column via padding. */
   width: auto;
-  margin: 0 calc(50% - 50vw) 3rem;
-  padding: clamp(2.5rem, 5vw, 3.5rem) max(clamp(1.5rem, 5vw, 4rem), calc((100vw - 52rem) / 2));
+  margin: 0 calc(50% - 50vw) 1.5rem;
+  padding: clamp(3.5rem, 6vw, 5rem) max(clamp(1.5rem, 5vw, 4rem), calc((100vw - 52rem) / 2));
   border: 0;
-  border-bottom: 1px solid var(--grey-800);
   border-radius: 0;
   overflow: hidden;
   color: var(--grey-50);
   background:
     linear-gradient(90deg, var(--grey-950) 0%, color-mix(in srgb, var(--grey-950) 55%, transparent) 44%, transparent 74%),
-    linear-gradient(0deg, color-mix(in srgb, var(--grey-950) 55%, transparent) 0%, transparent 34%),
     url("../images/hero-datamosh.webp") center / cover no-repeat,
     radial-gradient(55rem 40rem at 80% 15%, color-mix(in srgb, var(--accent-default) 22%, transparent), transparent 60%),
     radial-gradient(45rem 35rem at 96% 96%, color-mix(in srgb, var(--dg-assethub) 16%, transparent), transparent 55%),
     var(--grey-950);
-}
-/* Crisp top hairline where the full-bleed hero meets the header. */
-.home-hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  pointer-events: none;
+  /* Soft vertical fade: the panel dissolves to transparent at the top and
+     bottom, revealing the page background behind it, so the image blends into
+     the page instead of sitting in a hard-edged band. Scheme-agnostic — it
+     fades to whatever the page background is (dark or light). The centred
+     title + button live in the opaque middle, so they stay crisp. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 18%, #000 78%, transparent 100%);
 }
 .home-hero > * {
   position: relative;
