@@ -480,7 +480,7 @@ body:has(.home-hero) .md-content {
 /* The hero spans the full home width; the content below it reads in a narrower,
    centred column. */
 body:has(.home-hero) .md-content__inner > *:not(.home-hero) {
-  max-width: 48rem;
+  max-width: 52rem;
   margin-left: auto;
   margin-right: auto;
 }
@@ -494,15 +494,20 @@ body:has(.home-hero) .home-hero { max-width: none; }
    dark base render as a graceful fallback. */
 .home-hero {
   position: relative;
-  min-height: 25rem;
+  min-height: 26rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  margin: 0.25rem 0 3rem;
-  padding: clamp(2.5rem, 5vw, 3.5rem) clamp(1.5rem, 5vw, 4rem);
-  border: 1px solid var(--grey-800);
-  border-radius: var(--rounded-xl);
+  /* Full-bleed: break out of the centred content column to span the viewport.
+     The negative left/right margins reach the viewport edges regardless of the
+     column width; inner content stays aligned to the page column via padding. */
+  width: auto;
+  margin: 0 calc(50% - 50vw) 3rem;
+  padding: clamp(2.5rem, 5vw, 3.5rem) max(clamp(1.5rem, 5vw, 4rem), calc((100vw - 52rem) / 2));
+  border: 0;
+  border-bottom: 1px solid var(--grey-800);
+  border-radius: 0;
   overflow: hidden;
   color: var(--grey-50);
   background:
@@ -512,15 +517,13 @@ body:has(.home-hero) .home-hero { max-width: none; }
     radial-gradient(55rem 40rem at 80% 15%, color-mix(in srgb, var(--accent-default) 22%, transparent), transparent 60%),
     radial-gradient(45rem 35rem at 96% 96%, color-mix(in srgb, var(--dg-assethub) 16%, transparent), transparent 55%),
     var(--grey-950);
-  box-shadow: var(--elev-2);
 }
-/* Inset hairline ring — keeps the framed image feeling crisp against the page. */
+/* Crisp top hairline where the full-bleed hero meets the header. */
 .home-hero::after {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   pointer-events: none;
 }
 .home-hero > * {
@@ -727,8 +730,163 @@ body:has(.home-hero) .md-typeset h2::before {
   width: 0.62rem;
   height: 1.1rem;
   border-radius: 3px;
-  background: var(--accent-default);
+  background: var(--color-text-primary);
   flex: 0 0 auto;
+}
+
+/* --- Explore rail: three compact, icon-led tiles ------------------------- */
+.home-rail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin: 1rem 0 0;
+}
+.md-typeset .rail-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.15rem;
+  border: 1px solid var(--border-card);
+  border-radius: var(--rounded-lg);
+  background: var(--card-gradient);
+  box-shadow: var(--elev-1);
+  color: inherit;
+  text-decoration: none;
+  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+.md-typeset .rail-tile:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent-default) 40%, var(--border-card));
+  box-shadow: var(--elev-hover), var(--glow-accent);
+}
+.rail-tile__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 0.35rem;
+  border-radius: 10px;
+  color: var(--accent-default);
+  background: color-mix(in srgb, var(--accent-default) 13%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--accent-default) 32%, var(--color-border));
+}
+.rail-tile__icon svg {
+  width: 18px;
+  height: 18px;
+}
+.md-typeset .rail-tile b {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.md-typeset .rail-tile__desc {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+.rail-tile__arrow {
+  position: absolute;
+  top: 1.05rem;
+  right: 1.1rem;
+  color: var(--color-text-tertiary);
+  opacity: 0;
+  transform: translateX(-3px);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.md-typeset .rail-tile:hover .rail-tile__arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--accent-default);
+}
+
+/* --- Outro band: popular links + devnet entry points --------------------- */
+.home-outro {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 2.4rem;
+  margin: 3rem 0 1rem;
+}
+.md-typeset .home-outro__label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.7rem;
+  font-family: var(--md-code-font);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+.md-typeset .home-outro__label::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.75rem;
+  border-radius: 2px;
+  background: var(--color-text-primary);
+}
+
+.home-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.md-typeset .entry-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--rounded);
+  background: var(--color-surface);
+  box-shadow: var(--elev-1);
+  text-decoration: none;
+  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+.md-typeset .entry-chip:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--accent-default) 40%, var(--color-border));
+  background: var(--card-gradient);
+}
+.md-typeset .entry-chip .lbl {
+  font-family: var(--md-code-font);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+.md-typeset .entry-chip .val {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--md-code-font);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+.md-typeset .entry-chip .val::after {
+  content: "\2197";
+  color: var(--color-text-tertiary);
+  transition: color var(--dur) var(--ease);
+}
+.md-typeset .entry-chip:hover .val::after {
+  color: var(--accent-default);
+}
+
+@media screen and (max-width: 50em) {
+  .home-rail {
+    grid-template-columns: 1fr;
+  }
+  .home-outro {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
 }
 
 .home-link-list {

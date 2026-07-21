@@ -57,11 +57,11 @@ theme:
   palette:
     - scheme: polkadot-dark
       toggle:
-        icon: material/weather-sunny
+        icon: octicons/sun-24
         name: Switch to light mode
     - scheme: polkadot-light
       toggle:
-        icon: material/weather-night
+        icon: octicons/moon-24
         name: Switch to dark mode
 
 markdown_extensions:
