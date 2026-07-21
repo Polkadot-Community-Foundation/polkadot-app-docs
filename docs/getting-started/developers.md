@@ -133,12 +133,17 @@ pad ./dist my-app.dot --env devnet
 Your app is now reachable as `my-app.dot` in the Polkadot app and at
 `https://my-app.dev-dot.li` on the gateway.
 
-Browse self-serve listing is **not available on the public devnet yet**. No
-published `pad` build carries the devnet Browse `Publisher` address, so
-`pad --publish --env devnet` prints `Publish: not supported on this environment`
-and skips the listing step. The deploy still succeeds and the app works; it just
-isn't listed in Browse. See
-[List your app in Browse](../guides/list-in-browse.md).
+To also list the app in Browse, add `--publish`, which calls
+`Publisher.publish` after the contenthash is set:
+
+```bash
+pad ./dist my-app.dot --env devnet --publish
+```
+
+Publishing is gated on-chain — you must own the label and have proof of
+personhood (Lite lists 1/day, Full 5/day). Deploying without `--publish` still
+works; the app just isn't listed. See
+[List your app in Browse](../guides/list-in-browse.md) for the full gate model.
 
 ## 6. Optional — deploy contracts with `cdm`
 

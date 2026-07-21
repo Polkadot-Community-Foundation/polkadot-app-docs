@@ -189,21 +189,18 @@ Hub.
     pass `--mnemonic` (see `pad --help`), preferably from an environment
     variable, and never commit or print it.
 
-When Browse self-serve listing is available, add `--publish` to list the app in
-the on-chain Publisher registry so directory apps such as
-[Browse](https://browse.dev-dot.li) can enumerate it:
+Add `--publish` to list the app in the on-chain Publisher registry so directory
+apps such as [Browse](https://browse.dev-dot.li) can enumerate it:
 
 ```bash
 pad ./dist <name>.dot --env devnet --publish
 ```
 
-!!! warning "Browse `--publish` is not available on the public devnet yet"
-    Listing calls the devnet Browse `Publisher` contract, but no published `pad`
-    build carries that contract address yet. For now, `--publish --env devnet`
-    prints `Publish: not supported on this environment` and skips the listing
-    step. The deploy still succeeds; the app just is not listed in Browse. Once
-    self-serve listing is enabled, the publishing account will also need proof
-    of personhood.
+!!! note "`--publish` is personhood-gated"
+    The `devnet` preset carries the Browse `Publisher` address, so `--publish`
+    is active. Publishing is gated on-chain: the account must own the `.dot`
+    label and hold proof of personhood (Lite lists 1/day, Full 5/day). A deploy
+    without `--publish` always succeeds; the app just is not listed in Browse.
 
 Once the transaction settles, the app is live at `<name>.dot` in the Polkadot
 app and at `https://<name>.dev-dot.li` on the web gateway. See

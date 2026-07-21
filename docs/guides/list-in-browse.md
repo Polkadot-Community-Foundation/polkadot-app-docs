@@ -3,13 +3,14 @@
 Browse is the app-discovery directory for the Polkadot Products Devnet. A
 listing is a small on-chain record that points directory clients back to the
 app's `.dot` domain and manifest. This page covers the permission model, the CLI
-path, and how to verify or retract a listing once self-serve listing is enabled.
+path, and how to verify or retract a listing.
 
-!!! warning "Self-serve listing is not available on the public devnet yet"
-    No published `pad` build currently ships the devnet Browse `Publisher`
-    address. `pad --publish --env devnet` therefore prints
-    `Publish: not supported on this environment` and skips the listing step. The
-    deploy can still succeed; the app just is not listed in Browse.
+!!! info "Listing is self-serve, but personhood-gated"
+    `pad --publish --env devnet` calls `Publisher.publish` and works on the
+    public devnet — the `Publisher` contract is deployed and the preset carries
+    its address. Publishing is gated on-chain, though: you must own the `.dot`
+    label **and** hold proof of personhood (see the requirements below). A deploy
+    without `--publish` always succeeds; the app just is not listed in Browse.
 
 ## What "listing" actually is
 
@@ -54,8 +55,8 @@ To list an app, you need:
     ```
 
     This installs the `pad` (and `polkadot-app-deploy`) binary. Listing uses
-    the `--publish` flag, which only works when the selected environment carries
-    a Browse `Publisher` address.
+    the `--publish` flag; the `devnet` preset carries the Browse `Publisher`
+    address, so it is active there.
 
 - The network preset: `pad` takes it via `--env devnet`. The `--publish` step
   only takes effect when that preset carries a `Publisher` contract address.
@@ -88,26 +89,26 @@ root and per-executable `manifest` text records that Browse reads.
 
 ## Step 2 — Publish the listing
 
-When the selected environment supports Browse publishing, list the app as part
-of a deploy by adding `--publish`:
+List the app as part of a deploy by adding `--publish`:
 
 ```bash
 pad ./dist my-app.dot --env devnet --publish
 ```
 
-After the contenthash is set, this calls `Publisher.publish("my-app")`. If the
-selected `--env` preset carries no `Publisher` address, the publish step prints
-`Publish: not supported on this environment` and is skipped rather than failing
-the deploy. That is the current public **devnet** behaviour.
+After the contenthash is set, this calls `Publisher.publish("my-app")`. On an
+environment whose `--env` preset carries no `Publisher` address, the publish
+step prints `Publish: not supported on this environment` and is skipped rather
+than failing the deploy; the `devnet` preset does carry it, so `--publish` is
+active there.
 
-Publishing is idempotent where it is supported. Re-running it on an
+Publishing is idempotent. Re-running it on an
 already-listed label refreshes the publisher and timestamp in place rather than
 creating a duplicate entry, so it is safe to include `--publish` on every deploy.
 
 ## Step 3 — Verify the listing
 
-Once self-serve listing is enabled and the publish step succeeds, open the Browse
-reference app and search for your app:
+Once the publish step succeeds, open the Browse reference app and search for
+your app:
 
 - <https://browse.dev-dot.li>
 
