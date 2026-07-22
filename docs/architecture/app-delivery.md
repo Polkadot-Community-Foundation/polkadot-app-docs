@@ -39,8 +39,7 @@ building your frontend, a publish is a single invocation over the output
 directory:
 
 ```bash
-npm i -g @polkadot-community-foundation/polkadot-app-deploy
-pad ./dist my-app.dot --env devnet
+pad ./dist my-app.dot --env devnet --mnemonic "$MNEMONIC"
 ```
 
 The CLI merkleizes the build directory into a content-addressed DAG-PB archive,
@@ -55,16 +54,12 @@ blocks and updates the name to point at the new content.
 Content is stored on the Bulletin chain. Uploads are authorization-based rather
 than fee-based: the uploading account needs upload quota, but does not pay devnet
 tokens for each bundle. Quota is granted by an **authorizer** via
-`authorize_account`. In practice `pad` uploads from a small pool of derived
-helper accounts (not your signing account), so it is those that get authorized —
-either from the **Storage Faucet** in the
-[Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet)
-(authorize any account you name; the page also lists current grants and their
-expiry) or with the `pad-bootstrap` command, which authorizes the whole pool at
-once using a shared Devnet authorizer.
+`authorize_account`, and it is the account that *signs* the deploy which
+uploads — so that is the account that needs quota.
 See [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization)
 for the practical steps. This is separate from the token
-[faucet](https://faucet.polkadot.io), which only provides native tokens for fees.
+[faucet](../reference/networks.md#faucet), which only provides native tokens for
+fees.
 
 **Why storage is gated — and why this Devnet keeps it open.** Writing to Bulletin
 is permissioned (reading is always open — authorization gates storing, not

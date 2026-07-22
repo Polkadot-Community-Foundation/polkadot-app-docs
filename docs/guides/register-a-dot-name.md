@@ -17,10 +17,8 @@ bundle. For the resolution path and contract topology, see
 
 ## Install the CLI
 
-```bash
-npm i -g @polkadot-community-foundation/dotns-cli
-# provides the `dotns` command
-```
+The `dotns` command ships in `@polkadot-community-foundation/dotns-cli` — see
+[Packages & tools](../reference/packages.md) to install it.
 
 Every command takes a network via `--env devnet` (or the `DOTNS_ENV` environment
 variable).
@@ -28,14 +26,27 @@ variable).
 ## Set up an account
 
 The CLI keeps its **own** keystore, separate from any account in the Polkadot
-app. Configure it **before** you register anything — store a mnemonic once, then
-reference it by name:
+app. Configure it **before** you register anything:
 
 ```bash
-# Encrypt and store a mnemonic (or key-uri) into the keystore
 dotns auth set
+```
 
-# Confirm which account is active
+The prompt asks which kind of secret you are storing — answer `mnemonic` or
+`key-uri`, *then* paste the value — and finally sets a **keystore password**.
+Every later `dotns` command needs that password: pass it with `--password`, or
+export `DOTNS_KEYSTORE_PASSWORD` so scripts do not stall on a hidden prompt.
+
+To do it in one non-interactive step instead:
+
+```bash
+export DOTNS_KEYSTORE_PASSWORD="…"
+dotns auth set --mnemonic "…" --account my-app
+```
+
+Then confirm which account is active:
+
+```bash
 dotns account address
 dotns account info --env devnet
 ```
@@ -47,8 +58,9 @@ dotns account info --env devnet
     command. A `.dot` name registered from that account is **not yours**: anyone
     can transfer it away. Always configure your own key first.
 
-Registration signs a PolkaVM transaction, so your account needs a mapped EVM address
-and a small devnet balance:
+Registration signs a PolkaVM transaction, so your account also needs a mapped
+EVM address and a balance for fees — fund it from the
+[faucet](../reference/networks.md#faucet), then:
 
 ```bash
 # Map your Substrate account to its EVM address (once per account)
@@ -63,9 +75,6 @@ dotns account is-mapped <address> --env devnet
     banner still announces the CLI's default signer, so it may show the shared
     dev account even when your keystore is configured — the authoritative answer
     is the `mapped:` line for the address you asked about, not the banner.
-
-If your account has no balance, request devnet funds from the
-[faucet](https://faucet.polkadot.io).
 
 ## Reserved and short-name gating
 
@@ -83,10 +92,15 @@ Governance-reserved and explicitly reserved names are rejected by the controller
 Personhood-tier usernames are issued through the gateway path when you prove personhood
 in the Polkadot app, not through the CLI commands below.
 
-!!! tip
-    If you just want a name for an app, pick a label with a stem of nine or more
-    characters (for example `my-cool-app`) to stay on the open path and avoid the
-    personhood gate.
+!!! tip "Pick a nine-character stem"
+    If you just want a name for an app, use a label whose stem is **nine
+    characters or longer** (for example `my-cool-app`). That is the only band
+    that registers without proof of personhood, which today comes from the
+    Polkadot app rather than the CLI. Shorter names such as `my-app` — a
+    six-character stem — will be refused.
+
+    There is no way to check a label's tier before committing to it, so count
+    the stem yourself: the label with any trailing digits stripped.
 
 ## Register a name
 
@@ -97,23 +111,36 @@ commitment age, then reveal and pay. The CLI orchestrates all three steps:
 dotns register domain -n my-cool-app --env devnet
 ```
 
+Expect this to take **several minutes** — the commitment has to finalize, then
+mature, then be revealed. The CLI prints the tier and the price it is about to
+pay before the final step:
+
+```
+  name tier:  NoStatus
+  your tier:  NoStatus
+  message:    Available to all
+  price:      10 PAS
+```
+
 Useful options:
 
 - `-r, --reverse` — also set this name as your account's reverse (primary) record.
 - `--json` — emit machine-readable output.
 
-If the process is interrupted between commit and reveal, resume it:
-
-```bash
-dotns register retry my-cool-app --env devnet
-dotns register list --env devnet     # inspect cached commitments
-```
-
-Verify ownership:
+**Always confirm the result on chain before doing anything else** — that is the
+authoritative answer, whatever the CLI printed:
 
 ```bash
 dotns lookup owner-of my-cool-app --env devnet
 dotns lookup name my-cool-app --env devnet    # full record view
+```
+
+If the owner is your address, the name is yours and the job is done. Only if it
+is not should you resume the handshake:
+
+```bash
+dotns register list --env devnet     # inspect cached commitments
+dotns register retry my-cool-app --env devnet
 ```
 
 ## Bind a name to a bundle

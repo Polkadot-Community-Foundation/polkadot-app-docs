@@ -5,12 +5,17 @@ listing is a small on-chain record that points directory clients back to the
 app's `.dot` domain and manifest. This page covers the permission model, the CLI
 path, and how to verify or retract a listing.
 
-!!! info "Listing is self-serve, but personhood-gated"
-    `pad --publish --env devnet` calls `Publisher.publish` and works on the
-    public devnet — the `Publisher` contract is deployed and the preset carries
-    its address. Publishing is gated on-chain, though: you must own the `.dot`
-    label **and** hold proof of personhood (see the requirements below). A deploy
-    without `--publish` always succeeds; the app just is not listed in Browse.
+!!! warning "Listing needs proof of personhood — from the Polkadot app"
+    `pad --publish --env devnet` calls `Publisher.publish`, and the contract is
+    live on the Devnet. But publishing is gated on-chain: you must own the
+    `.dot` label **and** hold proof of personhood, which is obtained in the
+    Polkadot app on a device — there is no CLI path to a tier. Without one, the
+    publish step reports `NoPersonhood`.
+
+    This does not block you. A deploy without `--publish` always succeeds, and
+    the app is fully usable at `<name>.dot` and `https://<name>.dev-dot.li` —
+    it simply is not listed in the directory. Read on if you have a tier, or
+    want to know what listing would add.
 
 ## What "listing" actually is
 
@@ -45,28 +50,21 @@ To list an app, you need:
   for fees and mapped to its EVM address — the deploy and `Publisher.publish`
   calls are PolkaVM transactions on Asset Hub. See
   [Username & proof of personhood](username-and-personhood.md).
-- A Bulletin storage allowance for the upload, from the
-  [Storage Faucet](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet).
+- A Bulletin storage allowance for the upload — see
+  [Get storage authorization](build-and-publish.md#get-storage-authorization).
   Without it the deploy step cannot store your bundle.
-- The deploy CLI installed:
-
-    ```bash
-    npm i -g @polkadot-community-foundation/polkadot-app-deploy
-    ```
-
-    This installs the `pad` (and `polkadot-app-deploy`) binary. Listing uses
-    the `--publish` flag; the `devnet` preset carries the Browse `Publisher`
-    address, so it is active there.
+- The deploy CLI installed — see
+  [Packages & tools](../reference/packages.md).
 
 - The network preset: `pad` takes it via `--env devnet`. The `--publish` step
   only takes effect when that preset carries a `Publisher` contract address.
 
 !!! note "Metadata comes from a manifest"
-    Browse shows your app using a root manifest with `displayName`,
-    `description`, and an `icon`. The deploy CLI writes these `manifest` text
-    records when it finds a `polkadot-app-deploy.config` alongside your build.
-    If your app has no manifest, it can still be published, but it will not
-    hydrate into a rich card.
+    Browse renders your card from a `manifest` record that `pad` writes when it
+    finds a product config — see
+    [Add card metadata](build-and-publish.md#add-card-metadata) for the file.
+    An app without one can still be listed; it just will not hydrate into a
+    rich card.
 
 ## Step 1 — Deploy your app to its `.dot` domain
 
@@ -75,17 +73,12 @@ bundle, uploads it to the Bulletin Chain, and writes the content root as the
 `contenthash` on DotNS:
 
 ```bash
-pad ./dist my-app.dot --env devnet
+pad ./dist my-app.dot --env devnet --mnemonic "$MNEMONIC"
 ```
 
-When a `polkadot-app-deploy.config` is present, this same run also writes the
-root and per-executable `manifest` text records that Browse reads.
-
-!!! warning "Never print secrets"
-    Supply the signing key using your CLI's documented option (check
-    `pad --help`), prefer an environment variable over an inline argument where
-    possible, and never commit it. The signer must own the `.dot` label you are
-    publishing.
+The signer must own the `.dot` label. Keep the phrase in an environment
+variable; never commit or print it. When a product config is present, this same
+run also writes the `manifest` text records that Browse reads.
 
 ## Step 2 — Publish the listing
 

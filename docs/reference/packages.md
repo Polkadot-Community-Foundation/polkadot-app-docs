@@ -19,11 +19,16 @@ Most projects only need a few direct dependencies:
 | [`@polkadot-community-foundation/cdm-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-cli) | `npm i -g @polkadot-community-foundation/cdm-cli` | Contract Dependency Manager: build, deploy, publish, register, and install PolkaVM contracts. | `cdm` |
 | [`@polkadot-community-foundation/cdm-env`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-env) | `npm i @polkadot-community-foundation/cdm-env` | Maps a network name to its Asset Hub / Bulletin RPCs, IPFS gateway, and CDM registry address. | — |
 
-!!! tip
-    The CLIs all select a network preset. For this Devnet, use `devnet`:
-    `pad` and `dotns` use `--env devnet`; CDM uses `-n devnet`. If a command
-    fails because a preset cannot be found, check that the tool is up to date
-    before trying other names.
+!!! warning "Node.js 22 or newer"
+    `pad` and `cdm` require Node 22+ and fail at startup on Node 20 with an
+    unrelated-looking error. Check `node --version` first.
+
+!!! tip "`-n` is not the same flag everywhere"
+    All the CLIs select a network preset, and for this Devnet it is `devnet`:
+    `--env devnet` for `pad` and `dotns`, `-n devnet` for `cdm`. Watch the
+    collision — CDM's `-n` (`--name`) is the **network**, while `dotns`'s `-n`
+    is the **domain label**. `cdm`'s own `--help` also lists its presets from a
+    stale set that omits `devnet`; the preset is valid regardless.
 
 ## Product SDK family
 
@@ -57,7 +62,7 @@ are testing how your app behaves inside the real host protocol.
 |---------|---------|---------|
 | [`@novasamatech/host-api`](https://www.npmjs.com/package/@novasamatech/host-api) | `npm i @novasamatech/host-api` | Typed host methods for accounts, signing, storage, chat, payments, and remote chain access. |
 | [`@novasamatech/host-api-wrapper`](https://www.npmjs.com/package/@novasamatech/host-api-wrapper) | `npm i @novasamatech/host-api-wrapper` | Product-side runtime that connects a web app to the host bridge. |
-| [`@parity/host-api-test-sdk`](https://www.npmjs.com/package/@parity/host-api-test-sdk) | `pnpm add -D @parity/host-api-test-sdk` | Test host for end-to-end tests without launching the full app. |
+| [`@parity/host-api-test-sdk`](https://www.npmjs.com/package/@parity/host-api-test-sdk) | `npm i -D @parity/host-api-test-sdk @playwright/test` | Test host for end-to-end tests without launching the full app. Exports the fixture from `/playwright`; `@playwright/test` is a peer you install yourself. |
 
 ```mermaid
 flowchart LR
@@ -91,11 +96,8 @@ pad ./dist my-app.dot --env devnet
 ```
 
 !!! warning
-    The accounts `pad` uploads with must hold a live Bulletin storage
-    authorization — `pad` never self-authorizes and fails fast if it is missing
-    or expired. Grant one from the
-    [Storage Faucet](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet)
-    or with `pad-bootstrap`. See
+    The account `pad` deploys with must hold a live Bulletin storage
+    authorization — `pad` never self-authorizes. See
     [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization).
 
 ### CDM libraries

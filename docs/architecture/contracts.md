@@ -61,11 +61,8 @@ flowchart TD
 
 To deploy your own contracts:
 
-1. Install the CLIs:
-
-    ```bash
-    npm i -g @polkadot-community-foundation/cdm-cli
-    ```
+1. Install the CDM CLI and its Rust toolchain (`cdm setup`) — see
+   [Deploy & register contracts](../guides/deploy-contracts-cdm.md).
 
 2. Declare inter-contract dependencies in the project metadata so CDM knows the
    build order.

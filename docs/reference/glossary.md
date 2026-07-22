@@ -10,6 +10,13 @@ step.
 
 ## Platform and entry points
 
+### Product
+
+An application published to the Devnet under a `.dot` domain and opened inside
+the Polkadot app or the web gateway. These docs say "Product" wherever the
+published, named artefact is meant rather than a generic web app. See
+[App delivery](../architecture/app-delivery.md).
+
 ### Polkadot Products Devnet
 
 The public developer preview this documentation describes. It runs on the
@@ -43,7 +50,6 @@ The `.dot` naming system. Use DotNS when you need to register an app name, point
 that name at content, or look up where an app is published. See the
 [naming architecture](../architecture/naming.md).
 
-- DotNS CLI: `npm i -g @polkadot-community-foundation/dotns-cli`
 - Reference UI: <https://dotns.dev-dot.li>
 
 ### Browse / Publisher
@@ -67,8 +73,6 @@ The build, deploy, registry, and dependency tool for PolkaVM contracts. Use CDM
 when you want to publish a contract package that other Products can resolve by
 name. See the [contracts architecture](../architecture/contracts.md).
 
-- CDM CLI: `npm i -g @polkadot-community-foundation/cdm-cli` (bin: `cdm`)
-- CDM env library: `npm i @polkadot-community-foundation/cdm-env`
 - CDM Frontend: <https://contracts.dev-dot.li>
 
 ## Storage and delivery
@@ -82,6 +86,18 @@ Uploads require storage authorization, and stored content is addressed by CID.
     Because storage is authorization-gated, a deploy account needs a live
     storage authorization before it can upload. Authorizations can expire and
     must be refreshed.
+
+### CID
+
+The content identifier of a stored bundle or file. A `.dot` domain resolves to a
+CID, and the CID is what the client actually fetches. See
+[App delivery](../architecture/app-delivery.md).
+
+### Statement store
+
+A People-chain store of short signed statements. The app uses it as the transport
+for encrypted chat messages and call signalling. See
+[Messaging & calls](../architecture/messaging.md).
 
 ## Developer SDKs
 
@@ -112,13 +128,32 @@ static bundle and points a `.dot` domain at it.
 ### Proof of personhood
 
 The mechanism by which an account is recognized as a distinct human without
-revealing who they are. Lite and Full tiers can unlock product flows such as app
-listing, naming, rewards, or rate limits.
+revealing who they are. It has two tiers, and either can unlock product flows
+such as app listing, naming, rewards, or rate limits.
+
+- **Lite** — an attested username; the tier most users hold.
+- **Full** — stronger one-account-per-human assurance, reached by redeeming an
+  invitation. See
+  [Username & proof of personhood](../guides/username-and-personhood.md).
+
+### Alias
+
+A per-application pseudonym derived for your account, so an app can recognize a
+returning person without learning who they are or linking them across apps. See
+[Identity & personhood](../architecture/identity.md).
 
 ### People / Asset Hub
 
 Two of the system parachains the product suite targets. **Asset Hub** hosts
 contracts, assets, and DotNS. **People** hosts identity and personhood.
+
+## Accounts and addresses
+
+### SS58
+
+The Substrate address format an account is shown in (Devnet prefix `42`). Faucets
+and chain tools take the SS58 address; contract tooling uses the mapped EVM
+`0x…` address instead. See [Addresses & registries](addresses.md).
 
 ## Money
 
@@ -127,6 +162,22 @@ contracts, assets, and DotNS. **People** hosts identity and personhood.
 The end-user display name for a Devnet digital-dollar asset. Users can obtain
 CASH through in-app flows, rewards, or supporting faucet flows, depending on the
 current build.
+
+### PAS
+
+The native token of the underlying Paseo network, used to pay transaction fees
+and keep an account alive. It is not CASH, and comes from the faucet — see
+[Create an account & get funds](../guides/create-account.md).
+
+### Pocket
+
+The wallet surface in the Polkadot app: the screen holding your balances,
+including the CASH card and its top-up button.
+
+### Coinage
+
+The privacy-preserving payment system on the People chain that CASH is spent
+through. See [Money (CASH & funding)](../architecture/money.md).
 
 ## Learn more
 

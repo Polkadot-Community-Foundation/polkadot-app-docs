@@ -17,9 +17,9 @@ The product surface is shared across native clients:
 
 | Client | Role |
 |--------|------|
-| [Polkadot Android](https://github.com/Polkadot-Community-Foundation/polkadot-android-community) | Mobile app with local custody, identity, CASH, messaging, and app hosting |
-| [Polkadot iOS](https://github.com/Polkadot-Community-Foundation/polkadot-ios-community) | Mobile app with the same product surface for iOS users |
-| [Polkadot Desktop/Web](https://github.com/Polkadot-Community-Foundation/polkadot-desktop-community) | Desktop app and web client for the same account and Product flows |
+| Polkadot Android | Mobile app with local custody, identity, CASH, messaging, and app hosting |
+| Polkadot iOS | Mobile app with the same product surface for iOS users |
+| Polkadot Desktop/Web | Desktop app and web client for the same account and Product flows |
 
 The Desktop build also runs as a web application, and the same product suite is
 reachable through the web gateway at [dev-dot.li](https://dev-dot.li). Download
@@ -126,6 +126,6 @@ environment.
 
 ## Learn more
 
-- Client source: [Android](https://github.com/Polkadot-Community-Foundation/polkadot-android-community) · [iOS](https://github.com/Polkadot-Community-Foundation/polkadot-ios-community) · [Desktop](https://github.com/Polkadot-Community-Foundation/polkadot-desktop-community)
+- Client source and downloads: [More resources](../reference/resources.md)
 - [host-api-test-sdk](https://github.com/paritytech/host-api-test-sdk) — drive a Product against a real host in CI
 - [Naming (DotNS)](naming.md) — how the browser resolves a `.dot` domain

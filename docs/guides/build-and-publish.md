@@ -12,109 +12,63 @@ renders the bundle. For the full pipeline, see
 
 ## Prerequisites
 
-Install the SDK and the CLIs you will use:
+--8<-- "install-clis.md"
 
-```bash
-npm i @parity/product-sdk
-npm i -g @polkadot-community-foundation/polkadot-app-deploy   # deploy CLI (bins: pad, pad-bootstrap)
-npm i -g @polkadot-community-foundation/dotns-cli             # DotNS CLI (bin: dotns)
-npm i -g @polkadot-community-foundation/cdm-cli               # contract manifest CLI (bin: cdm)
-```
+Every command below targets the Devnet with `--env devnet`. Pass it every time:
+`pad`'s own default is a different network.
 
-The publishing CLIs (`pad` and `dotns`) select the network with `--env devnet`;
-CDM uses `-n devnet`.
+Your **signing account** needs three things before the first on-chain step:
 
-Before your first on-chain step, make sure your **signing account** is ready:
+1. **Native tokens** on Asset Hub for fees — see
+   [Faucet](../reference/networks.md#faucet).
+2. **A mapped EVM address.** `dotns`, `pad`, and `cdm` all sign PolkaVM
+   transactions on Asset Hub; an unmapped account fails on its first one. Map it
+   once with `dotns account map --env devnet`.
+3. **A Bulletin storage authorization**, so it can upload your bundle —
+   [below](#get-storage-authorization).
 
-- **Funded with native devnet tokens for fees.** `register` and `publish` sign
-  PolkaVM transactions on Asset Hub, so the account needs native tokens (from the
-  faucet — see the storage-authorization note below).
-- **Mapped to its EVM address.** `dotns`, `cdm`, and `pad` sign on Asset Hub's
-  PolkaVM; an account that has never been mapped fails on the first on-chain step.
-
-!!! warning "Two prerequisites for publishing"
-    Your deploy account must (1) **own** the target `.dot` domain, and (2) the
-    accounts `pad` uploads with must hold a live **Bulletin storage
-    authorization**. `pad` never self-authorizes and fails fast if the
-    authorization is missing or expired. See
-    [Get storage authorization](#get-storage-authorization) below.
+You also need to **own** the `.dot` name you publish to, which step 3 covers.
 
 ## Get storage authorization
 
 Publishing writes your app to the **Bulletin Chain**, and Bulletin storage is
 **authorization-based, not fee-based**: before `pad` can upload, the uploading
 account needs a live *authorization* — an on-chain quota of bytes and
-transactions recorded in `TransactionStorage.Authorizations`. You do **not** pay
-devnet tokens per upload, and `pad` never self-authorizes: if the authorization
-is missing or expired, it fails fast.
+transactions. You do **not** pay devnet tokens per upload, and `pad` never
+self-authorizes: without an authorization it stops before uploading anything.
 
-One detail decides *which* account to authorize: **`pad` does not upload from
-your signing account.** It derives a small **pool** of helper accounts and
-uploads from one of those — which is why a failing deploy reports
-`pool account N is not authorized`. By default the pool is a shared, well-known
-set derived from the standard dev phrase (`//deploy/0…9`); set
-`BULLETIN_POOL_MNEMONIC` to use your own. Either way, it is the **pool** accounts
-that need authorization. There are two ways to grant it.
+**The account that signs is the account that uploads.** When you pass
+`--mnemonic`, `pad` uploads from that same account, so that is the account to
+authorize — the one that owns your `.dot` name.
 
-### Option 1 — Storage Faucet (web)
-
-The **Storage Faucet** in the
-[Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet)
-authorizes a storage allowance for any account you name, and the same page lists
-current authorizations and when each expires. This is the quickest way to
-authorize a single account.
+Grant it from the **Faucet** tab of the
+[Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/):
+select the **Products Devnet** network, then authorize the SS58 address you
+deploy with. The same page lists current authorizations and when each expires.
 
 !!! note "Two different faucets"
-    The [token faucet](https://faucet.polkadot.io) provides **native devnet
-    tokens** for transaction fees and account existence. The **Storage Faucet**
-    grants a **Bulletin storage allowance**. Publishing typically needs both:
-    native tokens to sign the on-chain transactions, and an allowance to upload
-    the bundle.
+    The [token faucet](../reference/networks.md#faucet) provides **native devnet
+    tokens** for transaction fees. The **Storage Faucet** above grants a
+    **Bulletin storage allowance**. Publishing needs both: tokens to sign the
+    on-chain transactions, and an allowance to upload the bundle.
 
-### Option 2 — `pad-bootstrap` (self-driven)
+Authorizations are finite and expire. If a deploy that used to work stops at the
+upload step, the allowance has most likely lapsed — grant it again and re-run.
 
-**`pad-bootstrap`** ships in the same `@polkadot-community-foundation/polkadot-app-deploy` package as
-`pad` (installed in [Prerequisites](#prerequisites) — no extra install). It
-checks every pool account `pad` will use and grants authorization to the ones
-that need it, in a single run. It signs the grants with an **authorizer** key,
-and the Devnet provides a shared, feeless one for exactly this purpose.
+### Deploying without your own key
 
-!!! info "Devnet storage authorizer"
-    The Devnet provides a shared storage authorizer for `pad-bootstrap`. Pass it
-    as `--authorizer`; it can be rotated, so check here for the current value.
-
-    ```bash
-    export AUTHORIZER="//Eve"   # Devnet storage authorizer (rotatable)
-    ```
-
-Authorize the default (shared) pool that `pad … --env devnet` uses:
+`pad` can also upload from a shared **pool** of helper accounts, used when you
+deploy without `--mnemonic`. Those accounts are pre-authorized on the Devnet;
+`pad-bootstrap` (same package, no extra install) tops them up:
 
 ```bash
-pad-bootstrap --env devnet --authorizer "$AUTHORIZER"
+pad-bootstrap --env devnet --authorizer "//Eve"
 ```
 
-It prints each pool account's status, grants any that are missing or expired
-(feeless), and is idempotent — re-run it any time to top up expiring
-authorizations. Then run your deploy again.
-
-!!! warning "Always pass `--authorizer` explicitly"
-    The Devnet Bulletin identifies as a testnet, so if you omit `--authorizer`,
-    `pad-bootstrap` falls back to `//Alice` — which is **not** an authorizer here
-    and cannot grant. Always pass `//Eve` (above).
-
-Using your own pool? Pass the same mnemonic you deploy with, so `pad-bootstrap`
-authorizes the accounts your deploy actually uses:
-
-```bash
-BULLETIN_POOL_MNEMONIC="<your pool mnemonic>" \
-  pad-bootstrap --env devnet --authorizer "$AUTHORIZER"
-```
-
-### Authorizations expire
-
-Authorizations are finite and expire. If a deploy that used to work starts
-failing at the upload step, the allowance has most likely lapsed — top it up from
-the Storage Faucet or by re-running `pad-bootstrap`, then deploy again.
+Pass `--authorizer` explicitly — omitting it falls back to `//Alice`, which
+cannot grant here. This path does not authorize your own account, so it is only
+useful for CI and shared setups; a deploy that signs with `--mnemonic` still
+needs the authorization above.
 
 ## 1. Scaffold with the Product SDK
 
@@ -162,49 +116,92 @@ dotns register domain -n <name> --env devnet
 
 Pass the **label without the `.dot` suffix** — `my-cool-app`, not `my-cool-app.dot`.
 
-Label eligibility depends on length and personhood tier — short or reserved
-names are gated behind proof of personhood. See
-[Register a .dot domain](register-a-dot-name.md) and the
-[Naming architecture](../architecture/naming.md) for the full rules.
+Pick a label whose stem is **nine characters or longer** to register it without
+a personhood check; shorter labels are gated. Registration is a commit–reveal
+handshake that takes a few minutes and costs a deposit. See
+[Register a .dot domain](register-a-dot-name.md) for the rules and the
+verification step.
 
 !!! tip
-    `pad` will register the name for you during deploy if the signing account
-    does not already own it, so this step is optional when you deploy with an
+    `pad` registers the name for you during deploy if your signing account does
+    not already own it, so this step is optional when you deploy with the
     account that will hold the name.
 
 ## 4. Publish with pad
 
-Point `pad` at your build directory and the target name:
+Point `pad` at your build directory and the target name. `pad` takes its signer
+explicitly — it does **not** read the dotns keystore:
 
 ```bash
-pad ./dist <name>.dot --env devnet
+pad ./dist <name>.dot --env devnet --mnemonic "$MNEMONIC"
 ```
+
+Keep the phrase in an environment variable; never commit or print it.
+
+`pad` also has a `login` mode that signs with your Polkadot app instead of a
+local key — these guides use `--mnemonic` throughout, which is why every run
+reports `Storage signer: … (no session)`.
 
 `pad` uploads the bundle to Bulletin (skipping unchanged blocks on repeat
 deploys), registers the name if needed, and writes the content hash on Asset
-Hub.
+Hub. A successful run ends with `Verified on-chain:` and the CID it published.
 
-!!! note "`pad` uses its own signing key"
-    `pad` does **not** read the dotns keystore. Give it a signer explicitly —
-    pass `--mnemonic` (see `pad --help`), preferably from an environment
-    variable, and never commit or print it.
-
-Add `--publish` to list the app in the on-chain Publisher registry so directory
-apps such as [Browse](https://browse.dev-dot.li) can enumerate it:
+Confirm the name points at that CID before you share it:
 
 ```bash
-pad ./dist <name>.dot --env devnet --publish
+dotns content view <name> --env devnet
 ```
 
-!!! note "`--publish` is personhood-gated"
-    The `devnet` preset carries the Browse `Publisher` address, so `--publish`
-    is active. Publishing is gated on-chain: the account must own the `.dot`
-    label and hold proof of personhood (Lite lists 1/day, Full 5/day). A deploy
-    without `--publish` always succeeds; the app just is not listed in Browse.
+The app is now live at `<name>.dot` in the Polkadot app and at
+`https://<name>.dev-dot.li` on the web gateway.
 
-Once the transaction settles, the app is live at `<name>.dot` in the Polkadot
-app and at `https://<name>.dev-dot.li` on the web gateway. See
-[List your app in Browse](list-in-browse.md) for discovery.
+### Add card metadata
+
+Browse and the Polkadot app render your Product from a **product config** that
+`pad` reads at deploy time. Without one, the app still works — it just has no
+name, description or icon to show.
+
+Save this as `polkadot-app-deploy.config.ts` beside your project (`pad` walks up
+from the build directory to find it):
+
+```ts
+export default {
+  domain: "my-cool-app.dot",
+  displayName: "My Cool App",
+  description: "What it does, in one line.",
+  icon: { path: "./icon.png", format: "png" },
+  executables: [{ kind: "app", path: "./dist", appVersion: [1, 0, 0] }],
+};
+```
+
+Paths are resolved relative to the config file, and the icon must exist — `pad`
+validates all of this before it uploads anything. It then uploads the icon and
+writes the `manifest` record on your name plus an `executable` record on
+`app.<name>.dot`:
+
+```
+Icon CID: bafk2bzacecqdzkvdzflim3gspebc2iaqfjxtmqbuo6lpaqmvmlfhvkqxl2klw
+Writing root manifest text record on my-cool-app.dot (177 B)…
+✓ 2 text records written.
+```
+
+`executables` also accepts `widget` and `worker` entries, published to the
+`widget.` and `worker.` subnames.
+
+### List it in Browse
+
+Add `--publish` to list the app in the on-chain Publisher registry:
+
+```bash
+pad ./dist <name>.dot --env devnet --mnemonic "$MNEMONIC" --publish
+```
+
+!!! note "`--publish` needs proof of personhood"
+    Publishing is gated on-chain: the account must own the label **and** hold
+    proof of personhood (Lite lists 1/day, Full 5/day), which today comes from
+    the Polkadot app rather than the CLI. Without it the publish step reports
+    `NoPersonhood` and the deploy itself still succeeds — the app is live, just
+    not listed. See [List your app in Browse](list-in-browse.md).
 
 ## Reference apps to study
 

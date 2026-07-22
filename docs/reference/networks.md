@@ -62,19 +62,17 @@ Deployed reference Products and the Polkadot app download links are listed in
 
 ### Faucet
 
-Devnet accounts can be funded from the Polkadot faucet at
-[https://faucet.polkadot.io](https://faucet.polkadot.io). The faucet provides
-**native tokens** (for transaction fees and account existence) only.
+--8<-- "faucet.md"
 
 ### Storage authorization
 
 Publishing an app writes to the Bulletin Chain, which is **authorization-based**,
-not fee-based. A deploy account needs an authorization grant (a byte / transaction
-quota). Grant one to yourself from the **Storage Faucet** in the
-[Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet),
-which also lists current grants and their expiry. It does not come from the token
-faucet.
-See [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization).
+not fee-based, and separate from the token faucet above: a deploy account needs
+an authorization grant (a byte / transaction quota) before it can upload. Grant
+one from the **Faucet** tab of the
+[Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/)
+after selecting the **Products Devnet** network. See
+[Get storage authorization](../guides/build-and-publish.md#get-storage-authorization).
 
 ### Node RPC endpoints
 
@@ -86,6 +84,11 @@ is down.
 Paseo is community-operated: each chain is served by several independent
 providers, and any single endpoint can go offline or be re-homed. If one fails,
 try another in the same list.
+
+!!! tip "`Unable to connect` lines are usually retries"
+    The CLIs reconnect transparently, and a run that prints several
+    `Unable to connect` lines normally still completes. Only reach for a
+    different endpoint if the command actually fails.
 
 **Relay**
 

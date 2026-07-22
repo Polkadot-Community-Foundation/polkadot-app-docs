@@ -12,9 +12,9 @@ To follow this guide without hitting a wall, have these ready first:
   yet, create or import it first — see [Create an account & get funds](create-account.md).
 - **Native tokens for fees — needed to *send* CASH.** Topping up CASH with the
   in-app **"+"** button costs you nothing. But *sending* or spending CASH submits
-  an on-chain transaction, which needs a small amount of the native devnet token
-  to pay fees. Get native tokens from the [faucet](https://faucet.polkadot.io)
-  before you send CASH.
+  an on-chain transaction on the People chain, which needs a small amount of PAS
+  to pay fees. Fund it from the faucet first — see
+  [Fund the account from the faucet](create-account.md#fund-the-account-from-the-faucet).
 - **The mobile app.** The **"+"** top-up is on the mobile app (devnet builds);
   the desktop app has no CASH card.
 
@@ -44,20 +44,16 @@ the mobile app.
    next to **Get CASH**. (The **"+"** top-up button appears only on
    non-production / devnet builds.)
 3. The app requests a devnet top-up and prepares the funds for spending.
-4. Once the deposit settles, your CASH balance updates. You can now spend it.
+4. The deposit settles in a few seconds and the CASH card shows the new balance.
+   If it has not moved after a minute, reopen the Pocket to refresh the view and
+   tap **"+"** again.
 
 !!! tip "You fund your account yourself"
     New accounts are not funded automatically. Tap the **"+"** top-up on the CASH
-    card (devnet builds) to add test CASH, or use the faucet for native tokens to
-    pay fees.
+    card (devnet builds) to add test CASH. The faucet is a separate step, and it
+    pays PAS for fees rather than CASH.
 
-### 2. The public faucet
-
-You can also request devnet funds from the shared Polkadot faucet at
-<https://faucet.polkadot.io>. This is useful for topping up native devnet
-tokens for fees alongside your CASH.
-
-### 3. Earn it
+### 2. Earn it
 
 CASH can also be earned through Devnet reward flows, such as games, judgements,
 invitations, or prize events. When rewards are paid out, they appear in the same

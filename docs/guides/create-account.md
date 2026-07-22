@@ -5,7 +5,7 @@ and get enough devnet funds to start using Products on the Polkadot Products
 Devnet.
 
 You will need the app installed — download links are in
-[More resources](../reference/resources.md).
+[Get the app](../reference/resources.md#get-the-app).
 
 ## 1. Create or import the account
 
@@ -35,21 +35,32 @@ from two different places:
 | What | Why | Where |
 | --- | --- | --- |
 | **CASH** | The balance you spend inside the app | The in-app **"+"** top-up — see [Get & use CASH](get-and-use-cash.md) |
-| **Native tokens (PAS)** | Transaction fees and keeping the account alive | The [faucet](https://faucet.polkadot.io) |
+| **Native tokens (PAS)** | Transaction fees and keeping the account alive | The faucet — below |
 
 The faucet does **not** give you CASH, and the in-app top-up does not give you
 fees. A new account generally wants both.
 
-## If your balance does not appear
+### Fund the account from the faucet
 
-A few common reasons a balance may not show up right away:
+--8<-- "faucet.md"
 
-- **The transaction is still settling.** Funding involves an on-chain transfer
-  and, for CASH, an automatic conversion step. Give it a few moments to
-  finalize and refresh the balance view.
-- **Account minimums and fees.** Like other Substrate-based chains, accounts
-  need a small native balance to stay active and pay fees. On this Devnet, keep
-  a small **PAS** balance available.
+A request pays 5,000 PAS and normally lands within a block or two — a few
+seconds.
+
+## Check the funds arrived
+
+The app shows the balance once it refreshes. To confirm it independently, open
+Polkadot-JS Apps against the chain you funded —
+[Asset Hub](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fasset-hub-paseo-rpc.n.dwellir.com#/chainstate)
+or
+[People](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fpeople-paseo.rotko.net#/chainstate)
+— select `system` → `account`, paste your SS58 address, and read `data.free`.
+
+If it is still zero a minute later, the request went to a different chain than
+the one you are using. Request again from the link for the chain you need.
+
+Keep a small **PAS** balance in reserve afterwards: like other Substrate-based
+chains, an account needs one to stay active and pay fees.
 
 ## Learn more
 

@@ -16,8 +16,8 @@ distinct human", without exposing who you are. There are two tiers:
 
 - **Lite** — earned by registering an attested username. This is the tier most
   users reach.
-- **Full** — earned through the personhood "game" or by being invited, which
-  provides stronger, one-account-per-human assurance.
+- **Full** — reached by redeeming an invitation, which provides stronger,
+  one-account-per-human assurance.
 
 Apps and smart contracts can read your tier through an on-chain interface and
 adjust what they offer accordingly. In practice, an app only needs to know
@@ -33,7 +33,8 @@ whether you have no personhood, Lite personhood, or Full personhood.
 You need an account with a small amount of devnet funds. If you have not set
 one up yet, follow [Create an account & get funds](create-account.md) first.
 
-Download links for the app are in [More resources](../reference/resources.md).
+Download links for the app are in
+[Get the app](../reference/resources.md#get-the-app).
 
 ## Claim a username
 
@@ -50,7 +51,8 @@ Download links for the app are in [More resources](../reference/resources.md).
    sends the signed request to the network's attester service (the identity
    backend), which vouches for you and submits it to the People chain on your
    behalf.
-5. Wait for the registration to finalize on-chain. Once it does, you are a
+5. The attester queues the request and submits it, so the username appears a few
+   seconds after you confirm rather than instantly. Once it is on-chain you are a
    **lite person** and your username is live.
 
 Behind the scenes, the app sends your signed request to the attester service,
@@ -75,12 +77,15 @@ sequenceDiagram
 
 ## Reach Full personhood (optional)
 
-Lite personhood is enough for everyday use. Some features may require **Full**
-personhood, which you reach by taking part in the personhood game or by
-redeeming an invitation. When you have an invitation, the app can request a
-one-time ticket and use it on-chain to progress your verification. Availability
-of the game and invitations can change between Devnet builds, so this step may
-not be active at all times.
+Full personhood is **invitation-gated**: the app redeems a one-time invitation
+voucher, which then progresses your verification on-chain. Vouchers are not
+self-service — the team distributes them directly, for example as a QR code at an
+event. Without one, Lite is your tier.
+
+That is the expected outcome, not a failure. Lite covers every user flow in these
+guides; the only thing Full adds is claiming a six-to-eight-character `.dot` stem
+with no digits (see
+[Reserved and short-name gating](register-a-dot-name.md#reserved-and-short-name-gating)).
 
 ## Why some features need personhood
 
@@ -90,11 +95,11 @@ rather than letting one user act many times from many accounts. Because apps
 read your tier (and a privacy-preserving alias) directly from the chain, they
 can enforce these limits without ever learning your identity.
 
-Reserving a name can also be tied to your registration: claiming your username
-can also reserve a matching `.dot` domain in your name when `.dot` reflection is
-enabled on the current devnet build. More desirable or scarce names may be gated
-behind a personhood tier, so completing this flow is what unlocks them. To learn
-how naming works, see
+Reserving a name can also be tied to your registration: claiming a username can
+mirror it into `.dot` naming, through operator-run infrastructure rather than
+your own transaction. To see whether yours was mirrored, search the name in the
+[DotNS UI](https://dotns.dev-dot.li) — nothing else about your account depends on
+it. Short names are the ones a tier unlocks; see
 [Register a .dot domain](register-a-dot-name.md).
 
 ## If something blocks you
@@ -103,8 +108,8 @@ how naming works, see
   proposes.
 - **The registration does not finalize.** Check that your account has enough PAS
   for fees.
-- **Full personhood is not offered.** Lite is the expected tier for most current
-  flows; Full depends on which personhood flows are active in the current build.
+- **Full personhood is not offered.** Expected without an invitation voucher —
+  Lite is the tier these guides assume.
 - **An app does not recognize your status yet.** Wait for the on-chain update to
   finalize, then reopen the app.
 

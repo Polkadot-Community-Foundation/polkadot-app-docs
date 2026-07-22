@@ -16,8 +16,8 @@ This page covers the user-facing flow and the current limits of each client.
 
 ## Before you start
 
-You will need the [Polkadot app](../reference/resources.md) installed and an
-on-device account.
+You will need the Polkadot app installed — downloads are in
+[Get the app](../reference/resources.md#get-the-app) — and an on-device account.
 
 Messaging is tied to your on-chain identity, so both you and the person you want
 to reach need an account and, in practice, to have added each other as a

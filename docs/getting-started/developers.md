@@ -24,74 +24,75 @@ on the Devnet and pointing a `.dot` domain at it.
 
 ## Before you start
 
-Before running the commands below, make sure you have:
+You need **one signing account**, ready in three ways, before any command below
+touches the chain:
 
-- **The tooling installed** — the Product SDK and the CLIs (`dotns`, `pad`, `cdm`); Step 1 covers this.
-- **A funded, mapped signing account** — an account with native devnet tokens for fees (from the faucet) whose EVM address is mapped on Asset Hub. `dotns`, `pad`, and `cdm` all sign PolkaVM transactions on Asset Hub with it.
-- **A signing key configured for the CLIs** — set up the dotns keystore with `dotns auth set` (or export `DOTNS_MNEMONIC` / `DOTNS_KEY_URI`) **before** registering a name. Without it, `dotns` signs with a shared public dev account that anyone can control. `pad` is separate again — it takes its own `--mnemonic`. See [Set up an account](../guides/register-a-dot-name.md#set-up-an-account).
-- **Storage authorization to publish** — the publish step (Step 5) also needs a Bulletin storage allowance, granted either from the [Storage Faucet](https://paritytech.github.io/polkadot-bulletin-chain/authorizations?tab=faucet) or with the `pad-bootstrap` CLI. See [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization).
+1. **Funded** with native tokens on Asset Hub for fees —
+   [Faucet](../reference/networks.md#faucet).
+2. **Mapped** to its EVM address, once: `dotns account map --env devnet`.
+   Every CLI here signs PolkaVM transactions on Asset Hub, and an unmapped
+   account fails on the first one.
+3. **Authorized** to write to Bulletin, so step 5 can upload your bundle —
+   [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization).
+
+The CLIs do not share a keystore: `dotns` keeps its own (step 4), and `pad`
+takes `--mnemonic` on the command line. They can use the same account.
 
 ## 1. Install the tooling
 
-The developer packages are published to npm.
+--8<-- "install-clis.md"
+
+Your app code needs the SDK too — see
+[Packages & tools](../reference/packages.md) for the full list:
 
 ```bash
-# Product SDK (typed access to chains, wallet, storage, identity)
 npm i @parity/product-sdk
-
-# Host API (transport used when your app runs inside the Polkadot app)
-npm i @novasamatech/host-api
-
-# CLIs (install globally)
-npm i -g @polkadot-community-foundation/dotns-cli          # dotns — register/manage .dot domains
-npm i -g @polkadot-community-foundation/polkadot-app-deploy # pad, pad-bootstrap — publish bundles + authorize storage
-npm i -g @polkadot-community-foundation/cdm-cli            # cdm    — build/deploy/register contracts
 ```
 
 ## 2. Choose a network preset
 
 Every CLI takes the network as a flag, and this Devnet is **`devnet`**:
+`--env devnet` for `pad` and `dotns`, `-n devnet` for `cdm`.
 
-- `pad` and `dotns` take `--env devnet`.
-- `cdm` takes `-n devnet` (also spelled `--name`).
-
-!!! warning "Do not use the `paseo` preset"
-    The CLIs also ship `paseo` and `paseo-next` presets. Those point at
-    different networks — picking one silently targets the wrong chain, and your
-    app will not appear on this Devnet.
+!!! warning "Always pass the flag"
+    The same binaries ship `paseo` and `paseo-next` presets pointing at other
+    networks, and the default is not `devnet`. Omit the flag and your app lands
+    on a different chain, where nothing on this Devnet can see it.
 
 ## 3. Build a web app with the Product SDK
 
 The Product SDK (`@parity/product-sdk`) gives your app typed access to the host:
-wallet information, storage, chain calls, contracts, identity, and React
-helpers.
+wallet, storage, chain calls, contracts, and identity.
 
 ```ts
 import { createApp } from "@parity/product-sdk";
 
-const app = await createApp({ name: "my-app" });
+const app = await createApp({
+  name: "my-app",
+  cloudStorage: { environment: "devnet" }, // defaults to paseo
+});
 
-// Read/write chain, cloud storage, wallet, etc.
-const cid = await app.cloudStorage.upload("hello world");
+const result = await app.cloudStorage!.upload("hello world");
+if (result.ok) console.log(result.value); // the CID
 ```
 
 !!! warning "Run inside a host"
-    SDK calls expect the Polkadot app or the web gateway to provide the host
-    connection. For a starting point, use the
-    [dotli-starter](https://github.com/paritytech/dotli-starter) template. For
-    automated tests, use `@parity/host-api-test-sdk`.
+    The SDK expects the Polkadot app or the web gateway to provide the host
+    connection. Outside one, `createApp()` itself throws
+    `Host storage unavailable`. Start from the
+    [dotli-starter](https://github.com/paritytech/dotli-starter) template, and
+    use `@parity/host-api-test-sdk` for automated tests. See
+    [Use platform services from the SDK](../guides/platform-services-sdk.md).
 
 Build your app to a static directory (the reference template uses `vite build` → `dist/`).
 
 ## 4. Register a `.dot` domain
 
 Your deploy account must **own** the `.dot` domain before you can publish to it.
-
-First give the DotNS CLI its own signing key — it keeps a keystore separate from
-the Polkadot app:
+`dotns` keeps its own keystore, separate from the Polkadot app:
 
 ```bash
-dotns auth set          # store your mnemonic (or export DOTNS_MNEMONIC)
+dotns auth set          # choose `mnemonic`, paste it, then set a password
 dotns account address   # confirm the active account
 ```
 
@@ -101,64 +102,55 @@ dotns account address   # confirm the active account
     name registered to it is not really yours. `dotns` warns whenever it falls
     back to that account.
 
-Then register it with the DotNS CLI:
+The keystore password is needed by every later command — export
+`DOTNS_KEYSTORE_PASSWORD` to avoid an interactive prompt. Then register:
 
 ```bash
-dotns register domain --name my-app --env devnet
+dotns register domain --name my-cool-app --env devnet
 ```
 
-Public names go through a commit-reveal flow and must be at least three
-characters. Short or reserved names are gated by proof of personhood. See
-[Naming (DotNS)](../architecture/naming.md) for the classification rules.
+Use a label whose **stem is nine characters or longer**; shorter ones are gated
+behind proof of personhood. Registration is a commit-reveal flow that takes a
+few minutes, so confirm it landed before moving on:
+
+```bash
+dotns lookup owner-of my-cool-app --env devnet
+```
+
+See [Register a `.dot` domain](../guides/register-a-dot-name.md) for the full
+rules.
 
 ## 5. Publish the bundle with `pad`
 
-`pad` publishes your static build and updates the `.dot` domain so clients know
-which bundle to open.
+`pad` uploads your static build and points the `.dot` domain at it. It does not
+read the dotns keystore — give it the signer that owns the name:
 
 ```bash
-pad ./dist my-app.dot --env devnet
+pad ./dist my-cool-app.dot --env devnet --mnemonic "$MNEMONIC"
 ```
 
-!!! note "Two prerequisites"
-    Your signing account must **own** `my-app.dot` and have permission to upload
-    app content on the Devnet. If publishing fails because storage authorization
-    is missing or expired, refresh that authorization and run the command again.
+That account must own the name and hold a Bulletin storage authorization; a
+successful run ends with `Verified on-chain:` and the published CID.
 
-!!! note "`pad` uses its own signing key"
-    Unlike `dotns`, `pad` does **not** read the dotns keystore. Give it a signer
-    explicitly — pass `--mnemonic` (check `pad --help` for the exact options),
-    preferably from an environment variable, and never commit or print it.
+Your app is now reachable as `my-cool-app.dot` in the Polkadot app and at
+`https://my-cool-app.dev-dot.li` on the gateway. To give it a name, description
+and icon in the directory, add a product config — see
+[Add card metadata](../guides/build-and-publish.md#add-card-metadata).
 
-Your app is now reachable as `my-app.dot` in the Polkadot app and at
-`https://my-app.dev-dot.li` on the gateway.
-
-To also list the app in Browse, add `--publish`, which calls
-`Publisher.publish` after the contenthash is set:
-
-```bash
-pad ./dist my-app.dot --env devnet --publish
-```
-
-Publishing is gated on-chain — you must own the label and have proof of
-personhood (Lite lists 1/day, Full 5/day). Deploying without `--publish` still
-works; the app just isn't listed. See
-[List your app in Browse](../guides/list-in-browse.md) for the full gate model.
+To also list it in Browse, add `--publish`. That step needs proof of personhood,
+which today comes from the Polkadot app rather than the CLI; without it the
+deploy still succeeds and the app simply is not listed. See
+[List your app in Browse](../guides/list-in-browse.md).
 
 ## 6. Optional — deploy contracts with `cdm`
 
 Smart contracts on this Devnet are PolkaVM contracts on Asset Hub. The Contract
-Dependency Manager helps you build, deploy, publish metadata, and register
-addresses so downstream apps can find the contracts they depend on.
+Dependency Manager builds, deploys, publishes metadata, and registers addresses
+so downstream apps can resolve contracts by name.
 
-```bash
-cdm init -n devnet       # scaffold a project
-cdm deploy -n devnet     # build, deploy, publish metadata, register
-```
-
-Downstream projects can consume a published contract package with `cdm install`.
-Browse published contracts at
-[https://contracts.dev-dot.li](https://contracts.dev-dot.li).
+`cdm` needs a Rust toolchain that `npm i -g` does not install — run `cdm setup`
+first. See [Deploy & register contracts](../guides/deploy-contracts-cdm.md) for
+the full sequence.
 
 ## Try the reference apps
 

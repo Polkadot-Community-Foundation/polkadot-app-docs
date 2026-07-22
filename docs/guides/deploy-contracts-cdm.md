@@ -1,179 +1,246 @@
 # Deploy & register contracts
 
-Deploy a PolkaVM (PVM) smart contract to the Polkadot Products Devnet and
-register it in the Contract Dependency Manager (CDM), so other projects and
-frontends can resolve it by name. Smart contracts here run on Asset Hub's
-`pallet-revive`: they are PolkaVM bytecode that exposes a Solidity-shaped JSON
-ABI and a 20-byte (H160) address.
+Deploy a PolkaVM (PVM) smart contract to the Devnet Asset Hub and register it in
+the Contract Dependency Manager (CDM), so other projects and frontends resolve it
+by name. One `cdm deploy` builds the contracts, publishes each contract's
+metadata (ABI plus readme) to the Bulletin Chain as a content-addressed CID,
+instantiates the contracts on Asset Hub, and records
+`@org/name -> address + metadata` in the on-chain `ContractRegistry` — the
+instantiations and the registration in a single atomic batch. For the registry
+model itself, see [Smart contracts & CDM](../architecture/contracts.md).
 
-CDM is the build, deploy, registry, and dependency tool for these contracts. It
-compiles Rust PVM contracts, deploys them to Asset Hub, publishes each
-contract's metadata (ABI plus readme) to the Bulletin chain as a
-content-addressed CID, and records a global `@org/name -> address + metadata`
-mapping in an on-chain `ContractRegistry` contract.
-
-## How the pieces fit
-
-```mermaid
-flowchart TD
-  A[cdm deploy -n network] --> B[Resolve preset: AssetHub/Bulletin RPC + registry addr]
-  B --> C[Detect build order from Cargo.toml package.metadata.cdm]
-  C --> D[cargo-pvm-contract build -> .polkavm]
-  D --> E[Dry-run ReviveApi.instantiate: gas + CREATE2 address]
-  E --> F[Publish ABI+readme metadata to Bulletin -> CID]
-  F --> G[Utility.batch_all: instantiate_with_code + registry.publishLatest]
-  G --> H[(ContractRegistry PVM contract)]
-  H --> I[name -> owner + versioned address + metadata_uri]
-```
-
-The `ContractRegistry` is a single PVM contract per network. Its key methods
-include `publishLatest`, `getAddress`, `getMetadataUri`, `getVersionCount`,
-`getOwner`, `getContracts` (paged), and `searchContractNames` (prefix). The
-first publisher of a name becomes its owner, and only the owner can publish new
-versions. Names must match the `@scope/pkg` shape, be ASCII, and be at most 64
-bytes.
+!!! warning "Registry entries are permanent"
+    The first account to publish a name owns it, and the registry is
+    append-only: an entry cannot be deleted, renamed or reassigned. Getting the
+    package name and the signing account right *before* the first deploy is most
+    of what this page is about.
 
 ## Prerequisites
 
-1. Install the CDM CLI:
+Do these in order — each step depends on the one before it.
 
-    ```bash
-    npm i -g @polkadot-community-foundation/cdm-cli
-    ```
-
-2. Have a funded account on the devnet Asset Hub. You can request tokens from
-   the [faucet](https://faucet.polkadot.io).
-
-3. Target the right network. Every CDM command selects one with `-n <name>`
-   (also spelled `--name`); this Devnet is `-n devnet`.
-
-!!! note
-    The CDM CLI runs TypeScript directly and builds Rust PVM contracts with
-    `cargo-pvm-contract`, which the CDM installer sets up (Rust nightly plus
-    `rust-src`). See the
-    [contract-dependency-manager README](https://github.com/paritytech/contract-dependency-manager)
-    for toolchain setup.
-
-## Step 1 — Scaffold and build
-
-A CDM project is a Rust workspace whose contracts declare their package name and
-inter-contract dependencies under `[package.metadata.cdm]` in each `Cargo.toml`.
-You can start from a template:
+**1. Install the CLI, then its build toolchain.** Install `cdm` (see
+[Packages & tools](../reference/packages.md#command-line-tools)), then:
 
 ```bash
-cdm template
-cdm build
+cdm setup          # installs rustup, Rust nightly + rust-src, and cargo-pvm-contract
+cdm setup --check  # re-run the checks without installing anything
 ```
 
-`cdm build` detects the dependency order from the workspace metadata and
-compiles each contract to a `.polkavm` artifact.
+The npm package ships the CLI and nothing else — it has no install hooks and sets
+up nothing Rust-shaped. `cdm setup` is what makes `cdm build` work, and it is
+also what keeps `cargo-pvm-contract` in step with the SDK your contracts compile
+against. It is safe to re-run.
 
-## Step 2 — Deploy and register
+**2. Name the network explicitly, every time.** Every command that touches a
+chain takes `-n devnet` (`init`, `account …`, `build`, `deploy`, `install`);
+`template`, `setup` and `update` take no `-n` at all. The valid presets are
+`polkadot`, `paseo`, `paseo-next`, `w3s`, `devnet` and `local`. Do not check that
+against `--help`: its preset lists are stale and omit `devnet`. A bare `cdm init`
+defaults to `paseo`, which is a different network.
 
-`cdm deploy` performs the whole pipeline: it resolves the network preset,
-resolves a signer, maps the deploy account for `pallet-revive`, dry-runs each
+**3. Create or import the deploy account.**
+
+```bash
+cdm init -n devnet                                         # generate a new key
+cdm account set -n devnet --mnemonic "<12 or 24 words>"    # or import one
+```
+
+Both save the account to `~/.cdm/accounts.json` and print its address; `cdm init`
+also prints the new **mnemonic to stdout**, so store it and treat that scrollback
+as a secret. Neither command creates any project files.
+
+**4. Fund the account on the Devnet Asset Hub.** Contracts deploy to Asset Hub,
+so that is the chain the balance has to be on — funding the relay chain or
+another parachain leaves `cdm` reading zero, with no error connecting the two.
+See [Faucet](../reference/networks.md#faucet).
+
+**5. Map the account for `pallet-revive`.**
+
+```bash
+cdm account map -n devnet
+```
+
+Required before the first deploy. `cdm deploy` does not do this for you: an
+unmapped account fails in the dry run with a raw `Revive.AccountUnmapped`
+dispatch error that mentions neither mapping nor this command. `cdm account map`
+operates on the **saved** account only — a good reason to prefer a saved account
+over `--suri`.
+
+**6. Get a Bulletin storage authorization.** A deploy publishes each contract's
+metadata to the Bulletin Chain, spending one storage-authorization transaction
+per contract, so the deploy account needs a live authorization of its own —
+granted exactly as for publishing an app, in
+[Get storage authorization](build-and-publish.md#get-storage-authorization).
+
+One command shows the result of steps 3–6 at once:
+
+```bash
+cdm account bal -n devnet
+```
+
+It prints the address, its Asset Hub balance and its Bulletin allowance. Run it
+before every deploy: it is also the only way to confirm *which* account you are
+about to sign with.
+
+## Step 1 — Start from a template
+
+A CDM project is a Rust (or Foundry/Hardhat) workspace in which each contract
+declares its package name — and the packages it calls — under
+`[package.metadata.cdm]` in its own `Cargo.toml`:
+
+```toml
+[package.metadata.cdm]
+package = "@myteam/counter-writer"
+dependencies = ["@myteam/counter"]
+```
+
+`cdm template` with no argument **lists** the templates and writes nothing. Pass
+a name to scaffold:
+
+```bash
+cdm template                       # lists: shared-counter, hardhat-counter, instagram, foundry-counter
+cdm template shared-counter [dir]  # writes the project, printing every file it creates
+```
+
+`foundry-counter` and `hardhat-counter` additionally need Foundry or Hardhat
+installed.
+
+!!! warning "Templates track upstream `main`"
+    A scaffold pins `cdm` and `pvm-contract-sdk` to `branch = "main"`, so it
+    compiles against whatever those repositories are today and can fail on code
+    you did not write. With `cdm-cli` 0.8.26 the flagship `shared-counter` does
+    not build as shipped: its `counter` contract is rejected for an explicit
+    `#[slot(0)]` on a sub-word field (deleting that one attribute makes it
+    build), and the two contracts that call it through `cdm::import!` then fail
+    to resolve the import. A failure of this shape is the template, not your
+    toolchain or your account; report it upstream.
+
+!!! warning "Rename before you build"
+    Templates ship `@example/*` package names that are **already registered**.
+    Change `[package.metadata.cdm] package` in every contract `Cargo.toml`, and
+    every `dependencies` entry that refers to them, to a scope you control.
+    Deploying under a name someone else owns is rejected; deploying under a free
+    name claims it forever.
+
+## Step 2 — Build
+
+```bash
+cdm build -n devnet
+```
+
+Pass `-n devnet` so the registry address compiled into the contracts is the
+Devnet one. Each contract produces two artifacts:
+
+- `target/release/<crate>.polkavm` — the bytecode that gets instantiated;
+- `target/release/<crate>.abi.json` — the ABI that gets **published as the
+  package's metadata**.
+
+**Check that both exist before deploying.** If the ABI file is missing, the
+deploy still succeeds and publishes an empty ABI — a registry entry nothing can
+consume, and one you cannot repair. If it is missing, re-run `cdm setup`: the ABI
+is generated by `cargo-pvm-contract`, and an installed build of it older than the
+SDK your contracts pin emits no ABI at all while the contract build stays green.
+
+`cdm build` in a directory with no workspace prints a single `Root:` line and
+exits 0. A green run is not evidence that anything was built — look for the
+per-contract progress bars and for the artifacts above.
+
+## Step 3 — Deploy and register
+
+!!! danger "Always deploy with your own key"
+    If no `--suri` is given and no account is saved for the preset, `cdm` signs
+    as the well-known development account **Alice**, whose key everyone has. It
+    prints no warning, and a deploy never names the signer at all. The package
+    name is then owned by Alice, permanently, and cannot be taken back. Confirm
+    the account with `cdm account bal -n devnet` before every deploy.
+
+```bash
+cdm deploy -n devnet
+```
+
+signs with the account saved for the preset. To pass a key inline instead:
+
+```bash
+cdm deploy -n devnet --suri "<12 or 24-word mnemonic>"
+```
+
+Despite the name, `--suri` is not a full Substrate secret URI. It accepts a dev
+derivation (`//Alice`) or a plain BIP-39 mnemonic, sr25519 only; derivation paths
+and `///password` forms either fail to decode or silently derive a *different*
+account from the dev phrase. A saved account keeps the phrase out of your shell
+history, and is the only form `cdm account map` accepts.
+
+A deploy resolves the network preset and the signer, builds, dry-runs each
 instantiation for gas and its deterministic CREATE2 address, publishes each
-contract's metadata to Bulletin, and submits the instantiations together with
-`registry.publishLatest` in an atomic `Utility.batch_all`.
+contract's metadata to Bulletin, and submits every instantiation together with
+`registry.publishLatest` in one atomic `Utility.batch_all`. The only other option
+worth knowing is `--bootstrap`, which deploys a `ContractRegistry` first — use it
+only on a network that has none.
+
+The output is five lines: the two chain endpoints, the registry address, one row
+per contract, and links to the extrinsic and to the metadata CID. It does not
+print the signing account, the untruncated contract address or the registered
+version, and it writes no local file. Recover the address from the linked
+explorer page, or from Step 4.
+
+## Step 4 — Verify the package resolves
+
+A deploy is not done until something can consume it. In an empty directory:
 
 ```bash
-cdm deploy -n devnet --suri "<your-secret-uri>"
+cdm install @your/name -n devnet
 ```
 
-The signer is resolved in the order `--suri` > a saved account for the preset >
-the development `Alice` account. One notable option
-([`commands/deploy.ts`](https://github.com/paritytech/contract-dependency-manager)):
+A good result prints the version, metadata CID and address, and writes
+`.cdm/contracts/@your/name/<version>/abi.json`. If it prints
+`No ABI found in metadata`, the registry entry resolved but its metadata carries
+no ABI: nothing can call that contract by name, and because the registry is
+append-only you can only publish a new version, never repair that one. Do this
+before you depend on a package or hand its name to anyone.
 
-- `--bootstrap` — deploy the `ContractRegistry` itself first, then all
-  workspace contracts. Use this only when standing up a brand-new network that
-  has no registry yet.
+The [CDM Frontend](https://contracts.dev-dot.li) browses the same registry, but
+it is itself a Product resolved client-side through the gateway — a blank page
+means the name did not resolve for you, not that your deploy failed. The CLI
+round-trip above is the check that carries information.
 
-For the full, current option list, run `cdm deploy --help`.
+## Step 5 — Consume a published contract
 
-!!! warning
-    A contract name is owned by whoever publishes it first. If you deploy under
-    a name someone else already owns, `registry.publishLatest` will reject the
-    new version. Choose a `@scope/pkg` name you control.
-
-When the batch is included, each of your contracts has an H160 address on Asset
-Hub and a `name -> (owner, versioned address, metadata_uri)` entry in the
-registry. You can confirm the entry in the
-[CDM Frontend](https://contracts.dev-dot.li), which browses published contracts
-by reading the same registry.
-
-## Step 3 — Install a contract into a consumer project
-
-Downstream projects depend on a published contract by name. From a project that
-has (or will have) a `cdm.json`:
+From the consuming project:
 
 ```bash
-cdm install @org/name -n devnet
-# or a pinned version:
-cdm install @org/name:3 -n devnet
-# or install everything listed in cdm.json:
-cdm install -n devnet
+cdm install @org/name -n devnet     # latest version
+cdm install @org/name:3 -n devnet   # pinned version
+cdm install -n devnet               # everything listed in cdm.json
 ```
 
-`install` builds a registry handle from `CONTRACTS_REGISTRY_ABI` at the
-network's registry address, resolves the version with `getVersionCount`, reads
-`getAddress` and `getMetadataUri`, fetches the metadata JSON from the
-Bulletin/IPFS gateway by CID, and writes the resolved
-`{version, address, abi, metadataCid}` into `cdm.json` under `contracts`
-(recording the registry it resolved against). Post-install hooks then generate
-TypeScript augmentation (`.cdm/cdm.d.ts`, `.cdm/contracts.d.ts`) and Solidity
-import files under `.cdm/solidity/`, and patch your `tsconfig` include so that
-typed contract access works
-([`commands/install/index.ts`](https://github.com/paritytech/contract-dependency-manager)).
+`install` reads the registry, resolves the version, fetches the metadata by CID
+from the Bulletin IPFS gateway, and writes `cdm.json` — dependencies, a
+`contracts` entry with `version`, `address`, `abi` and `metadataCid`, and the
+registry address it resolved against — plus
+`.cdm/contracts/<name>/<version>/{abi,info,metadata}.json`.
 
-## Step 4 — Resolve the contract from a frontend
+The header line `Rust  Solidity  TypeScript` reports which code generators ran,
+and each is enabled by what is already in the directory: Rust by a `Cargo.toml`,
+TypeScript by a `package.json`, Solidity by a buildable Foundry or Hardhat
+project. In a bare directory all three are off, and you get `cdm.json` and the
+`.cdm` artifacts only — no TypeScript augmentation, no Solidity imports, no
+`tsconfig` patch.
 
-At runtime, a frontend resolves a network config that provides a product-SDK
-environment, an Asset Hub descriptor, and the registry address (from
-`@polkadot-community-foundation/cdm-env`'s `getRegistryAddress`). It then builds a registry handle and
-calls the registry getters. This is exactly what the CDM Frontend does:
+The first install connects to a public RPC and downloads chain metadata; several
+minutes showing nothing but a spinner is normal, and a warm repeat still takes
+about a minute.
 
-The shape below is a sketch; treat the CDM Frontend source as the source of
-truth for the exact imports and call signatures.
-
-```ts
-import {
-  createContract,
-  createContractRuntimeFromClient,
-} from "@parity/product-sdk-contracts";
-
-// networkConfig supplies productSdkEnvironment, an Asset Hub descriptor, and
-// registryAddress (from @polkadot-community-foundation/cdm-env's getRegistryAddress). CONTRACTS_REGISTRY_ABI
-// is the registry ABI shipped with the CDM libraries.
-const runtime = createContractRuntimeFromClient(assetHubClient, assetHubDescriptor);
-const registry = createContract(
-  runtime,
-  networkConfig.registryAddress,
-  CONTRACTS_REGISTRY_ABI,
-);
-
-// resolve names -> addresses on-chain
-const address = await registry.getAddress(/* @org/name */);
-```
-
-The exact call shape follows the CDM Frontend's
-[`utils/contracts.ts`](https://github.com/paritytech/contract-dependency-manager).
-Your contract's ABI comes from the installed `cdm.json` (typed through the
-`.cdm` augmentation) or from the Bulletin metadata CID, which lets your app make
-typed contract calls.
-
-To install the resolution helpers into a frontend project:
-
-```bash
-npm i @polkadot-community-foundation/cdm-env @parity/product-sdk-contracts
-```
-
-!!! tip
-    The registry address is per-network. Always take it from
-    `getRegistryAddress("devnet")` rather than hard-coding it, since it differs
-    across networks and can change on a devnet.
+At runtime a frontend performs the same resolution: read the registry address for
+the selected network with `getRegistryAddress("devnet")` — never hard-code it, it
+differs per network — build a registry handle with
+`@parity/product-sdk-contracts`, and call the registry getters. Your contract's
+ABI comes from `cdm.json` (or from the metadata CID), which is what makes the
+calls typed. See
+[How a frontend resolves a contract](../architecture/contracts.md#how-a-frontend-resolves-a-contract).
 
 ## Learn more
 
-- [contract-dependency-manager](https://github.com/paritytech/contract-dependency-manager) — CDM source and toolchain setup
-- [CDM Frontend](https://contracts.dev-dot.li) — browse what is already published
+- [contract-dependency-manager (PCF fork)](https://github.com/Polkadot-Community-Foundation/contract-dependency-manager) — the source of the `cdm` you installed. Its README documents a different install channel (`install.sh`) and uses `-n paseo` throughout; here, use `cdm setup` and `-n devnet`.
 - [Smart contracts & CDM](../architecture/contracts.md) — the registry model
+- [CDM Frontend](https://contracts.dev-dot.li) — browse what is already published

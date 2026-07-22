@@ -18,9 +18,9 @@ There are three practical entry points:
   <https://survey.dev-dot.li>). Open it in an ordinary browser.
 
 You reach the platform through the Polkadot app (mobile and desktop) or the web
-gateway at <https://dev-dot.li>. If you do not have the app yet, see
-[Create an account & get funds](create-account.md) for install links (Android
-direct APK, iOS TestFlight, and desktop).
+gateway at <https://dev-dot.li>. If you do not have the app yet,
+[Get the app](../reference/resources.md#get-the-app) has the Android, iOS and
+desktop downloads.
 
 ## Find Products in Browse
 
@@ -51,6 +51,14 @@ On the **desktop** app you can go straight to a name:
 
 If you are in an ordinary web browser instead, use the gateway form of the same
 name: `https://survey.dev-dot.li`.
+
+## When a name does not resolve
+
+The gateway resolves names in the browser, so every `<name>.dev-dot.li` address
+serves the same Polkadot loader shell first — a typo, an unpublished name and a
+working app look identical until resolution completes. If the shell never hands
+over to an app, check the spelling, then look the name up in
+<https://browse.dev-dot.li>: a name that is not listed there is not published.
 
 ## Reference apps to try
 
