@@ -1,8 +1,23 @@
 # Guides
 
-These guides are organized around the jobs developers actually come here to do:
-build and publish a Product, register a `.dot` domain, use platform services,
-and deploy contracts on the Polkadot Products Devnet.
+These guides are organized around the jobs people actually come here to do:
+create an account, get funds, open Products, publish a Product, use platform
+services, and deploy contracts on the Polkadot Products Devnet.
+
+## For users
+
+Use these guides when you want to try the Polkadot app or open Products through
+the web gateway at [dev-dot.li](https://dev-dot.li).
+
+- [Create an account & get funds](create-account.md) — set up a self-custodial
+  account and get the funds needed for Devnet flows.
+- [Get & use CASH](get-and-use-cash.md) — understand the balance shown in the
+  app and send it to another user.
+- [Messaging & calls](messaging-and-calls.md) — chat and call other users.
+- [Username & proof of personhood](username-and-personhood.md) — claim a
+  People Chain username and establish personhood.
+- [Discover & open apps](discover-and-open-apps.md) — find apps in
+  [Browse](https://browse.dev-dot.li) and open them by their `.dot` domain.
 
 ## For developers
 

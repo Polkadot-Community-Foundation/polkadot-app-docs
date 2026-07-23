@@ -208,4 +208,4 @@ Working examples are the fastest way to see the shape of a Product — start wit
 skeleton to build from.
 
 To test as an end user, install the app and fund an account — see
-[Getting started for users](users.md).
+[Create an account & get funds](../guides/create-account.md).

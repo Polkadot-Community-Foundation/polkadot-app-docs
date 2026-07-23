@@ -967,24 +967,6 @@ body:has(.home-hero) .md-typeset h2::before {
   transform: translateY(-2px);
 }
 
-/* "Coming soon" card: greyed out, not a link, no hover affordance. */
-.md-typeset .intro-cta__card--disabled {
-  --cta: var(--color-text-tertiary);
-  cursor: not-allowed;
-  opacity: 0.5;
-  filter: grayscale(1);
-}
-
-.md-typeset .intro-cta__card--disabled:hover {
-  border-color: var(--color-border);
-  transform: none;
-}
-
-.md-typeset .intro-cta__card--disabled .intro-cta__go {
-  font-style: italic;
-  font-weight: 500;
-}
-
 .intro-cta__top {
   display: flex;
   align-items: center;
@@ -1682,4 +1664,133 @@ body:has(.home-hero) .md-typeset h2::before {
 .dg-announce strong {
   color: var(--color-text-primary);
   font-weight: 600;
+}
+
+/* =============================================================================
+   Diagram zoom — in-page affordance + full-screen lightbox
+   -----------------------------------------------------------------------------
+   Behaviour is in material-overrides/assets/javascripts/mermaid-zoom.js. These
+   rules only add the affordance (a zoom cursor + corner hint on a wired diagram)
+   and style the overlay. The diagram's own colours/layout are untouched.
+   ============================================================================= */
+
+/* A wired, rendered diagram invites a click. */
+.md-typeset .mermaid[data-dg-zoomable] {
+  position: relative;
+  cursor: zoom-in;
+}
+
+.md-typeset .mermaid[data-dg-zoomable]::after {
+  content: "Click to zoom";
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  padding: 0.18rem 0.5rem;
+  font-family: var(--md-code-font);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--rounded-sm, 8px);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.md-typeset .mermaid[data-dg-zoomable]:hover::after,
+.md-typeset .mermaid[data-dg-zoomable]:focus-visible::after {
+  opacity: 1;
+}
+
+.md-typeset .mermaid[data-dg-zoomable]:focus-visible {
+  outline: 2px solid var(--accent-default, #ff2867);
+  outline-offset: 3px;
+}
+
+/* Overlay. */
+.dg-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  background: color-mix(in srgb, var(--color-bg, #000) 78%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.dg-lightbox[hidden] {
+  display: none;
+}
+
+body.dg-lightbox-open {
+  overflow: hidden;
+}
+
+.dg-lightbox__stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.dg-lightbox__stage.is-dragging {
+  cursor: grabbing;
+}
+
+.dg-lightbox__canvas {
+  transform-origin: center center;
+  transition: transform 0.04s linear;
+  will-change: transform;
+}
+
+.dg-lightbox__canvas svg {
+  display: block;
+  /* Fit the diagram to the viewport before any manual zoom. */
+  max-width: 92vw;
+  max-height: 82vh;
+  height: auto;
+  filter: drop-shadow(0 24px 60px rgba(0, 0, 0, 0.45));
+}
+
+/* Toolbar. */
+.dg-lightbox__bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem;
+}
+
+.dg-lightbox__btn {
+  min-width: 2.4rem;
+  height: 2.4rem;
+  padding: 0 0.8rem;
+  font-family: var(--md-text-font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--rounded-lg, 12px);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+}
+
+.dg-lightbox__btn:hover {
+  border-color: var(--accent-default, #ff2867);
+  background: var(--color-surface-secondary, var(--color-surface));
+}
+
+.dg-lightbox__btn:active {
+  transform: translateY(1px);
+}
+
+.dg-lightbox__btn--close {
+  margin-left: 0.4rem;
 }

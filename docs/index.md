@@ -24,15 +24,15 @@ template: home.html
 ## Choose your path
 
 <div class="intro-cta">
-<div class="intro-cta__card intro-cta__card--disabled" aria-disabled="true">
+<a class="intro-cta__card" href="guides/#for-users">
   <div class="intro-cta__top">
     <span class="intro-cta__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
     <span class="intro-cta__tag">For users</span>
   </div>
   <div class="intro-cta__title">Use the app</div>
   <div class="intro-cta__desc">Install the Polkadot app, create or import a devnet account and start exploring decentralized experiences.</div>
-  <div class="intro-cta__go">Coming soon</div>
-</div>
+  <div class="intro-cta__go">Get started as a user <span>&rarr;</span></div>
+</a>
 <a class="intro-cta__card intro-cta__card--dev" href="getting-started/developers/">
   <div class="intro-cta__top">
     <span class="intro-cta__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
@@ -71,11 +71,12 @@ template: home.html
 <div class="home-outro__col">
 <div class="home-outro__label">Popular guides</div>
 <div class="dg-links">
+<a href="guides/create-account/">Create an account &amp; get funds</a>
+<a href="guides/get-and-use-cash/">Get &amp; use CASH</a>
+<a href="guides/discover-and-open-apps/">Discover &amp; open apps</a>
 <a href="guides/build-and-publish/">Build &amp; publish applications</a>
 <a href="guides/register-a-dot-name/">Register a <code>.dot</code> domain</a>
-<a href="guides/deploy-contracts-cdm/">Deploy &amp; register contracts</a>
 <a href="guides/platform-services-sdk/">Use platform services from the SDK</a>
-<a href="guides/list-in-browse/">List your app in Browse</a>
 </div>
 </div>
 <div class="home-outro__col">

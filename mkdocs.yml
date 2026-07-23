@@ -20,6 +20,10 @@ extra_css:
   - assets/stylesheets/fonts.css
   - assets/stylesheets/theme.css
 
+# Click-to-zoom lightbox for the Mermaid diagrams (self-contained, no CDN).
+extra_javascript:
+  - assets/javascripts/mermaid-zoom.js
+
 validation:
   absolute_links: ignore
   unrecognized_links: ignore
@@ -110,13 +114,21 @@ extra:
 nav:
   - Home: index.md
   - Introduction: introduction.md
-  # "For users" onboarding is hidden for now — Getting started resolves straight
-  # to the developer page. The user pages still build (reachable by direct URL)
-  # but are intentionally out of the nav; restore the section to bring them back.
-  - Getting started: getting-started/developers.md
+  # Introduction (the platform overview) and the developer quickstart are blended
+  # into one "Get started" flow: Introduction is the section landing (nav.indexes),
+  # then the developer quickstart. The "For users" getting-started page is hidden
+  # for now — it still builds (reachable by direct URL) but is out of the nav.
+  - Get started:
+      - introduction.md
+      - For developers: getting-started/developers.md
   - Guides:
       - guides/index.md
-      # "For users" guides hidden for now (see Getting started note above).
+      - For users:
+          - Create an account & get funds: guides/create-account.md
+          - Get & use CASH: guides/get-and-use-cash.md
+          - Messaging & calls: guides/messaging-and-calls.md
+          - Username & proof of personhood: guides/username-and-personhood.md
+          - Discover & open apps: guides/discover-and-open-apps.md
       - For developers:
           - Build & Publish Applications: guides/build-and-publish.md
           - Register a .dot domain: guides/register-a-dot-name.md
