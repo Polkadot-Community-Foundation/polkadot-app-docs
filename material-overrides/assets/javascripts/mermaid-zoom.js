@@ -1,28 +1,98 @@
 /* =============================================================================
-   Mermaid — click-to-zoom lightbox
+   Mermaid — self-contained render + click-to-zoom
    -----------------------------------------------------------------------------
-   Makes every rendered Mermaid diagram open in a full-screen overlay you can
-   pan (drag) and zoom (wheel / buttons / double-click). Self-contained: no CDN,
-   no external library — matches the repo's self-hosted approach.
+   Why this exists: mkdocs-material's built-in Mermaid integration races its own
+   async load of mermaid.min.js — on a cold cache it runs the typeset before
+   Mermaid is ready and leaves the diagram <div class="mermaid"> EMPTY (no SVG,
+   source stripped). That is flaky and was leaving diagrams blank in production.
 
-   The diagram itself is left untouched (colours + layout come from the diagram
-   source and theme.css). This only adds an affordance: a zoom cursor + hint on
-   the in-page diagram, and an overlay that shows a *clone* of the SVG so the
-   original is never moved.
+   So we take rendering into our own hands. The fence emits the source as
+   `<pre class="dg-mermaid"><code>…</code></pre>` (a class Material ignores, so it
+   never touches or empties it). We load a PINNED Mermaid, render each block
+   ourselves once Mermaid is ready, drop the SVG into a `.mermaid` wrapper (so all
+   the theme.css styling + per-chain colour classes apply unchanged), and wire a
+   full-screen pan/zoom lightbox on each diagram.
 
-   Robustness mirrors mermaid-chain-colors.js: Mermaid renders asynchronously
-   (bundled from a CDN by mkdocs-material) and Material can swap page content, so
-   we wire diagrams on load, on a bounded polling loop, and via a
-   MutationObserver — whichever sees the SVG first. Wiring is idempotent.
+   No CDN lock-in on Material's side; the only network fetch is the pinned Mermaid,
+   loaded once per page and only if the page actually has a diagram.
    ============================================================================= */
 (function () {
   "use strict";
+
+  // Pinned Mermaid — verified to render this repo's diagrams. Bump deliberately.
+  var MERMAID_URL = "https://cdn.jsdelivr.net/npm/mermaid@11.16.0/dist/mermaid.min.js";
+
+  /* ---------------------------------------------------------------- rendering */
+
+  var mermaidLoading = null;
+
+  function loadMermaid() {
+    if (window.mermaid) return Promise.resolve(window.mermaid);
+    if (mermaidLoading) return mermaidLoading;
+    mermaidLoading = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = MERMAID_URL;
+      s.async = true;
+      s.onload = function () { resolve(window.mermaid); };
+      s.onerror = function () { reject(new Error("mermaid failed to load")); };
+      document.head.appendChild(s);
+    });
+    return mermaidLoading;
+  }
+
+  var seq = 0;
+
+  function renderBlock(pre, mermaid) {
+    var code = pre.querySelector("code");
+    var src = (code ? code.textContent : pre.textContent) || "";
+    if (!src.trim()) return Promise.resolve();
+    var id = "dg-mmd-" + (seq++);
+    return mermaid
+      .render(id, src)
+      .then(function (out) {
+        var wrap = document.createElement("div");
+        wrap.className = "mermaid";
+        wrap.innerHTML = out.svg;
+        if (out.bindFunctions) out.bindFunctions(wrap);
+        pre.replaceWith(wrap);
+        wireZoom(wrap);
+      })
+      .catch(function (err) {
+        // Graceful degradation: reveal the source so the info isn't lost.
+        pre.classList.add("dg-mermaid--error");
+        if (window.console) console.error("mermaid render failed:", err);
+      });
+  }
+
+  function renderAll() {
+    var blocks = document.querySelectorAll("pre.dg-mermaid");
+    if (!blocks.length) return;
+    loadMermaid()
+      .then(function (mermaid) {
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: "loose", // allow <br/> in node labels
+          theme: "base",
+          // Measure with the same font the page renders in, so labels don't clip.
+          fontFamily: '"DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+          flowchart: { htmlLabels: true, useMaxWidth: true }
+        });
+        Array.prototype.forEach.call(blocks, function (pre) { renderBlock(pre, mermaid); });
+      })
+      .catch(function (err) {
+        Array.prototype.forEach.call(blocks, function (pre) {
+          pre.classList.add("dg-mermaid--error");
+        });
+        if (window.console) console.error(err);
+      });
+  }
+
+  /* ---------------------------------------------------------------- lightbox */
 
   var BOX_ID = "dg-diagram-lightbox";
   var MIN_SCALE = 0.2;
   var MAX_SCALE = 12;
 
-  // ---- Lightbox singleton --------------------------------------------------
   var box = null, stage = null, canvas = null;
   var view = { scale: 1, tx: 0, ty: 0 };
   var drag = { active: false, moved: false, x: 0, y: 0 };
@@ -32,14 +102,8 @@
       "translate(" + view.tx + "px, " + view.ty + "px) scale(" + view.scale + ")";
   }
 
-  function resetView() {
-    view.scale = 1;
-    view.tx = 0;
-    view.ty = 0;
-    applyTransform();
-  }
+  function resetView() { view.scale = 1; view.tx = 0; view.ty = 0; applyTransform(); }
 
-  // Zoom by `factor` keeping the point (cx, cy) — client coordinates — fixed.
   function zoomAt(factor, cx, cy) {
     var rect = stage.getBoundingClientRect();
     var ox = cx - rect.left - rect.width / 2;
@@ -58,9 +122,7 @@
   }
 
   function ensureBox() {
-    var existing = document.getElementById(BOX_ID);
-    if (existing) return existing;
-
+    if (box) return box;
     box = document.createElement("div");
     box.id = BOX_ID;
     box.className = "dg-lightbox";
@@ -76,11 +138,12 @@
       '  <button type="button" class="dg-lightbox__btn dg-lightbox__btn--close" data-act="close" title="Close (Esc)" aria-label="Close">&#10005;</button>' +
       "</div>";
     document.body.appendChild(box);
-
     stage = box.querySelector(".dg-lightbox__stage");
     canvas = box.querySelector(".dg-lightbox__canvas");
+    // `md-typeset` so the same theme.css .mermaid rules (per-chain colours,
+    // label styling) apply to the cloned diagram inside the lightbox.
+    canvas.className += " md-typeset";
 
-    // Toolbar
     box.querySelector(".dg-lightbox__bar").addEventListener("click", function (e) {
       var btn = e.target.closest("[data-act]");
       if (!btn) return;
@@ -91,53 +154,43 @@
       else if (act === "close") closeBox();
     });
 
-    // Backdrop click (outside the canvas) closes; drag on canvas pans.
     stage.addEventListener("mousedown", function (e) {
-      drag.active = true;
-      drag.moved = false;
-      drag.x = e.clientX;
-      drag.y = e.clientY;
+      drag.active = true; drag.moved = false; drag.x = e.clientX; drag.y = e.clientY;
       stage.classList.add("is-dragging");
     });
     window.addEventListener("mousemove", function (e) {
       if (!drag.active) return;
-      var dx = e.clientX - drag.x;
-      var dy = e.clientY - drag.y;
+      var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
       if (Math.abs(dx) > 2 || Math.abs(dy) > 2) drag.moved = true;
-      view.tx += dx;
-      view.ty += dy;
-      drag.x = e.clientX;
-      drag.y = e.clientY;
+      view.tx += dx; view.ty += dy; drag.x = e.clientX; drag.y = e.clientY;
       applyTransform();
     });
     window.addEventListener("mouseup", function (e) {
       if (!drag.active) return;
       drag.active = false;
       stage.classList.remove("is-dragging");
-      // A click (no drag) on the empty stage closes the viewer.
       if (!drag.moved && !e.target.closest("svg")) closeBox();
     });
-
     stage.addEventListener("wheel", function (e) {
       e.preventDefault();
       zoomAt(e.deltaY < 0 ? 1.12 : 1 / 1.12, e.clientX, e.clientY);
     }, { passive: false });
-
-    stage.addEventListener("dblclick", function (e) {
-      zoomAt(1.6, e.clientX, e.clientY);
-    });
-
+    stage.addEventListener("dblclick", function (e) { zoomAt(1.6, e.clientX, e.clientY); });
     return box;
   }
 
   function openBox(svg) {
     ensureBox();
     canvas.innerHTML = "";
+    // Wrap in `.mermaid` so theme.css colour classes reach the clone.
+    var wrap = document.createElement("div");
+    wrap.className = "mermaid";
     var clone = svg.cloneNode(true);
     clone.removeAttribute("id");
     clone.style.maxWidth = "none";
     clone.style.maxHeight = "none";
-    canvas.appendChild(clone);
+    wrap.appendChild(clone);
+    canvas.appendChild(wrap);
     resetView();
     box.removeAttribute("hidden");
     document.body.classList.add("dg-lightbox-open");
@@ -159,64 +212,25 @@
     }
   });
 
-  // ---- Wire up each rendered diagram --------------------------------------
-  function wire(root) {
-    var diagrams = (root || document).querySelectorAll(".mermaid");
-    var touched = 0;
-    Array.prototype.forEach.call(diagrams, function (el) {
-      if (el.getAttribute("data-dg-zoomable")) return; // already wired
-      var svg = el.querySelector("svg");
-      if (!svg) return; // not rendered yet
-      el.setAttribute("data-dg-zoomable", "1");
-      el.setAttribute("tabindex", "0");
-      el.setAttribute("role", "button");
-      el.setAttribute("aria-label", "Open diagram — click to zoom");
-      el.addEventListener("click", function () { openBox(svg); });
-      el.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          openBox(svg);
-        }
-      });
-      touched++;
+  function wireZoom(el) {
+    if (el.getAttribute("data-dg-zoomable")) return;
+    var svg = el.querySelector("svg");
+    if (!svg) return;
+    el.setAttribute("data-dg-zoomable", "1");
+    el.setAttribute("tabindex", "0");
+    el.setAttribute("role", "button");
+    el.setAttribute("aria-label", "Open diagram — click to zoom");
+    el.addEventListener("click", function () { openBox(svg); });
+    el.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openBox(svg); }
     });
-    return touched;
   }
 
-  function run() { try { return wire(document); } catch (e) { return 0; } }
+  /* ---------------------------------------------------------------- bootstrap */
 
-  // 1) Now / on load.
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", run);
+    document.addEventListener("DOMContentLoaded", renderAll);
   } else {
-    run();
+    renderAll();
   }
-  window.addEventListener("load", run);
-
-  // 2) Bounded polling — catches diagrams that render after load.
-  var idle = 0, elapsed = 0, STEP = 400, MAX = 15000;
-  var timer = setInterval(function () {
-    elapsed += STEP;
-    if (run() === 0) { idle++; } else { idle = 0; }
-    if (idle >= 4 || elapsed >= MAX) clearInterval(timer);
-  }, STEP);
-
-  // 3) MutationObserver — re-scan when Mermaid injects SVGs or Material swaps content.
-  try {
-    var mo = new MutationObserver(function (mutations) {
-      for (var i = 0; i < mutations.length; i++) {
-        var added = mutations[i].addedNodes || [];
-        for (var j = 0; j < added.length; j++) {
-          var n = added[j];
-          if (n.nodeType !== 1) continue;
-          if ((n.querySelector && n.querySelector("svg, .mermaid")) ||
-              (n.tagName && n.tagName.toLowerCase() === "svg")) {
-            run();
-            return;
-          }
-        }
-      }
-    });
-    mo.observe(document.documentElement, { childList: true, subtree: true });
-  } catch (e) { /* no-op */ }
 })();

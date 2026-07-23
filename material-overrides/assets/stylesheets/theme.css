@@ -1520,6 +1520,16 @@ body:has(.home-hero) .md-typeset h2::before {
    `mkdocs serve` after upgrading mkdocs-material / mermaid.
    ============================================================================= */
 
+/* Raw diagram source (emitted as `pre.dg-mermaid`) is hidden — mermaid-zoom.js
+   renders it and swaps in a `.mermaid` wrapper. If rendering fails, the script
+   adds `dg-mermaid--error`, which reveals the source so the content isn't lost. */
+.md-typeset pre.dg-mermaid {
+  display: none;
+}
+.md-typeset pre.dg-mermaid.dg-mermaid--error {
+  display: block;
+}
+
 .md-typeset .mermaid {
   margin: 1.5rem 0;
   padding: 1.4rem;
@@ -1530,7 +1540,9 @@ body:has(.home-hero) .md-typeset h2::before {
   overflow: hidden;
 }
 
-/* Node shells — rounded, matched to the current surface. */
+/* Node shells — rounded, matched to the current surface. !important because
+   Mermaid injects an id-scoped <style> inside the SVG that would otherwise win
+   and leave plain (unclassed) nodes with Mermaid's default beige fill. */
 .md-typeset .mermaid .node > rect,
 .md-typeset .mermaid .node > polygon,
 .md-typeset .mermaid .node > path,
@@ -1538,13 +1550,29 @@ body:has(.home-hero) .md-typeset h2::before {
   rx: 12px;
   ry: 12px;
   stroke-width: 1px;
-  fill: var(--color-surface);
-  stroke: var(--color-border-strong);
+  fill: var(--color-surface) !important;
+  stroke: var(--color-border-strong) !important;
 }
 
-.md-typeset .mermaid .node .nodeLabel {
+.md-typeset .mermaid .node .nodeLabel,
+.md-typeset .mermaid .node .nodeLabel p {
   font-family: var(--md-text-font);
-  color: var(--color-text-primary);
+  /* !important to beat Mermaid's id-scoped <style> injected inside the SVG. */
+  color: var(--color-text-primary) !important;
+}
+
+/* Mermaid renders HTML labels as <p>; `.md-typeset p` margins/line-height would
+   inflate them past the node boxes Mermaid measured and clip the last line.
+   Neutralise that so multi-line labels fit their nodes. */
+.md-typeset .mermaid .nodeLabel,
+.md-typeset .mermaid .nodeLabel p,
+.md-typeset .mermaid .edgeLabel,
+.md-typeset .mermaid .edgeLabel p,
+.md-typeset .mermaid .cluster-label p,
+.md-typeset .mermaid span.nodeLabel {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.3 !important;
 }
 
 /* Subgraph clusters. */
@@ -1565,9 +1593,12 @@ body:has(.home-hero) .md-typeset h2::before {
   color: var(--color-text-tertiary);
 }
 
-/* Edges + arrowheads. */
+/* Edges + arrowheads. `fill: none` is !important because the lightbox clone
+   drops the SVG id, which otherwise breaks Mermaid's id-scoped `fill:none` and
+   fills the curved connectors solid black (the "shadow" wedges). */
 .md-typeset .mermaid .edgePath .path,
 .md-typeset .mermaid .flowchart-link {
+  fill: none !important;
   stroke: var(--color-border-strong) !important;
   stroke-width: 1.4px !important;
 }
@@ -1588,6 +1619,16 @@ body:has(.home-hero) .md-typeset h2::before {
 }
 .md-typeset .mermaid .edgeLabel foreignObject > div {
   background: transparent;
+}
+/* Edge labels render in monospace (wider than the font Mermaid measured with),
+   so let them overflow their measured box instead of clipping the last chars. */
+.md-typeset .mermaid .edgeLabel foreignObject {
+  overflow: visible;
+}
+.md-typeset .mermaid .edgeLabel foreignObject > div {
+  width: max-content !important;
+  transform: translateX(-50%);
+  margin-left: 50%;
 }
 
 /* ---- Per-chain colour classes (opt-in, see convention above) ------------- */
@@ -1721,7 +1762,9 @@ body:has(.home-hero) .md-typeset h2::before {
   z-index: 2000;
   display: flex;
   flex-direction: column;
-  background: color-mix(in srgb, var(--color-bg, #000) 78%, transparent);
+  /* Fixed dark scrim in both themes — gives contrast for light-mode diagrams
+     (white cards) and dark-mode diagrams alike. */
+  background: rgba(10, 11, 16, 0.86);
   backdrop-filter: blur(10px);
 }
 
@@ -1752,12 +1795,28 @@ body.dg-lightbox-open {
   will-change: transform;
 }
 
-.dg-lightbox__canvas svg {
+/* Inside the lightbox the diagram is the whole subject: drop the in-page card
+   chrome and let it overflow freely so pan/zoom isn't clipped. Colour classes
+   still apply because the clone is wrapped in `.md-typeset .mermaid`. */
+.dg-lightbox .mermaid {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+  /* Fill the viewport so the diagram opens large; the SVG scales to fit inside
+     (viewBox + preserveAspectRatio) before any manual zoom. */
+  width: 92vw;
+  height: 84vh;
+}
+
+.dg-lightbox .mermaid svg {
   display: block;
-  /* Fit the diagram to the viewport before any manual zoom. */
-  max-width: 92vw;
-  max-height: 82vh;
-  height: auto;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
   filter: drop-shadow(0 24px 60px rgba(0, 0, 0, 0.45));
 }
 

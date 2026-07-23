@@ -97,8 +97,12 @@ markdown_extensions:
       alternate_style: true
   - pymdownx.superfences:
       custom_fences:
+        # Authors still write ```mermaid fences, but we emit class `dg-mermaid`
+        # (NOT `mermaid`) so Material's built-in — and flaky — Mermaid typeset
+        # ignores them. mermaid-zoom.js renders them itself, reliably, and wires
+        # the zoom lightbox. See that file for the why.
         - name: mermaid
-          class: mermaid
+          class: dg-mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
 
 plugins:
