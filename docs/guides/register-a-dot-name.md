@@ -25,8 +25,24 @@ variable).
 
 ## Set up an account
 
-The CLI keeps its **own** keystore, separate from any account in the Polkadot
-app. Configure it **before** you register anything:
+The CLI signs with its **own** key, separate from any account in the Polkadot
+app. Configure one **before** you register anything.
+
+### Fastest: a throwaway account
+
+--8<-- "throwaway-account.md"
+
+Then confirm which account is active:
+
+```bash
+dotns account address
+dotns account info --env devnet
+```
+
+### Keep it: the encrypted keystore
+
+To reuse an account across sessions, store a mnemonic or key-uri in the
+password-protected `dotns` keystore instead of the environment:
 
 ```bash
 dotns auth set
@@ -43,20 +59,6 @@ To do it in one non-interactive step instead:
 export DOTNS_KEYSTORE_PASSWORD="…"
 dotns auth set --mnemonic "…" --account my-app
 ```
-
-Then confirm which account is active:
-
-```bash
-dotns account address
-dotns account info --env devnet
-```
-
-!!! danger "Without a keystore you sign with a shared public account"
-    If you have not run `dotns auth set` — and have set neither `DOTNS_MNEMONIC`
-    nor `DOTNS_KEY_URI` — `dotns` falls back to a **shared public dev account
-    that anyone can control**, and prints a warning saying exactly that on every
-    command. A `.dot` name registered from that account is **not yours**: anyone
-    can transfer it away. Always configure your own key first.
 
 Registration signs a PolkaVM transaction, so your account also needs a mapped
 EVM address and a balance for fees — fund it from the

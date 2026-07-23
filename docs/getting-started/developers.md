@@ -24,8 +24,12 @@ on the Devnet and pointing a `.dot` domain at it.
 
 ## Before you start
 
-You need **one signing account**, ready in three ways, before any command below
-touches the chain:
+Every command below runs through the CLIs you install in
+[step 1](#1-install-the-tooling), so install those first. You also need **one
+signing account** — if you don't already have a key,
+[mint a throwaway one](#4-set-up-an-account-and-register-a-dot-domain) (no seed
+to import, no password). That account has to be ready in three ways before any
+command touches the chain:
 
 1. **Funded** with native tokens on Asset Hub for fees —
    [Faucet](../reference/networks.md#faucet).
@@ -86,24 +90,27 @@ if (result.ok) console.log(result.value); // the CID
 
 Build your app to a static directory (the reference template uses `vite build` → `dist/`).
 
-## 4. Register a `.dot` domain
+## 4. Set up an account and register a `.dot` domain
 
 Your deploy account must **own** the `.dot` domain before you can publish to it.
-`dotns` keeps its own keystore, separate from the Polkadot app:
+This is a CLI signing key, separate from any account in the Polkadot app.
 
-```bash
-dotns auth set          # choose `mnemonic`, paste it, then set a password
-dotns account address   # confirm the active account
-```
+--8<-- "throwaway-account.md"
 
-!!! danger "Register from your own key, not the shared default"
-    If you skip `dotns auth set` (and set no `DOTNS_MNEMONIC` / `DOTNS_KEY_URI`),
-    `dotns` signs with a **shared public dev account anyone can control**, and a
-    name registered to it is not really yours. `dotns` warns whenever it falls
-    back to that account.
+??? note "Prefer to reuse an account across sessions?"
+    Store a mnemonic or key-uri in the encrypted `dotns` keystore instead of
+    the environment:
 
-The keystore password is needed by every later command — export
-`DOTNS_KEYSTORE_PASSWORD` to avoid an interactive prompt. Then register:
+    ```bash
+    dotns auth set          # choose `mnemonic`, paste it, then set a password
+    dotns account address   # confirm the active account
+    ```
+
+    The keystore password is then needed by every later command — export
+    `DOTNS_KEYSTORE_PASSWORD` to avoid an interactive prompt. See
+    [Register a `.dot` domain](../guides/register-a-dot-name.md#set-up-an-account).
+
+With `$MNEMONIC` exported, register your name:
 
 ```bash
 dotns register domain --name my-cool-app --env devnet
@@ -152,18 +159,53 @@ so downstream apps can resolve contracts by name.
 first. See [Deploy & register contracts](../guides/deploy-contracts-cdm.md) for
 the full sequence.
 
+## Continue in the guides
+
+This page is the quickstart; each step has a full guide with the rules and edge
+cases. Find them all under the **Guides** tab:
+
+<div class="grid cards" markdown>
+
+-   **[Build & Publish Applications](../guides/build-and-publish.md)**
+
+    ---
+
+    The full publishing path — bundle, name, deploy, and card metadata.
+
+-   **[Register a `.dot` domain](../guides/register-a-dot-name.md)**
+
+    ---
+
+    Account setup, name rules, and the commit-reveal flow in depth.
+
+-   **[Deploy & register contracts](../guides/deploy-contracts-cdm.md)**
+
+    ---
+
+    Build, deploy, and register PolkaVM contracts with `cdm`.
+
+-   **[Use platform services from the SDK](../guides/platform-services-sdk.md)**
+
+    ---
+
+    Chains, storage, contracts, and identity from your app.
+
+-   **[List your app in Browse](../guides/list-in-browse.md)**
+
+    ---
+
+    Get your Product into the in-app directory.
+
+</div>
+
 ## Try the reference apps
 
 Working examples are the fastest way to see the shape of a Product — start with
 [Playground](https://playground.dev-dot.li) or
 [Simple Survey](https://survey.dev-dot.li); the full list is in
-[More resources](../reference/resources.md).
+[More resources](../reference/resources.md). The
+[dotli-starter](https://github.com/paritytech/dotli-starter) template is a good
+skeleton to build from.
 
 To test as an end user, install the app and fund an account — see
 [Getting started for users](users.md).
-
-## Learn more
-
-- [Build & Publish Applications](../guides/build-and-publish.md) — the full publishing path
-- [Use platform services from the SDK](../guides/platform-services-sdk.md) — chains, storage, contracts, identity
-- [dotli-starter](https://github.com/paritytech/dotli-starter) — a template to start from

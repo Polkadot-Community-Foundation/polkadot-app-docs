@@ -7,6 +7,12 @@ Devnet.
 You will need the app installed — download links are in
 [Get the app](../reference/resources.md#get-the-app).
 
+!!! note "Building an app instead?"
+    This page is the **in-app** account you use as an end user. To deploy a
+    Product you want a **CLI signing key**, which is set up separately — see
+    [Set up an account](register-a-dot-name.md#set-up-an-account) (a throwaway
+    one takes a single command).
+
 ## 1. Create or import the account
 
 The Polkadot app is **self-custodial**: your keys are generated and stored on
