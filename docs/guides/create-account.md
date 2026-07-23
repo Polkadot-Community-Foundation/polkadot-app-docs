@@ -33,6 +33,20 @@ happens locally after you approve it.
     into a website, a chat, or a support request. The Polkadot app will never
     ask you to share it.
 
+### Log in on the desktop app
+
+The desktop (and web) app holds no keys of its own — it is a companion that
+pairs with your phone, and signing stays on the phone. So set the account up on
+mobile first:
+
+1. **Create or import your account in the mobile app** (above).
+2. Open the **desktop app** and **scan the QR code** it shows to pair the two
+   devices.
+3. If macOS asks for network options, choose **dev only**.
+
+See [the client architecture](../architecture/client.md) for why signing happens
+on the phone.
+
 ## 2. Get devnet funds
 
 Nothing funds a brand-new account automatically. You need two different things,
