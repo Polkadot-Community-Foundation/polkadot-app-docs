@@ -1540,9 +1540,12 @@ body:has(.home-hero) .md-typeset h2::before {
   overflow: hidden;
 }
 
-/* Node shells — rounded, matched to the current surface. !important because
-   Mermaid injects an id-scoped <style> inside the SVG that would otherwise win
-   and leave plain (unclassed) nodes with Mermaid's default beige fill. */
+/* Node shells — rounded. Filled with `surface-secondary`, a mid-tone that is
+   deliberately a step away from BOTH the in-page diagram container (surface) and
+   the dark lightbox scrim, so node bodies never share the colour of whatever is
+   behind them and stay legible in every context. !important because Mermaid
+   injects an id-scoped <style> inside the SVG that would otherwise win (and leave
+   plain, unclassed nodes with Mermaid's default beige fill). */
 .md-typeset .mermaid .node > rect,
 .md-typeset .mermaid .node > polygon,
 .md-typeset .mermaid .node > path,
@@ -1550,7 +1553,7 @@ body:has(.home-hero) .md-typeset h2::before {
   rx: 12px;
   ry: 12px;
   stroke-width: 1px;
-  fill: var(--color-surface) !important;
+  fill: var(--color-surface-secondary) !important;
   stroke: var(--color-border-strong) !important;
 }
 
@@ -1609,10 +1612,11 @@ body:has(.home-hero) .md-typeset h2::before {
   stroke: var(--color-text-tertiary) !important;
 }
 
-/* Edge labels as monospace pills. */
+/* Edge labels as monospace pills. `surface-secondary` so the pill reads against
+   both the in-page container (surface) and the dark lightbox scrim. */
 .md-typeset .mermaid .edgeLabel,
 .md-typeset .mermaid .edgeLabel p {
-  background: var(--color-surface) !important;
+  background: var(--color-surface-secondary) !important;
   color: var(--color-text-secondary) !important;
   font-family: var(--md-code-font);
   font-size: 0.72rem;
@@ -1762,9 +1766,10 @@ body:has(.home-hero) .md-typeset h2::before {
   z-index: 2000;
   display: flex;
   flex-direction: column;
-  /* Fixed dark scrim in both themes — gives contrast for light-mode diagrams
-     (white cards) and dark-mode diagrams alike. */
-  background: rgba(10, 11, 16, 0.86);
+  /* Light backdrop in both site themes: the lightbox forces the light scheme
+     (see mermaid-zoom.js), so the diagram renders as a light "paper" with dark
+     text — always legible, including Mermaid's default-styled sequence diagrams. */
+  background: rgba(247, 248, 250, 0.94);
   backdrop-filter: blur(10px);
 }
 

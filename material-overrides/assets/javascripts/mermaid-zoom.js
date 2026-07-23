@@ -52,6 +52,9 @@
       .then(function (out) {
         var wrap = document.createElement("div");
         wrap.className = "mermaid";
+        // Diagrams always render on a light scheme so Mermaid's dark-by-default
+        // text (sequence messages, etc.) stays legible in every site theme.
+        wrap.setAttribute("data-md-color-scheme", "polkadot-light");
         wrap.innerHTML = out.svg;
         if (out.bindFunctions) out.bindFunctions(wrap);
         pre.replaceWith(wrap);
@@ -126,6 +129,9 @@
     box = document.createElement("div");
     box.id = BOX_ID;
     box.className = "dg-lightbox";
+    // Force the light scheme so the fullscreen diagram + chrome stay legible
+    // regardless of the site theme (matches the in-page diagram wrappers).
+    box.setAttribute("data-md-color-scheme", "polkadot-light");
     box.setAttribute("hidden", "");
     box.innerHTML =
       '<div class="dg-lightbox__stage" role="dialog" aria-modal="true" aria-label="Diagram viewer">' +
@@ -182,11 +188,15 @@
   function openBox(svg) {
     ensureBox();
     canvas.innerHTML = "";
-    // Wrap in `.mermaid` so theme.css colour classes reach the clone.
+    // Wrap in `.mermaid` so theme.css colour classes reach the clone. Keep the
+    // SVG id: Mermaid injects an id-scoped <style> inside the SVG (message lines,
+    // actor lines, arrowheads, dashed strokes…). Stripping the id dropped all of
+    // it, so sequence-diagram lines/arrows disappeared in the lightbox. Our
+    // theme.css !important rules still override the parts we customise.
     var wrap = document.createElement("div");
     wrap.className = "mermaid";
+    wrap.setAttribute("data-md-color-scheme", "polkadot-light");
     var clone = svg.cloneNode(true);
-    clone.removeAttribute("id");
     clone.style.maxWidth = "none";
     clone.style.maxHeight = "none";
     wrap.appendChild(clone);
