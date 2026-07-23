@@ -1681,11 +1681,11 @@ body:has(.home-hero) .md-typeset h2::before {
 }
 
 .md-typeset .mermaid[data-dg-zoomable]::after {
-  content: "Click to zoom";
+  content: "⤢ Click to zoom";
   position: absolute;
   top: 0.6rem;
   right: 0.6rem;
-  padding: 0.18rem 0.5rem;
+  padding: 0.2rem 0.55rem;
   font-family: var(--md-code-font);
   font-size: 0.6rem;
   font-weight: 500;
@@ -1696,14 +1696,17 @@ body:has(.home-hero) .md-typeset h2::before {
   border: 1px solid var(--color-border);
   border-radius: var(--rounded-sm, 8px);
   backdrop-filter: blur(6px);
-  opacity: 0;
-  transition: opacity 0.15s ease;
+  /* Always visible so the affordance is obvious; brightens on hover/focus. */
+  opacity: 0.72;
+  transition: opacity 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   pointer-events: none;
 }
 
 .md-typeset .mermaid[data-dg-zoomable]:hover::after,
 .md-typeset .mermaid[data-dg-zoomable]:focus-visible::after {
   opacity: 1;
+  color: var(--color-text-primary);
+  border-color: var(--accent-default, #ff2867);
 }
 
 .md-typeset .mermaid[data-dg-zoomable]:focus-visible {

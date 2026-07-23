@@ -113,14 +113,15 @@ extra:
 
 nav:
   - Home: index.md
-  - Introduction: introduction.md
-  # Introduction (the platform overview) and the developer quickstart are blended
-  # into one "Get started" flow: Introduction is the section landing (nav.indexes),
-  # then the developer quickstart. The "For users" getting-started page is hidden
-  # for now — it still builds (reachable by direct URL) but is out of the nav.
+  # "Get started" blends the platform introduction with the developer quickstart
+  # as two pages under one section (clicking the tab lands on the Introduction).
+  # introduction.md must appear ONCE in the nav — listing it here AND as a
+  # top-level tab put it in the sidebar twice. The "For users" getting-started
+  # page is hidden for now — it still builds (reachable by direct URL) but is out
+  # of the nav.
   - Get started:
-      - introduction.md
-      - For developers: getting-started/developers.md
+      - Introduction: introduction.md
+      - Developer quickstart: getting-started/developers.md
   - Guides:
       - guides/index.md
       - For users:

@@ -80,37 +80,12 @@ For how each piece actually works — and the full path of a request from a `.do
 name to chain storage and back — read the
 [architecture overview](architecture/index.md).
 
-## Ship one
+## Ready to build?
 
-The developer loop is four steps, and only the first three are required:
+That is the whole model. The **[Developer quickstart](getting-started/developers.md)**
+takes you through it end to end — build a static frontend, give it a `.dot`
+domain, publish the bundle, and add contracts only when you need custom on-chain
+logic.
 
-1. Build a static frontend with the Product SDK.
-2. Register a `.dot` domain.
-3. Publish the bundle with `pad`.
-4. Add contracts with CDM when your Product needs custom on-chain logic.
-
-Pick where to start:
-
-<div class="intro-cta" markdown>
-
-<a class="intro-cta__card intro-cta__card--user" href="../guides/#for-users">
-  <span class="intro-cta__top">
-    <span class="intro-cta__icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/></svg></span>
-    <span class="intro-cta__tag">For users</span>
-  </span>
-  <span class="intro-cta__title">Start using the app</span>
-  <span class="intro-cta__desc">Install the Polkadot app, claim a username, and enjoy a decentralized web experience.</span>
-  <span class="intro-cta__go">Get the app <span>&rarr;</span></span>
-</a>
-
-<a class="intro-cta__card intro-cta__card--dev" href="../getting-started/developers/">
-  <span class="intro-cta__top">
-    <span class="intro-cta__icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg></span>
-    <span class="intro-cta__tag">For developers</span>
-  </span>
-  <span class="intro-cta__title">Start building</span>
-  <span class="intro-cta__desc">Ship an application to a <code>.dot</code> site, create new decentralized experiences.</span>
-  <span class="intro-cta__go">Read the dev guide <span>&rarr;</span></span>
-</a>
-
-</div>
+To try the app as an end user instead, start with
+[Create an account & get funds](guides/create-account.md).
