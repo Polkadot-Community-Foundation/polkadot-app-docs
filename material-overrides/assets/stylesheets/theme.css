@@ -967,6 +967,24 @@ body:has(.home-hero) .md-typeset h2::before {
   transform: translateY(-2px);
 }
 
+/* "Coming soon" card: greyed out, not a link, no hover affordance. */
+.md-typeset .intro-cta__card--disabled {
+  --cta: var(--color-text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.md-typeset .intro-cta__card--disabled:hover {
+  border-color: var(--color-border);
+  transform: none;
+}
+
+.md-typeset .intro-cta__card--disabled .intro-cta__go {
+  font-style: italic;
+  font-weight: 500;
+}
+
 .intro-cta__top {
   display: flex;
   align-items: center;

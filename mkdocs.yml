@@ -110,17 +110,13 @@ extra:
 nav:
   - Home: index.md
   - Introduction: introduction.md
-  - Getting started:
-      - For users: getting-started/users.md
-      - For developers: getting-started/developers.md
+  # "For users" onboarding is hidden for now — Getting started resolves straight
+  # to the developer page. The user pages still build (reachable by direct URL)
+  # but are intentionally out of the nav; restore the section to bring them back.
+  - Getting started: getting-started/developers.md
   - Guides:
       - guides/index.md
-      - For users:
-          - Create an account & get funds: guides/create-account.md
-          - Get & use CASH: guides/get-and-use-cash.md
-          - Messaging & calls: guides/messaging-and-calls.md
-          - Username & proof of personhood: guides/username-and-personhood.md
-          - Discover & open apps: guides/discover-and-open-apps.md
+      # "For users" guides hidden for now (see Getting started note above).
       - For developers:
           - Build & Publish Applications: guides/build-and-publish.md
           - Register a .dot domain: guides/register-a-dot-name.md
