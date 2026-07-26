@@ -17,6 +17,7 @@ template: home.html
 
 <div class="home-hero__actions">
 <a class="hero-btn hero-btn--primary" href="introduction/">Get Started</a>
+<a class="hero-btn hero-btn--onchain" href="https://docs.dev-dot.li" target="_blank" rel="noopener">On-chain docs &#8599;</a>
 </div>
 
 </div>

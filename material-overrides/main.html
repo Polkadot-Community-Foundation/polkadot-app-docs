@@ -15,3 +15,16 @@
     services may be reset, and flows can change between builds.
   </div>
 {% endblock %}
+
+{#-
+  On the on-chain build (mkdocs.onchain.yml sets extra.onchain: true) the reader
+  is already viewing docs.dev-dot.li, so hide the "On-chain docs" hero button.
+  The button itself lives in the shared index.md; gating it here keeps the two
+  builds on one source.
+-#}
+{% block extrahead %}
+  {{ super() }}
+  {%- if config.extra.onchain %}
+  <style>.hero-btn--onchain{display:none!important;}</style>
+  {%- endif %}
+{% endblock %}

@@ -40,3 +40,4 @@ pnpm-debug.log*
 
 # Design source artifacts (large; the served hero image is committed as a webp)
 previews/
+site-onchain/

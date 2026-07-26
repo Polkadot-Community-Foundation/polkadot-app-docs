@@ -49,12 +49,17 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-  # Also publish the built site on-chain to docs.dot on the Products Devnet, so
-  # the docs are dogfooded through the same delivery path apps use (Bulletin +
-  # DotNS + Browse). Additive to GitHub Pages. Inert until the repo variable
-  # PUBLISH_DOCS_DOT is "true" AND the DOCS_DEPLOYER_MNEMONIC secret is set —
-  # the docs.dot name must already be reserved and owned by that account (a
-  # one-time bootstrap); this job only refreshes its content and listing.
+  # Also publish the docs on-chain to docs.dot on the Products Devnet, so the
+  # docs are dogfooded through the same delivery path apps use (Bulletin + DotNS).
+  # Additive to GitHub Pages. Inert until the repo variable PUBLISH_DOCS_DOT is
+  # "true"; the docs.dot name is already reserved and owned by the signer, so this
+  # job only refreshes its content.
+  #
+  # Uses the dotns CLI, not `pad`: pad refuses base names <= 5 chars (governance-
+  # reserved), so it cannot publish to a 4-char name like `docs`. We build the
+  # on-chain variant (mkdocs.onchain.yml — adds the sandbox navigation shim),
+  # upload it to Bulletin, then point docs.dot's content hash at the new CID.
+  # DOCS_DOT_SIGNER_MNEMONIC is the name owner (5Fk8), authorized on Bulletin.
   publish-onchain:
     needs: build
     if: ${{ vars.PUBLISH_DOCS_DOT == 'true' }}
@@ -71,18 +76,29 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Build site
-        run: mkdocs build --strict
+      - name: Build on-chain variant
+        run: mkdocs build -f mkdocs.onchain.yml -d site-onchain --strict
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "22" # pad requires Node >= 22
+          node-version: "22" # dotns CLI requires Node >= 20; 22 to be safe
+
+      - name: Install dotns CLI
+        run: npm i -g @polkadot-community-foundation/dotns-cli@0.8.0
 
       - name: Publish to docs.dot on the Products Devnet
         env:
-          DOCS_DEPLOYER_MNEMONIC: ${{ secrets.DOCS_DEPLOYER_MNEMONIC }}
+          DOTNS_MNEMONIC: ${{ secrets.DOCS_DOT_SIGNER_MNEMONIC }}
         run: |
-          npx --yes --package=@polkadot-community-foundation/polkadot-app-deploy@0.13.1 \
-            pad ./site docs.dot --env devnet \
-            --mnemonic "$DOCS_DEPLOYER_MNEMONIC" --publish
+          set -euo pipefail
+          echo "Uploading ./site-onchain to Bulletin…"
+          UP=$(dotns bulletin upload ./site-onchain --env devnet 2>&1)
+          echo "$UP" | grep -v -- "--mnemonic puts a secret" || true
+          CID=$(printf '%s\n' "$UP" | grep -oE 'bafy[a-z2-7]{20,}' | tail -1)
+          if [ -z "$CID" ]; then echo "::error::could not parse CID from upload output"; exit 1; fi
+          echo "root CID: $CID"
+          echo "Pointing docs.dot at $CID…"
+          dotns content set docs "$CID" --env devnet
+          echo "Verifying…"
+          dotns content view docs --env devnet

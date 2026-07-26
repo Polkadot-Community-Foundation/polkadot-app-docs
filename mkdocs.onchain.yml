@@ -1,0 +1,23 @@
+# On-chain build variant — deployed to docs.dot (dotli sandbox), NOT to GitHub
+# Pages. Identical to mkdocs.yml except it additionally ships onchain-nav.js,
+# the navigation shim that reroutes cross-page links through the sandbox's
+# /dotli-app/ prefix (see that file for why). MkDocs INHERIT replaces list
+# keys wholesale, so extra_javascript is re-declared in full here.
+#
+#   Build:   mkdocs build -f mkdocs.onchain.yml -d site-onchain --strict
+#   Publish: dotns bulletin upload ./site-onchain ; dotns content set docs <cid>
+#
+# GitHub Pages keeps using mkdocs.yml (root, no prefix). Deploy differentiation:
+#   - GitHub Pages (docs.polkadotcommunity.foundation) -> mkdocs.yml
+#   - On-chain (docs.dot / docs.dev-dot.li)             -> mkdocs.onchain.yml
+INHERIT: mkdocs.yml
+
+# onchain: true marks this as the on-chain build. main.html uses it to omit the
+# "these docs run on-chain too / docs.dev-dot.li" callout here (redundant when
+# the reader is already on the on-chain copy). Deep-merges into the base `extra`.
+extra:
+  onchain: true
+
+extra_javascript:
+  - assets/javascripts/mermaid-zoom.js
+  - assets/javascripts/onchain-nav.js
