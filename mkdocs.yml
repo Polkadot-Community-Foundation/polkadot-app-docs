@@ -117,14 +117,13 @@ extra:
 
 nav:
   - Home: index.md
-  # "Get started" blends the platform introduction with the developer quickstart
-  # as two pages under one section (clicking the tab lands on the Introduction).
-  # introduction.md must appear ONCE in the nav — listing it here AND as a
-  # top-level tab put it in the sidebar twice. The "For users" getting-started
-  # page is hidden for now — it still builds (reachable by direct URL) but is out
-  # of the nav.
+  # "Get started" blends the platform introduction with the two entry paths
+  # (users, developers) under one section (clicking the tab lands on the
+  # Introduction). introduction.md must appear ONCE in the nav — listing it here
+  # AND as a top-level tab put it in the sidebar twice.
   - Get started:
       - Introduction: introduction.md
+      - For users: getting-started/users.md
       - Developer quickstart: getting-started/developers.md
   - Guides:
       - guides/index.md
@@ -146,6 +145,7 @@ nav:
       - The Polkadot app (client tier): architecture/client.md
       - Naming (DotNS): architecture/naming.md
       - App delivery: architecture/app-delivery.md
+      - Storage & data: architecture/storage.md
       - Smart contracts & CDM: architecture/contracts.md
       - Identity & personhood: architecture/identity.md
       - Money (CASH & funding): architecture/money.md

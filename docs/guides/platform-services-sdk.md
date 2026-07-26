@@ -128,8 +128,10 @@ missed check leaves you with a `null` signer and no error to explain it.
 ## Store and retrieve data (Cloud Storage)
 
 Cloud Storage is content-addressed storage backed by the Polkadot Bulletin
-chain. Store bytes, get back a root CID, read them back by CID. Uploads need a
-connected wallet with a selected account:
+chain — the platform's dedicated way for an app to persist data. Store bytes, get
+back a root CID, read them back by CID. Uploads need a connected wallet with a
+selected account, and a storage authorization on that account; for the model
+behind it see [Storage & data](../architecture/storage.md).
 
 ```ts
 import { createApp } from "@parity/product-sdk";

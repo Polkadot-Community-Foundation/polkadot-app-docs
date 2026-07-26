@@ -28,6 +28,9 @@ The platform is a small set of cooperating layers:
 - **App delivery** — the [`pad` CLI](app-delivery.md) uploads a
   static bundle to Bulletin and binds its CID to a `.dot` domain; the
   [dotli gateway](app-delivery.md) resolves and renders it.
+- **Storage & data** — one content-addressed [Bulletin store](storage.md)
+  holds both app bundles and app runtime data (via Cloud Storage); writes are
+  authorization-gated, reads are open.
 - **Smart contracts & CDM** — [contracts](contracts.md) are PolkaVM
   bytecode on Asset Hub, deployed and indexed by the Contract Dependency Manager.
 - **Identity & personhood** — [proof-of-personhood](identity.md)

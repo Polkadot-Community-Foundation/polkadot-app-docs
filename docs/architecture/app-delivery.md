@@ -61,18 +61,9 @@ for the practical steps. This is separate from the token
 [faucet](../reference/networks.md#faucet), which only provides native tokens for
 fees.
 
-**Why storage is gated — and why this Devnet keeps it open.** Writing to Bulletin
-is permissioned (reading is always open — authorization gates storing, not
-retrieval). In production that write-gate is typically tied to **proof of
-personhood** or an **operator-run authorizer**, to keep an un-metered public
-store from being spammed. This Devnet leaves it open — a public Storage Faucet
-and a shared authorizer — so any developer can self-serve an allowance without a
-personhood check.
-
-!!! note
-    Authorizations are finite and expire. If a previously working deploy
-    account starts failing at the upload step, its authorization likely lapsed
-    and must be refreshed before uploads resume.
+The authorization model — why writes are gated, why this Devnet keeps it open,
+and that authorizations are finite and expire — is the same for every write to
+Bulletin. It is described once in [Storage & data](storage.md#how-storage-authorization-works).
 
 ### Binding the `.dot` domain
 

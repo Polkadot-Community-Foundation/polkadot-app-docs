@@ -16,6 +16,10 @@ For **users**, the Devnet is the Polkadot app: a self-custodial client for
 mobile and desktop, plus a web gateway at [dev-dot.li](https://dev-dot.li).
 Create an account, claim a username, try CASH flows, chat, and open Products.
 
+To try the app as an end user, start with
+[Getting started for users](getting-started/users.md) — install the app (or
+open the gateway), then create an account and get funds.
+
 For **developers**, it is a way to ship a web app into a Polkadot-native host.
 You build a static frontend, give it a `.dot` domain, publish the bundle, and
 call host-provided services for accounts, signing, identity, payments,
@@ -86,6 +90,3 @@ That is the whole model. The **[Developer quickstart](getting-started/developers
 takes you through it end to end — build a static frontend, give it a `.dot`
 domain, publish the bundle, and add contracts only when you need custom on-chain
 logic.
-
-To try the app as an end user instead, start with
-[Create an account & get funds](guides/create-account.md).

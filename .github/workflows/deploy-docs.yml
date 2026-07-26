@@ -48,3 +48,41 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Also publish the built site on-chain to docs.dot on the Products Devnet, so
+  # the docs are dogfooded through the same delivery path apps use (Bulletin +
+  # DotNS + Browse). Additive to GitHub Pages. Inert until the repo variable
+  # PUBLISH_DOCS_DOT is "true" AND the DOCS_DEPLOYER_MNEMONIC secret is set —
+  # the docs.dot name must already be reserved and owned by that account (a
+  # one-time bootstrap); this job only refreshes its content and listing.
+  publish-onchain:
+    needs: build
+    if: ${{ vars.PUBLISH_DOCS_DOT == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build site
+        run: mkdocs build --strict
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22" # pad requires Node >= 22
+
+      - name: Publish to docs.dot on the Products Devnet
+        env:
+          DOCS_DEPLOYER_MNEMONIC: ${{ secrets.DOCS_DEPLOYER_MNEMONIC }}
+        run: |
+          npx --yes --package=@polkadot-community-foundation/polkadot-app-deploy@0.13.1 \
+            pad ./site docs.dot --env devnet \
+            --mnemonic "$DOCS_DEPLOYER_MNEMONIC" --publish
