@@ -52,6 +52,21 @@ deploy with. The same page lists current authorizations and when each expires.
     **Bulletin storage allowance**. Publishing needs both: tokens to sign the
     on-chain transactions, and an allowance to upload the bundle.
 
+!!! tip "Authorize from the CLI"
+    `dotns` can also grant the authorization directly, signed by the shared
+    devnet authorizer:
+
+    ```bash
+    dotns bulletin authorize <your-ss58-address> \
+      --transactions 1000 --bytes 104857600 --env devnet
+    ```
+
+    This delegates from a **shared** authorizer budget, so request only what you
+    need — 1000 transactions / 100 MiB comfortably covers a typical app, and
+    raising `--transactions` / `--bytes` past the shared budget fails with
+    `InsufficientAuthorizerBudget`. Use the Storage Faucet above for larger
+    grants.
+
 Authorizations are finite and expire. If a deploy that used to work stops at the
 upload step, the allowance has most likely lapsed — grant it again and re-run.
 
