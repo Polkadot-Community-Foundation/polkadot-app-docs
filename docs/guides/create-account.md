@@ -19,13 +19,13 @@ The Polkadot app is **self-custodial**: your keys are generated and stored on
 your own device. The app's backend never holds your keys; every signature
 happens locally after you approve it.
 
-1. Open the app and choose to **create a new account** if you are starting
-   fresh, or **import an existing account** if you already hold a recovery
-   phrase.
-2. If you create a new account, the app generates a fresh key pair on the
-   device.
-3. Follow the prompts to back up your recovery phrase. Store it somewhere you
-   can recover later, but never somewhere another person or website can read it.
+1. Open the app. It starts by asking for a username, and creates the account for
+   you once you pick one. There is no separate "create account" step.
+2. If you already have a recovery phrase, tap **Already using Polkadot? Recover
+   here** on that same screen instead, and restore from it.
+3. The app does not show you your recovery phrase on its own, so go and get it
+   from **Settings → Security & privacy → Backup**. See
+   [Back up & restore your account](back-up-your-account.md).
 
 !!! warning "Your recovery phrase is the account"
     Anyone who holds your recovery phrase controls the account, and losing it

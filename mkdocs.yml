@@ -129,6 +129,7 @@ nav:
       - guides/index.md
       - For users:
           - Create an account & get funds: guides/create-account.md
+          - Back up & restore your account: guides/back-up-your-account.md
           - Get & use CASH: guides/get-and-use-cash.md
           - Messaging & calls: guides/messaging-and-calls.md
           - Username & proof of personhood: guides/username-and-personhood.md

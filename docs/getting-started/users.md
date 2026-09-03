@@ -37,12 +37,14 @@ flowchart TD
 ## Then follow the path
 
 1. **[Create an account & get funds](../guides/create-account.md)** — create or
-   import an account, protect the recovery phrase, and fund it.
-2. **[Get & use CASH](../guides/get-and-use-cash.md)** — top up the spendable
+   import an account and fund it.
+2. **[Back up & restore your account](../guides/back-up-your-account.md)** —
+   save the recovery phrase and turn on the cloud backup, before you need them.
+3. **[Get & use CASH](../guides/get-and-use-cash.md)** — top up the spendable
    balance and send it to someone.
-3. **[Username & proof of personhood](../guides/username-and-personhood.md)** —
+4. **[Username & proof of personhood](../guides/username-and-personhood.md)** —
    claim a readable name instead of a long address.
-4. **[Discover & open apps](../guides/discover-and-open-apps.md)** — find
+5. **[Discover & open apps](../guides/discover-and-open-apps.md)** — find
    Products in Browse and open them by `.dot` domain.
-5. **[Messaging & calls](../guides/messaging-and-calls.md)** — chat and call
+6. **[Messaging & calls](../guides/messaging-and-calls.md)** — chat and call
    your contacts.

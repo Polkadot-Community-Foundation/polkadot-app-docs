@@ -11,6 +11,8 @@ the web gateway at [dev-dot.li](https://dev-dot.li).
 
 - [Create an account & get funds](create-account.md) — set up a self-custodial
   account and get the funds needed for Devnet flows.
+- [Back up & restore your account](back-up-your-account.md) — save the recovery
+  phrase, turn on the cloud backup, and restore onto a new device.
 - [Get & use CASH](get-and-use-cash.md) — understand the balance shown in the
   app and send it to another user.
 - [Messaging & calls](messaging-and-calls.md) — chat and call other users.
