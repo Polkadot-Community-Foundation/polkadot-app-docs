@@ -95,16 +95,16 @@ to a deployed address and ABI.
 
 | Registry | Address |
 | --- | --- |
-| `ContractRegistry` (Devnet) | `0x59b0245778917af55224e5f8fb55f7f8d452619f` |
+| `ContractRegistry` (Devnet) | `0x05662b3dbd5dd9f2ff92d67630477e84b0b37c1f` |
 
 Shared system contracts registered in it:
 
 | CDM name | Address |
 | --- | --- |
-| `@polkadot/contexts` | `0x9B935075094D7176Afc7e33C5B183109B86B1b6A` |
-| `@polkadot/profiles` | `0x99dAFFC69479297C30815e3a27746f81632dfea1` |
-| `@polkadot/threads` | `0xFa1AB6B6aCBb056F5D9952EEDC5C67F1F3162f3A` |
-| `@mock/reputation` | `0x94a9099379EeA0C5093F93E9934a7f6605E7922f` |
+| `@polkadot/contexts` | `0x65317D46e8F62682002F9A769F7Bd8d63f8100Ba` |
+| `@polkadot/profiles` | `0xaFa90438a1cBEd95A1fbA380226b27226e36C71B` |
+| `@polkadot/threads` | `0x9F8c47b542856ABDa30F665eE4c7071444E39f50` |
+| `@mock/reputation` | `0xa92964b3D49953086D01124cE0508932519edaDD` |
 
 These are the kind of values you should resolve from the on-chain
 `ContractRegistry` rather than hard-code. See
