@@ -120,7 +120,7 @@ try another in the same list.
 Contract tooling that speaks Ethereum JSON-RPC (Hardhat, `cast`, viem) needs the
 ETH-RPC endpoint for Asset Hub rather than a Substrate WebSocket endpoint:
 
-- `https://paseo-assethub-rpc.laissez-faire.trade`
+- `https://eth-rpc-testnet.polkadot.io`
 
 See [Deploy contracts with CDM](../guides/deploy-contracts-cdm.md) for how this
 is used.
