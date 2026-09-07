@@ -294,5 +294,6 @@ point the test host at this Devnet, pass your own `NetworkConfig`
 ## Learn more
 
 - [product-sdk](https://github.com/paritytech/product-sdk) — SDK source
+- [Claude Code plugin](https://github.com/paritytech/product-sdk#claude-code-plugin) — agent skills for every SDK area, see the [developer quickstart](../getting-started/developers.md#3-build-a-web-app-with-the-product-sdk)
 - [Deploy & register contracts (CDM)](deploy-contracts-cdm.md) — resolve a contract by name
 - [Identity & personhood](../architecture/identity.md) — the model behind the precompile

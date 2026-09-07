@@ -68,6 +68,23 @@ Every CLI takes the network as a flag, and this Devnet is **`devnet`**:
 The Product SDK (`@parity/product-sdk`) gives your app typed access to the host:
 wallet, storage, chain calls, contracts, and identity.
 
+!!! tip "Use the SDK's Claude Code plugin"
+    The product-sdk repo doubles as a [Claude Code plugin marketplace](https://github.com/paritytech/product-sdk#claude-code-plugin).
+    Its skills teach Claude Code the whole SDK: app scaffolding, chain
+    connections, transactions, contracts, cloud storage, statement store,
+    individuality, utilities, and migrating an existing codebase. Install it,
+    then ask "build me a Polkadot app":
+
+    ```
+    /plugin marketplace add paritytech/product-sdk
+    /plugin install product-sdk@paritytech
+    /reload-plugins
+    ```
+
+    Each skill is a plain Markdown file under
+    [`product-sdk/skills/`](https://github.com/paritytech/product-sdk/tree/main/product-sdk/skills),
+    so they also read well as reference for any other agent or editor.
+
 ```ts
 import { createApp } from "@parity/product-sdk";
 
