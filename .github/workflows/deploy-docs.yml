@@ -84,26 +84,30 @@ jobs:
         with:
           node-version: "22" # dotns CLI requires Node >= 20; 22 to be safe
 
-      - name: Install dotns CLI
-        # 0.9.1 decodes the Bulletin 2004000 authorization shape (nested
-        # extra.bytesPermanent); 0.8.2 reads every account as "not authorized".
-        run: npm i -g @polkadot-community-foundation/dotns-cli@0.9.1
+      - name: Install polkadot-app-deploy (pad) and dotns CLI
+        # pad publishes the product manifest next to the content: the `manifest`
+        # text record (displayName/description/icon) on docs.dot and the
+        # `app.docs.dot` executable subname the Polkadot app clients open. A
+        # content-only publish would leave that subname stale. dotns-cli is kept
+        # for the read-back; 0.9.1 decodes the Bulletin 2004000 authorization
+        # shape (0.8.2 reads every account as "not authorized").
+        run: |
+          npm i -g @polkadot-community-foundation/polkadot-app-deploy@0.16.1 \
+                   @polkadot-community-foundation/dotns-cli@0.9.1
 
       - name: Publish to docs.dot on the Products Devnet
         env:
           DOTNS_MNEMONIC: ${{ secrets.DOCS_DOT_SIGNER_MNEMONIC }}
         run: |
           set -euo pipefail
-          echo "Uploading ./site-onchain to Bulletin…"
-          # Capture without `set -e` aborting on a failed assignment, so the
-          # CLI's own error reaches the log instead of a bare exit 1.
-          UP=$(dotns bulletin upload ./site-onchain --env devnet 2>&1) || UP_RC=$?
-          echo "$UP" | grep -v -- "--mnemonic puts a secret" || true
-          if [ "${UP_RC:-0}" -ne 0 ]; then echo "::error::dotns bulletin upload exited ${UP_RC}"; exit "$UP_RC"; fi
-          CID=$(printf '%s\n' "$UP" | grep -oE 'bafy[a-z2-7]{20,}' | tail -1)
-          if [ -z "$CID" ]; then echo "::error::could not parse CID from upload output"; exit 1; fi
-          echo "root CID: $CID"
-          echo "Pointing docs.dot at $CID…"
-          dotns content set docs "$CID" --env devnet
-          echo "Verifying…"
-          dotns content view docs --env devnet
+          # `--mnemonic` must be a FLAG: it selects pad's direct-signer mode, so
+          # the authorized name owner (5Fk8) signs its own Bulletin uploads
+          # instead of the unauthorized //deploy/N pool. The value is a masked
+          # secret; pad's "puts a secret on the command line" warning is expected.
+          # `--js-merkle`: no Kubo binary on the runner. Config discovered from
+          # polkadot-app-deploy.config.ts at the repo root.
+          polkadot-app-deploy ./site-onchain docs.dot --env devnet --mnemonic "$DOTNS_MNEMONIC" --js-merkle \
+            | grep -v -- "puts a secret on the command line"
+          echo "Read-back…"
+          dotns lookup --name docs --env devnet
+          dotns text view app.docs executable --env devnet
