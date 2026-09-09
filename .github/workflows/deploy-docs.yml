@@ -85,7 +85,9 @@ jobs:
           node-version: "22" # dotns CLI requires Node >= 20; 22 to be safe
 
       - name: Install dotns CLI
-        run: npm i -g @polkadot-community-foundation/dotns-cli@0.8.2
+        # 0.9.1 decodes the Bulletin 2004000 authorization shape (nested
+        # extra.bytesPermanent); 0.8.2 reads every account as "not authorized".
+        run: npm i -g @polkadot-community-foundation/dotns-cli@0.9.1
 
       - name: Publish to docs.dot on the Products Devnet
         env:
@@ -93,8 +95,11 @@ jobs:
         run: |
           set -euo pipefail
           echo "Uploading ./site-onchain to Bulletin…"
-          UP=$(dotns bulletin upload ./site-onchain --env devnet 2>&1)
+          # Capture without `set -e` aborting on a failed assignment, so the
+          # CLI's own error reaches the log instead of a bare exit 1.
+          UP=$(dotns bulletin upload ./site-onchain --env devnet 2>&1) || UP_RC=$?
           echo "$UP" | grep -v -- "--mnemonic puts a secret" || true
+          if [ "${UP_RC:-0}" -ne 0 ]; then echo "::error::dotns bulletin upload exited ${UP_RC}"; exit "$UP_RC"; fi
           CID=$(printf '%s\n' "$UP" | grep -oE 'bafy[a-z2-7]{20,}' | tail -1)
           if [ -z "$CID" ]; then echo "::error::could not parse CID from upload output"; exit 1; fi
           echo "root CID: $CID"
