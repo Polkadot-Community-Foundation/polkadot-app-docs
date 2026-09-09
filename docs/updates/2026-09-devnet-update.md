@@ -1,16 +1,18 @@
 ---
 date: 2026-09-08
 short_title: Devnet update, September 2026
-summary: Every user creates a new username; developers move to the new CDM registry and re-pin chain descriptors.
+summary: Every user creates a new username; DotNS moves to a new contract set, so check your published apps; developers move to the new CDM registry and re-pin chain descriptors.
 ---
 
-# Devnet update: new apps, X25519 chat, new contract registry
+# Devnet update: new apps, X25519 chat, new registries
 
 A major update is rolling out to the Polkadot Products Devnet, with new versions
 of the Devnet mobile and desktop apps to match.
 
 It changes a lot, and everyone has to act. **Every user creates a new
-username**, and contacts and chat history do not carry over. Product developers
+username**, and contacts and chat history do not carry over. The `.dot` name
+system moves to a new set of contracts, so app publishers should
+[check their published apps](#check-your-published-apps). Product developers
 move to a new contract registry and re-pin their chain descriptors. Deployed
 contracts, `.dot` registrations, and published Bulletin data all survive.
 
@@ -37,13 +39,16 @@ Do these steps **in this order**, before installing the new build:
     Clearing the backup before you have written the phrase down loses the old
     account, and every `.dot` domain it owns, for good.
 
-To keep managing a domain from the old account, import that phrase into the
-`dotns` CLI with `dotns auth set` as described in
+Your `.dot` names are tied to the account behind that recovery phrase. Restore
+from the same phrase after reinstalling and you keep them. Create a fresh
+account instead and the names stay with the old one. To keep managing a domain
+from the old account, import its phrase into the `dotns` CLI with
+`dotns auth set` as described in
 [Register a .dot domain](../guides/register-a-dot-name.md#set-up-an-account).
 
 ## What's changing
 
-Three platform changes drive the update:
+Four platform changes drive the update:
 
 - **Stronger chat encryption.** Chat encryption moves from P-256 to X25519, a
   modern elliptic curve built for fast, lightweight key exchange. Keys in the
@@ -55,6 +60,10 @@ Three platform changes drive the update:
 - **A fixed contract registry.** The CDM registry is redeployed at a new
   address to resolve a failure when publishing a brand-new contract name. What
   developers must do is under [Tooling updates](#tooling-updates).
+- **A new DotNS deployment.** The `.dot` name system moves to a new set of
+  contracts. Registered names carry over. See
+  [Check your published apps](#check-your-published-apps) and
+  [Naming (DotNS)](../architecture/naming.md).
 
 ### Desktop app
 
@@ -89,7 +98,45 @@ the new build:
 The desktop app holds no keys of its own: it pairs with your phone. Once your
 new account exists, open the desktop app and scan its QR code to pair again.
 
+## Check your published apps
+
+The DotNS migration moved every registered `.dot` name to the new contracts.
+**You keep your names.** The app records attached to them, the content hash
+and the app manifest, were re-created from a snapshot of the old deployment,
+and most apps came across intact. Not all of them did, and we cannot guarantee
+yours is one of them.
+
+After you update, open your app in the Polkadot app or at
+`https://<your-name>.dev-dot.li`. If it loads, you are done. If it fails to
+load, shows *Can't find product*, or shows an older version, republish it:
+
+```bash
+npm i -g @polkadot-community-foundation/polkadot-app-deploy  # pad, 0.16.1 or later
+npm i -g @polkadot-community-foundation/dotns-cli            # 0.9.1 or later
+pad ./dist <your-name>.dot --env devnet --publish
+```
+
+Update the tooling first. Older releases of `pad` and `dotns` still point at
+the retired DotNS contracts, and a publish through them succeeds without error
+while nothing changes for anyone on the new apps. Anything you published or
+registered on the old deployment after the snapshot was taken is not on the
+new one, so republish that too.
+
+Your data on Bulletin is not affected. Republishing only rewrites the pointer
+on your name. The full flow is in
+[Build & Publish Applications](../guides/build-and-publish.md).
+
 ## Tooling updates
+
+### DotNS moves to a new contract set
+
+The current DotNS contract addresses are in
+[Addresses & registries](../reference/addresses.md#dotns-the-dot-naming-system).
+They ship inside `@polkadot-community-foundation/dotns-cli` 0.9.1 and
+`@polkadot-community-foundation/polkadot-app-deploy` 0.16.1, so updating those
+two packages is all most projects need. Only addresses you wrote by hand need
+manual attention. The retired contracts stay readable, which is why an old
+tool keeps "working" against them without an error.
 
 ### The contract registry moves
 
