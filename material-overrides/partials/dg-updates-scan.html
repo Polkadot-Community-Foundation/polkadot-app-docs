@@ -1,0 +1,15 @@
+{#-
+  Collect the Updates entries (pages under updates/ whose front matter carries a
+  `date:`) into the caller's `ns` namespace: ns.entries (list of pages) and
+  ns.latest (the page with the newest date). The newest entry is "current";
+  every older one is "superseded". Nothing else has to be edited per release.
+-#}
+{%- for f in pages %}
+  {%- set p = f.page %}
+  {%- if p and p.meta and p.meta.date and p.url.startswith('updates/') and p.url != 'updates/' %}
+    {%- set ns.entries = ns.entries + [p] %}
+    {%- if ns.latest is none or p.meta.date > ns.latest.meta.date %}
+      {%- set ns.latest = p %}
+    {%- endif %}
+  {%- endif %}
+{%- endfor %}

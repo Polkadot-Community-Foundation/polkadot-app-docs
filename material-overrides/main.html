@@ -10,10 +10,56 @@
 {% extends "base.html" %}
 
 {% block announce %}
+  {%- set ns = namespace(latest=none, entries=[]) %}
+  {%- include "partials/dg-updates-scan.html" %}
   <div class="dg-announce">
     <strong>Public devnet.</strong> Tokens have no real value, chains and
     services may be reset, and flows can change between builds.
+    {%- if ns.latest %}
+    <span class="dg-announce__update">Latest update:
+      <a href="{{ base_url }}/{{ ns.latest.url }}">{{ ns.latest.meta.short_title or ns.latest.title }}</a></span>
+    {%- endif %}
   </div>
+{% endblock %}
+
+{#-
+  Updates section chrome, driven by front matter (`date:`) — see
+  partials/dg-updates-scan.html. An entry page gets a status ribbon above its
+  title: "Current update" on the newest entry, "Superseded" (with a link to the
+  newest) on every older one. The section index gets the entry list rendered
+  newest-first after its prose, so adding a dated page is the whole release
+  procedure.
+-#}
+{% block content %}
+  {%- set ns = namespace(latest=none, entries=[]) %}
+  {%- include "partials/dg-updates-scan.html" %}
+  {%- if page.meta.date and page.url.startswith('updates/') %}
+  <div class="dg-update-status{% if page == ns.latest %} dg-update-status--current{% endif %}">
+    {%- if page == ns.latest %}
+    <span class="dg-update-status__badge">Current update</span>
+    <span>Published {{ page.meta.date.strftime('%-d %B %Y') }}. This is the update to act on.</span>
+    {%- else %}
+    <span class="dg-update-status__badge">Superseded</span>
+    <span>Published {{ page.meta.date.strftime('%-d %B %Y') }}. The current update is
+      <a href="{{ base_url }}/{{ ns.latest.url }}">{{ ns.latest.meta.short_title or ns.latest.title }}</a>.</span>
+    {%- endif %}
+  </div>
+  {%- endif %}
+  {{ super() }}
+  {%- if page.url == 'updates/' and ns.entries %}
+  <div class="md-typeset dg-update-list">
+    {%- for p in ns.entries|sort(attribute='meta.date', reverse=true) %}
+    <a class="dg-update-card{% if loop.first %} dg-update-card--current{% endif %}" href="{{ base_url }}/{{ p.url }}">
+      <span class="dg-update-card__meta">
+        <span class="dg-update-card__date">{{ p.meta.date.strftime('%-d %B %Y') }}</span>
+        {%- if loop.first %}<span class="dg-update-status__badge">Current</span>{% endif %}
+      </span>
+      <span class="dg-update-card__title">{{ p.title }}</span>
+      {%- if p.meta.summary %}<span class="dg-update-card__summary">{{ p.meta.summary }}</span>{% endif %}
+    </a>
+    {%- endfor %}
+  </div>
+  {%- endif %}
 {% endblock %}
 
 {#-
