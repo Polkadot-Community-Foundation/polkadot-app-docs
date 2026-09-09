@@ -85,7 +85,7 @@ jobs:
           node-version: "22" # dotns CLI requires Node >= 20; 22 to be safe
 
       - name: Install dotns CLI
-        run: npm i -g @polkadot-community-foundation/dotns-cli@0.8.0
+        run: npm i -g @polkadot-community-foundation/dotns-cli@0.8.2
 
       - name: Publish to docs.dot on the Products Devnet
         env:
