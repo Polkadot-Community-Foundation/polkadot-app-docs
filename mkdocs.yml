@@ -159,3 +159,8 @@ nav:
       - Addresses & registries: reference/addresses.md
       - Glossary: reference/glossary.md
       - More resources: reference/resources.md
+  # Release notes + breaking changes. One page per update, newest first in
+  # updates/index.md; the date in the filename is the identity of the entry.
+  - Updates:
+      - updates/index.md
+      - "Devnet update: new apps, X25519 chat, new registry": updates/2026-09-devnet-update.md

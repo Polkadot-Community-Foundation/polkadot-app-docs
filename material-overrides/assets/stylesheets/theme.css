@@ -1861,3 +1861,108 @@ body.dg-lightbox-open {
 .dg-lightbox__btn--close {
   margin-left: 0.4rem;
 }
+
+/* =============================================================================
+   Updates section — current/superseded ribbon + newest-first entry cards
+   -----------------------------------------------------------------------------
+   Rendered by material-overrides/main.html from each entry's `date:` front
+   matter. The newest entry is "current"; older ones are "superseded".
+   ========================================================================== */
+
+.dg-announce__update {
+  margin-left: 0.5em;
+  color: var(--color-text-primary);
+}
+
+.dg-update-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6em;
+  margin: 0 0 1.2rem;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  background: var(--color-surface-secondary);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-border-strong);
+  border-radius: 0.3rem;
+}
+
+.dg-update-status--current {
+  border-left-color: var(--accent-default);
+  background: var(--accent-soft);
+}
+
+.dg-update-status__badge {
+  display: inline-block;
+  padding: 0.1em 0.55em;
+  font-family: var(--md-code-font-family);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+}
+
+.dg-update-status--current .dg-update-status__badge,
+.dg-update-card--current .dg-update-status__badge {
+  color: var(--accent-default);
+  border-color: var(--accent-default);
+}
+
+.dg-update-list {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1rem 0 0;
+}
+
+.dg-update-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.8rem 1rem;
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.4rem;
+  text-decoration: none;
+}
+
+.dg-update-card:hover {
+  border-color: var(--accent-default);
+  color: var(--color-text-primary);
+}
+
+.dg-update-card--current {
+  border-left: 3px solid var(--accent-default);
+}
+
+.dg-update-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--md-code-font-family);
+  font-size: 0.65rem;
+  color: var(--color-text-tertiary);
+}
+
+.dg-update-card__title {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.dg-update-card__summary {
+  font-size: 0.72rem;
+  color: var(--color-text-secondary);
+}
+
+.md-typeset .dg-update-card,
+.md-typeset .dg-update-card:hover,
+.md-typeset .dg-update-card:focus {
+  text-decoration: none;
+  border-bottom-width: 1px;
+}
