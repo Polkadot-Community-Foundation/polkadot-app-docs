@@ -111,8 +111,8 @@ After you update, open your app in the Polkadot app or at
 load, shows *Can't find product*, or shows an older version, republish it:
 
 ```bash
-npm i -g @polkadot-community-foundation/polkadot-app-deploy  # pad, 0.16.1 or later
-npm i -g @polkadot-community-foundation/dotns-cli            # 0.9.1 or later
+npm i -g @polkadot-community-foundation/polkadot-app-deploy@latest  # pad
+npm i -g @polkadot-community-foundation/dotns-cli@latest            # dotns
 pad ./dist <your-name>.dot --env devnet --publish
 ```
 
@@ -132,11 +132,11 @@ on your name. The full flow is in
 
 The current DotNS contract addresses are in
 [Addresses & registries](../reference/addresses.md#dotns-the-dot-naming-system).
-They ship inside `@polkadot-community-foundation/dotns-cli` 0.9.1 and
-`@polkadot-community-foundation/polkadot-app-deploy` 0.16.1, so updating those
-two packages is all most projects need. Only addresses you wrote by hand need
-manual attention. The retired contracts stay readable, which is why an old
-tool keeps "working" against them without an error.
+They ship inside `@polkadot-community-foundation/dotns-cli` and
+`@polkadot-community-foundation/polkadot-app-deploy`, so installing the latest
+release of those two packages is all most projects need. Only addresses you
+wrote by hand need manual attention. The retired contracts stay readable, which
+is why an old tool keeps "working" against them without an error.
 
 ### The contract registry moves
 
@@ -150,11 +150,10 @@ you keep your names. The current addresses live in
 Upgrade in this order:
 
 1. **Update your tooling.** The registry address ships inside the CDM
-   packages, so moving to the versions published after the redeploy handles
-   most of it: `@polkadot-community-foundation/cdm-cli` 0.9.0 and
-   `@polkadot-community-foundation/cdm-env` 2.3.0. If you read the address
-   through `getRegistryAddress("devnet")` or a preset rather than writing it
-   yourself, updating the package is all you need.
+   packages, so installing the latest `@polkadot-community-foundation/cdm-cli`
+   and `@polkadot-community-foundation/cdm-env` handles most of it. If you
+   read the address through `getRegistryAddress("devnet")` or a preset rather
+   than writing it yourself, updating the package is all you need.
 2. **Regenerate your `cdm.json`.** Your project file pins the registry at the
    top level as `"registry": "0x59b0…"`, and updating the package does not
    rewrite that pin. Re-resolve your dependencies with `cdm install -n devnet`

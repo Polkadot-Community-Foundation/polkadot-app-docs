@@ -89,11 +89,16 @@ jobs:
         # text record (displayName/description/icon) on docs.dot and the
         # `app.docs.dot` executable subname the Polkadot app clients open. A
         # content-only publish would leave that subname stale. dotns-cli is kept
-        # for the read-back; 0.9.1 decodes the Bulletin 2004000 authorization
-        # shape (0.8.2 reads every account as "not authorized").
+        # for the read-back.
+        #
+        # Both are installed at @latest, deliberately: these CLIs carry the
+        # network presets, contract addresses, and Bulletin authorization
+        # decoding inside them, and every past pin here went stale and broke
+        # this job (0.8.2 read every account as "not authorized" until 0.9.1).
+        # Pin a version here only to work around a bad release.
         run: |
-          npm i -g @polkadot-community-foundation/polkadot-app-deploy@0.16.1 \
-                   @polkadot-community-foundation/dotns-cli@0.9.1
+          npm i -g @polkadot-community-foundation/polkadot-app-deploy@latest \
+                   @polkadot-community-foundation/dotns-cli@latest
 
       - name: Publish to docs.dot on the Products Devnet
         env:
