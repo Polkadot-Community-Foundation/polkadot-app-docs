@@ -124,6 +124,18 @@ addresses are network-specific, so read them from the Browse address book for
 the network you target. See
 [App discovery (Browse)](../architecture/discovery.md).
 
+### Polkadot app `AccountDataStore`
+
+`AccountDataStore` is the contract the Polkadot app uses to back up coinage
+installations. Each install stores a small, client-encrypted record under the
+account's own address, so restoring the same recovery phrase on a new device can
+find coins held by earlier installs. The contract has no owner or admin, and
+only the device holding the key can read a record's contents.
+
+| Contract | Devnet address |
+| --- | --- |
+| AccountDataStore | `0x58c9963308c7735cf72ab633e8a9d892f5ab9e05` |
+
 ### Attestation protocol
 
 An EAS-style attestation suite (`SchemaRegistry` + `AttestationService`) provides
@@ -158,4 +170,4 @@ When you need a value directly, read it from the preset rather than assuming it.
 ## Sources
 
 - [paseo-network/runtimes](https://github.com/paseo-network/runtimes) — parachains, assets, precompiles
-- Contract source: [dotns](https://github.com/paritytech/dotns) · [CDM](https://github.com/paritytech/contract-dependency-manager) · [browse](https://github.com/paritytech/browse) · [attestation-protocol](https://github.com/paritytech/attestation-protocol)
+- Contract source: [dotns](https://github.com/paritytech/dotns) · [CDM](https://github.com/paritytech/contract-dependency-manager) · [browse](https://github.com/paritytech/browse) · [attestation-protocol](https://github.com/paritytech/attestation-protocol) · [AccountDataStore](https://github.com/paritytech/polkadot-mobile-datastore-contract-community)
