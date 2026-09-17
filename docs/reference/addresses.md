@@ -67,18 +67,18 @@ gateway uses that record to load the app.
 
 | Contract | Devnet address |
 | --- | --- |
-| DotnsRegistrar (ERC-721) | `0x0E05e0E2576DDD1C339d360Aa634fE52CBa7Ee45` |
-| DotnsRegistrarController | `0x77556F42DF5db7f89c2eCD00446041F16781011E` |
-| DotnsRegistry | `0x38cf3dE5877a18157f4C1a4e067F84956F582b31` |
-| DotnsResolver | `0x57c10bc51bC59B93b6F2C165C62daFa92C34A8a9` |
-| DotnsReverseResolver | `0x992c7C87967897b0F9336de640d9f66A5af76f73` |
-| DotnsContentResolver | `0x444578659848ba38D1825238f10B8D75522d278f` |
-| DotnsPopController | `0xB25510B665ad82291bc1552E94005013a025c42b` |
-| DotnsPopResolver | `0xE841BaEaDac51d301BCb82162d3B10918b60D158` |
-| PopRules | `0xB991Bc0C5Ff4B4c7f3634bfC74e0E20F74D59554` |
-| DotnsNameEscrow | `0xCbf524C2E8ebC43FDE09C9A02632A4Fe03290524` |
-| StoreFactory | `0x59aAF46797A549455697B6f046B4dE16b92670fd` |
-| Multicall3 | `0x55985d2Cfdac95DD828bd3Aa0e031602a07a9049` |
+| DotnsRegistrar (ERC-721) | `0xc609e0c2DAB4433d55a32FB098Db8788C1956302` |
+| DotnsRegistrarController | `0x59dcF8BfFFa7239243785C3fC336D8Bb22312e8c` |
+| DotnsRegistry | `0xb052E5EfC5ADEff1f21d48DEfb5169Cb394A1a73` |
+| DotnsResolver | `0xFcB74C073a2d14dc65B178Bb873f4dE51318DDC2` |
+| DotnsReverseResolver | `0x736e067290AE71f841399575ABfc8b2BAA5Eed7E` |
+| DotnsContentResolver | `0x7e75491ecfb04900EB05ee63CABA2B33900aABB5` |
+| DotnsPopController | `0xC3a3EdAb753F91488fD84E6134b5b0325dc22452` |
+| DotnsPopResolver | `0x398912c9bb03180Ff049f0E034FE2E0024fb8406` |
+| PopRules | `0xD5Ee34610F06f7FF4668aB4fabE2393B65a43AE7` |
+| DotnsNameEscrow | `0xb50269322010DeeF2afb162c009Caf897971952C` |
+| StoreFactory | `0x5Df012daA06cA2602DA153309C2E3A83284Cb879` |
+| Multicall3 | `0x92640655c5c7ee7E42F0B5aD68D205a8A767b81C` |
 
 Some supporting DotNS contracts vary by network and are not reproduced here.
 Read them from the `dotns-sdk` address book for the `devnet` preset when you
