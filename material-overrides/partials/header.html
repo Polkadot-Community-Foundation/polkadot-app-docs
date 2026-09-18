@@ -1,6 +1,7 @@
 {#-
-  Single-row header adapted from the local Polkadot Developer Docs theme.
-  The site title is intentionally omitted; the logo and tabs carry navigation.
+  Single-row header: Material's partial minus the site title (logo + tabs carry
+  navigation), plus a feedback link and the app-style theme picker next to the
+  light/dark toggle. The picker popover is filled by assets/javascripts/theme-picker.js.
 -#}
 {% set class = "md-header" %}
 {% if "navigation.tabs.sticky" in features %}
@@ -41,7 +42,17 @@
     {% endif %}
     {% if not config.theme.palette is mapping %}
       {% include "partials/javascripts/palette.html" %}
+      {#- First visit on a dark OS: Material's script above only applies a stored
+          palette and base.html stamps the first (light) entry on <body>, so the
+          media query would be honoured by bundle.js only after first paint. -#}
+      <script>(function(){try{if(__md_get("__palette"))return;var m=matchMedia("(prefers-color-scheme: dark)");if(!m.matches)return;var i=document.querySelector("[data-md-color-media='(prefers-color-scheme: dark)']");if(i)document.body.setAttribute("data-md-color-scheme",i.getAttribute("data-md-color-scheme"))}catch(e){}})()</script>
     {% endif %}
+    <div class="dg-theme" data-md-component="dg-theme">
+      <button type="button" class="md-header__button md-icon dg-theme-btn" title="Choose theme" aria-label="Choose theme" aria-controls="dg-theme-pop" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+      </button>
+      <div class="dg-theme-pop" id="dg-theme-pop" role="radiogroup" aria-label="Theme" hidden></div>
+    </div>
     {% if config.repo_url %}
       <a href="{{ config.repo_url }}" title="{{ config.repo_name | d('GitHub', true) }}" class="md-header__button md-icon" target="_blank" rel="noopener">
         {% include ".icons/fontawesome/brands/github.svg" %}

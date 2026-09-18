@@ -4,7 +4,7 @@ description: Documentation for the Polkadot Products Devnet, the Polkadot app, a
 hide:
   # `navigation` is deliberately NOT hidden: on mobile the navigation sidebar is
   # the burger drawer, and hiding it leaves the burger opening nothing. The
-  # sidebar column is hidden on desktop from theme.css instead.
+  # sidebar column is hidden on desktop from chrome.css instead.
   - toc
 template: home.html
 ---
@@ -14,6 +14,8 @@ template: home.html
 <p class="home-eyebrow">Polkadot Products Devnet</p>
 
 <h1>Build Products<br>for People.</h1>
+
+<p class="home-hero__lead">Documentation for the Polkadot app, the Products Devnet it runs on, and the developer platform behind it.</p>
 
 <div class="home-hero__actions">
 <a class="hero-btn hero-btn--primary" href="introduction/">Get Started</a>

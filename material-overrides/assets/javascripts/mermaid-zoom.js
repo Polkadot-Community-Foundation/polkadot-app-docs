@@ -10,7 +10,7 @@
    `<pre class="dg-mermaid"><code>…</code></pre>` (a class Material ignores, so it
    never touches or empties it). We load a PINNED Mermaid, render each block
    ourselves once Mermaid is ready, drop the SVG into a `.mermaid` wrapper (so all
-   the theme.css styling + per-chain colour classes apply unchanged), and wire a
+   the diagrams.css styling + per-chain colour classes apply unchanged), and wire a
    full-screen pan/zoom lightbox on each diagram.
 
    No CDN lock-in on Material's side; the only network fetch is the pinned Mermaid,
@@ -77,7 +77,7 @@
           securityLevel: "loose", // allow <br/> in node labels
           theme: "base",
           // Measure with the same font the page renders in, so labels don't clip.
-          fontFamily: '"DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+          fontFamily: '"Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
           flowchart: { htmlLabels: true, useMaxWidth: true }
         });
         Array.prototype.forEach.call(blocks, function (pre) { renderBlock(pre, mermaid); });
@@ -146,7 +146,7 @@
     document.body.appendChild(box);
     stage = box.querySelector(".dg-lightbox__stage");
     canvas = box.querySelector(".dg-lightbox__canvas");
-    // `md-typeset` so the same theme.css .mermaid rules (per-chain colours,
+    // `md-typeset` so the same diagrams.css .mermaid rules (per-chain colours,
     // label styling) apply to the cloned diagram inside the lightbox.
     canvas.className += " md-typeset";
 
@@ -188,11 +188,11 @@
   function openBox(svg) {
     ensureBox();
     canvas.innerHTML = "";
-    // Wrap in `.mermaid` so theme.css colour classes reach the clone. Keep the
+    // Wrap in `.mermaid` so diagrams.css colour classes reach the clone. Keep the
     // SVG id: Mermaid injects an id-scoped <style> inside the SVG (message lines,
     // actor lines, arrowheads, dashed strokes…). Stripping the id dropped all of
     // it, so sequence-diagram lines/arrows disappeared in the lightbox. Our
-    // theme.css !important rules still override the parts we customise.
+    // diagrams.css !important rules still override the parts we customise.
     var wrap = document.createElement("div");
     wrap.className = "mermaid";
     wrap.setAttribute("data-md-color-scheme", "polkadot-light");

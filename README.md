@@ -7,15 +7,34 @@ how to get there, what might block them, and which tools or source repositories
 can help when they need more detail.
 
 Built with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/). The
-visual identity is intentionally **self-contained**, so a future restyle should
-mostly be a CSS task:
+site looks like the Polkadot app clients because it uses the app's own design
+tokens. Everything visual lives in `material-overrides/`:
 
-- `material-overrides/assets/stylesheets/theme.css` — design tokens + the
-  `polkadot-light` / `polkadot-dark` colour schemes.
-- `material-overrides/assets/stylesheets/fonts.css` — self-hosted DM Sans.
+- `assets/stylesheets/tokens.css` — **generated, do not edit**. Primitives,
+  typescale, and the semantic colour roles for the four app themes (`berlin`
+  default, `tokyo`, `malta`, `lisbon`), each in light and dark. Regenerate with
+  `tools/build-design-tokens.mjs` from `@novasamatech/tr-ui` (themes) and
+  `paritytech/polkadot-app-design-system` (typescale); see the script header.
+- `assets/stylesheets/fonts.css` — self-hosted Inter, Manrope and Martian Mono
+  (variable woff2 under `assets/fonts/`).
+- `assets/stylesheets/chrome.css` — Material bridge variables and the shell:
+  header, tabs, search, sidebars, TOC, footer, banner, theme-picker popover,
+  article panel and page grid.
+- `assets/stylesheets/content.css` — everything inside `.md-typeset`: headings,
+  prose, code, tables, admonitions, tabs, figures.
+- `assets/stylesheets/components.css` — home page, cards, chips, updates
+  section, buttons.
+- `assets/stylesheets/diagrams.css` — Mermaid diagram styling, per-chain
+  colours and the zoom lightbox.
+- `assets/javascripts/theme-picker.js` — header theme picker; persists the
+  choice in `localStorage['dg-theme']`, applied pre-paint by `main.html`.
+  Light/dark is Material's palette toggle (first visit follows the OS); the
+  dark scheme is swapped for light while printing.
 
-Content is plain Markdown under `docs/`. Keep layout and styling concerns in the
-two CSS files above whenever possible so content pages stay portable.
+Rules: colours, radii, spacing and type come from token variables only (no raw
+hex outside `tokens.css`); `mkdocs.yml` `extra_css` order is fonts, tokens, then
+the consumer layers. Content is plain Markdown under `docs/`; keep layout and
+styling out of content pages so they stay portable.
 
 ## Develop locally
 

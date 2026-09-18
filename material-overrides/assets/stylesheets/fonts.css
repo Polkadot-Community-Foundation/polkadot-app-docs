@@ -1,95 +1,86 @@
-/* Self-hosted DM Sans (variable weight) — replaces the Google Fonts CDN load.
-   Vendored from @fontsource-variable/dm-sans (woff2 in ../fonts/dm-sans/).
-   Keeps visitor IP off fonts.googleapis.com / fonts.gstatic.com (GDPR).
-   DM Sans is the body font (via --md-text-font). DM Serif Display is used for
-   the home hero title. DM Mono is the label + code typeface (--md-code-font):
-   it carries every eyebrow, breadcrumb, chip, para-id and code block, so it is
-   self-hosted too rather than falling back to Courier New. */
+/* fonts.css — self-hosted @font-face for the app typefaces (no Google Fonts CDN).
+   Inter (body, --font-sans), Manrope (headings, --font-accent), Martian Mono
+   (code, --font-mono). Variable-weight woff2 vendored from @fontsource-variable
+   into ../fonts/{inter,manrope,martian-mono}/, split latin / latin-ext. Family
+   names must match the stacks in tokens.css. */
 
-/* DM Mono — label + code typeface. Weights 400 (default) and 500 (labels). */
+/* Inter — latin */
 @font-face {
-  font-family: "DM Mono";
+  font-family: "Inter";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 100 900;
   font-display: swap;
-  src: url("../fonts/dm-mono/dm-mono-latin-400-normal.woff2") format("woff2");
+  src: url("../fonts/inter/inter-latin-wght-normal.woff2") format("woff2") tech("variations"),
+       url("../fonts/inter/inter-latin-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: "DM Mono";
-  font-style: normal;
-  font-weight: 500;
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 100 900;
   font-display: swap;
-  src: url("../fonts/dm-mono/dm-mono-latin-500-normal.woff2") format("woff2");
+  src: url("../fonts/inter/inter-latin-wght-italic.woff2") format("woff2") tech("variations"),
+       url("../fonts/inter/inter-latin-wght-italic.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-/* latin-ext */
+/* Inter — latin-ext */
 @font-face {
-  font-family: "DM Mono";
+  font-family: "Inter";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 100 900;
   font-display: swap;
-  src: url("../fonts/dm-mono/dm-mono-latin-ext-400-normal.woff2") format("woff2");
+  src: url("../fonts/inter/inter-latin-ext-wght-normal.woff2") format("woff2") tech("variations"),
+       url("../fonts/inter/inter-latin-ext-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: "DM Mono";
-  font-style: normal;
-  font-weight: 500;
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 100 900;
   font-display: swap;
-  src: url("../fonts/dm-mono/dm-mono-latin-ext-500-normal.woff2") format("woff2");
+  src: url("../fonts/inter/inter-latin-ext-wght-italic.woff2") format("woff2") tech("variations"),
+       url("../fonts/inter/inter-latin-ext-wght-italic.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-
-/* DM Serif Display — used for the home hero title. */
+/* Manrope — latin */
 @font-face {
-  font-family: "DM Serif Display";
+  font-family: "Manrope";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 100 900;
   font-display: swap;
-  src: url("../fonts/dm-serif-display/dm-serif-display-latin-400-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "DM Serif Display";
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/dm-serif-display/dm-serif-display-latin-400-italic.woff2") format("woff2");
-}
-
-/* latin */
-@font-face {
-  font-family: "DM Sans";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 1000;
-  src: url("../fonts/dm-sans/dm-sans-latin-wght-normal.woff2") format("woff2-variations");
+  src: url("../fonts/manrope/manrope-latin-wght-normal.woff2") format("woff2") tech("variations"),
+       url("../fonts/manrope/manrope-latin-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* Manrope — latin-ext */
 @font-face {
-  font-family: "DM Sans";
-  font-style: italic;
-  font-display: swap;
-  font-weight: 100 1000;
-  src: url("../fonts/dm-sans/dm-sans-latin-wght-italic.woff2") format("woff2-variations");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* latin-ext */
-@font-face {
-  font-family: "DM Sans";
+  font-family: "Manrope";
   font-style: normal;
+  font-weight: 100 900;
   font-display: swap;
-  font-weight: 100 1000;
-  src: url("../fonts/dm-sans/dm-sans-latin-ext-wght-normal.woff2") format("woff2-variations");
+  src: url("../fonts/manrope/manrope-latin-ext-wght-normal.woff2") format("woff2") tech("variations"),
+       url("../fonts/manrope/manrope-latin-ext-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
+
+/* Martian Mono — latin */
 @font-face {
-  font-family: "DM Sans";
-  font-style: italic;
+  font-family: "Martian Mono";
+  font-style: normal;
+  font-weight: 100 900;
   font-display: swap;
-  font-weight: 100 1000;
-  src: url("../fonts/dm-sans/dm-sans-latin-ext-wght-italic.woff2") format("woff2-variations");
+  src: url("../fonts/martian-mono/martian-mono-latin-wght-normal.woff2") format("woff2") tech("variations"),
+       url("../fonts/martian-mono/martian-mono-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Martian Mono — latin-ext */
+@font-face {
+  font-family: "Martian Mono";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/martian-mono/martian-mono-latin-ext-wght-normal.woff2") format("woff2") tech("variations"),
+       url("../fonts/martian-mono/martian-mono-latin-ext-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
