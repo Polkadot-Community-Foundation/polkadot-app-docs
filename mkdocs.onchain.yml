@@ -18,6 +18,13 @@ INHERIT: mkdocs.yml
 extra:
   onchain: true
 
+# No repo_url on-chain: Material fetches repo facts from api.github.com for the
+# drawer source card, and the on-chain copy should not call out to GitHub.
+# edit_uri goes with it (mkdocs treats it as an absolute URL without repo_url).
+repo_url: null
+edit_uri: null
+
 extra_javascript:
   - assets/javascripts/mermaid-zoom.js
+  - assets/javascripts/theme-picker.js
   - assets/javascripts/onchain-nav.js

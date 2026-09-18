@@ -1,0 +1,425 @@
+/* diagrams.css — Mermaid diagrams: global skin, per-chain colour classes, and the
+   click-to-zoom lightbox. Behaviour lives in assets/javascripts/mermaid-zoom.js
+   (render + lightbox) and mermaid-chain-colors.js (auto class assignment); this
+   file only styles what they produce. Colour/radius/type via tokens.css roles.
+
+   Every `.mermaid` wrapper (in-page and in the lightbox) carries
+   `data-md-color-scheme="polkadot-light"`, so the roles below always resolve to
+   the active theme's LIGHT surfaces, whatever the site scheme. Intended.
+
+   Mermaid injects an id-scoped <style> inside each SVG; rules that must beat it
+   are `!important`. */
+
+/* --- Category hues (relay keeps Polkadot pink; nothing else in the UI does) --- */
+:root {
+  --dg-relay: var(--pink-500);
+  --dg-assethub: var(--violet-500);
+  --dg-people: var(--blue-500);
+  --dg-bulletin: var(--emerald-500);
+  --dg-developer: var(--amber-500);
+  --dg-dotns: var(--violet-700);
+  --dg-gateway: var(--blue-600);
+  --dg-user: var(--green-600);
+}
+
+/* --- Source block ---------------------------------------------------------- */
+/* `pre.dg-mermaid` is the raw fence; mermaid-zoom.js renders it and swaps in a
+   `.mermaid` wrapper. On a render failure it adds `dg-mermaid--error`, which
+   reveals the source so the content is not lost. */
+.md-typeset pre.dg-mermaid {
+  display: none;
+}
+.md-typeset pre.dg-mermaid.dg-mermaid--error {
+  display: block;
+  border-left: var(--border-width-2) solid var(--stroke-error);
+}
+
+/* --- Diagram card ---------------------------------------------------------- */
+/* Connectors stay neutral (a muted fg-secondary), so colour belongs to the node
+   classes; stroke-tertiary is a saturated hue in the tinted themes. */
+.md-typeset .mermaid {
+  --dg-edge: color-mix(in srgb, var(--fg-secondary) 45%, transparent);
+  --dg-arrow: color-mix(in srgb, var(--fg-secondary) 60%, var(--bg-surface-container));
+  margin: var(--space-24) 0;
+  padding: var(--space-24);
+  background: var(--bg-surface-container);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-12);
+  overflow: hidden;
+}
+/* Tall `flowchart TD` drawings are narrow and page-long at natural size; cap them
+   at about one screen (width follows the ratio) and let the lightbox carry the
+   detail. Wide diagrams are far below the cap, so it never touches them. */
+.md-typeset .mermaid svg {
+  display: block;
+  margin: 0 auto;
+  width: auto;
+  max-width: 100%;
+  max-height: min(760px, 82vh);
+  overflow: visible; /* chips near the edge spill into the card padding */
+}
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .mermaid {
+    padding: var(--space-16);
+    border-radius: var(--radius-8);
+  }
+}
+
+/* Where the article panel has room, a diagram bleeds into its padding: these
+   drawings are laid out far wider than the text measure, so every pixel back
+   raises the effective label size. */
+@media screen and (min-width: 76.25em) {
+  .md-typeset .mermaid {
+    margin-inline: calc(var(--space-24) * -1);
+  }
+}
+
+/* --- Nodes ----------------------------------------------------------------- */
+/* Nested fill is a step away from the container so node bodies never share the
+   colour behind them. !important beats Mermaid's injected style (which would
+   otherwise leave unclassed nodes with the default beige). */
+.md-typeset .mermaid .node > rect,
+.md-typeset .mermaid .node > polygon,
+.md-typeset .mermaid .node > path,
+.md-typeset .mermaid .node > circle {
+  rx: var(--radius-8);
+  ry: var(--radius-8);
+  stroke-width: var(--border-width-1);
+  fill: var(--bg-surface-nested) !important;
+  stroke: var(--stroke-secondary) !important;
+}
+
+.md-typeset .mermaid .node .nodeLabel,
+.md-typeset .mermaid .node .nodeLabel p {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-primary) !important;
+}
+
+/* Mermaid renders HTML labels as <p>; `.md-typeset p` margins/line-height would
+   inflate them past the boxes Mermaid measured and clip the last line. */
+.md-typeset .mermaid .nodeLabel,
+.md-typeset .mermaid .nodeLabel p,
+.md-typeset .mermaid .edgeLabel,
+.md-typeset .mermaid .edgeLabel p,
+.md-typeset .mermaid .cluster-label p,
+.md-typeset .mermaid span.nodeLabel {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.3 !important;
+}
+
+/* --- Subgraph clusters ----------------------------------------------------- */
+.md-typeset .mermaid .cluster > rect {
+  rx: var(--radius-12);
+  ry: var(--radius-12);
+  fill: color-mix(in srgb, var(--fg-tertiary) 6%, transparent) !important;
+  stroke: var(--stroke-primary) !important;
+  stroke-dasharray: 4 4;
+}
+.md-typeset .mermaid .cluster .nodeLabel,
+.md-typeset .mermaid .cluster-label .nodeLabel {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-secondary) !important;
+}
+
+/* --- Edges + arrowheads ---------------------------------------------------- */
+/* `fill: none` is !important because a cloned SVG can lose Mermaid's id-scoped
+   `fill:none`, which fills curved connectors solid (the "shadow" wedges). */
+.md-typeset .mermaid .edgePath .path,
+.md-typeset .mermaid .flowchart-link {
+  fill: none !important;
+  stroke: var(--dg-edge) !important;
+  stroke-width: 1.4px !important;
+}
+.md-typeset .mermaid marker path,
+.md-typeset .mermaid .marker {
+  fill: var(--dg-arrow) !important;
+  stroke: var(--dg-arrow) !important;
+}
+
+/* --- Edge labels: badge-style chips on the container surface -------------- */
+.md-typeset .mermaid .edgeLabel,
+.md-typeset .mermaid .edgeLabel p {
+  background: var(--bg-surface-container) !important;
+  color: var(--fg-secondary) !important;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-medium);
+}
+.md-typeset .mermaid span.edgeLabel {
+  display: inline-block;
+  padding: 0 var(--space-6) !important;
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-6);
+}
+.md-typeset .mermaid .edgeLabel foreignObject > div {
+  background: transparent;
+}
+/* The chip may be wider than the box Mermaid measured (different font): let it
+   overflow, centred, instead of clipping the last characters. */
+.md-typeset .mermaid .edgeLabel foreignObject {
+  overflow: visible;
+}
+.md-typeset .mermaid .edgeLabel foreignObject > div {
+  width: max-content !important;
+  transform: translateX(-50%);
+  margin-left: 50%;
+}
+
+/* --- Sequence diagrams ----------------------------------------------------- */
+.md-typeset .mermaid rect.actor {
+  rx: var(--radius-8);
+  ry: var(--radius-8);
+  fill: var(--bg-surface-nested) !important;
+  stroke: var(--stroke-secondary) !important;
+}
+.md-typeset .mermaid text.actor,
+.md-typeset .mermaid text.actor tspan {
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-14) !important;
+  font-weight: var(--font-weight-medium);
+  fill: var(--fg-primary) !important;
+}
+.md-typeset .mermaid .actor-line {
+  stroke: var(--stroke-secondary) !important;
+}
+.md-typeset .mermaid .messageLine0,
+.md-typeset .mermaid .messageLine1,
+.md-typeset .mermaid .loopLine {
+  stroke: var(--dg-edge) !important;
+}
+.md-typeset .mermaid .messageText {
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-14) !important;
+  fill: var(--fg-primary) !important;
+}
+.md-typeset .mermaid .loopText,
+.md-typeset .mermaid .loopText tspan,
+.md-typeset .mermaid .labelText,
+.md-typeset .mermaid .labelText tspan,
+.md-typeset .mermaid .noteText,
+.md-typeset .mermaid .noteText tspan {
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-12) !important;
+  fill: var(--fg-secondary) !important;
+}
+.md-typeset .mermaid .labelBox {
+  fill: var(--bg-surface-nested) !important;
+  stroke: var(--stroke-secondary) !important;
+}
+.md-typeset .mermaid .note {
+  fill: color-mix(in srgb, var(--dg-developer) 14%, var(--bg-surface-container)) !important;
+  stroke: color-mix(in srgb, var(--dg-developer) 55%, var(--stroke-primary)) !important;
+}
+.md-typeset .mermaid .activation0,
+.md-typeset .mermaid .activation1,
+.md-typeset .mermaid .activation2 {
+  fill: var(--bg-surface-nested) !important;
+  stroke: var(--dg-arrow) !important;
+}
+
+/* --- Per-chain colour classes (opt-in via classDef, or auto-assigned) ------ */
+.md-typeset .mermaid .relayNode > rect,
+.md-typeset .mermaid .relayNode > polygon,
+.md-typeset .mermaid .relayNode > path {
+  fill: color-mix(in srgb, var(--dg-relay) 14%, var(--bg-surface-container)) !important;
+  stroke: color-mix(in srgb, var(--dg-relay) 55%, var(--stroke-primary)) !important;
+}
+.md-typeset .mermaid .assethubNode > rect,
+.md-typeset .mermaid .assethubNode > polygon,
+.md-typeset .mermaid .assethubNode > path {
+  fill: color-mix(in srgb, var(--dg-assethub) 14%, var(--bg-surface-container)) !important;
+  stroke: color-mix(in srgb, var(--dg-assethub) 55%, var(--stroke-primary)) !important;
+}
+.md-typeset .mermaid .peopleNode > rect,
+.md-typeset .mermaid .peopleNode > polygon,
+.md-typeset .mermaid .peopleNode > path {
+  fill: color-mix(in srgb, var(--dg-people) 14%, var(--bg-surface-container)) !important;
+  stroke: color-mix(in srgb, var(--dg-people) 55%, var(--stroke-primary)) !important;
+}
+.md-typeset .mermaid .bulletinNode > rect,
+.md-typeset .mermaid .bulletinNode > polygon,
+.md-typeset .mermaid .bulletinNode > path {
+  fill: color-mix(in srgb, var(--dg-bulletin) 14%, var(--bg-surface-container)) !important;
+  stroke: color-mix(in srgb, var(--dg-bulletin) 55%, var(--stroke-primary)) !important;
+}
+.md-typeset .mermaid .developerNode > rect,
+.md-typeset .mermaid .developerNode > polygon,
+.md-typeset .mermaid .developerNode > path {
+  fill: color-mix(in srgb, var(--dg-developer) 14%, var(--bg-surface-container)) !important;
+  stroke: color-mix(in srgb, var(--dg-developer) 55%, var(--stroke-primary)) !important;
+}
+.md-typeset .mermaid .dotnsNode > rect,
+.md-typeset .mermaid .dotnsNode > polygon,
+.md-typeset .mermaid .dotnsNode > path {
+  fill: color-mix(in srgb, var(--dg-dotns) 14%, var(--bg-surface-container)) !important;
+  stroke: color-mix(in srgb, var(--dg-dotns) 55%, var(--stroke-primary)) !important;
+}
+.md-typeset .mermaid .gatewayNode > rect,
+.md-typeset .mermaid .gatewayNode > polygon,
+.md-typeset .mermaid .gatewayNode > path {
+  fill: color-mix(in srgb, var(--dg-gateway) 14%, var(--bg-surface-container)) !important;
+  stroke: color-mix(in srgb, var(--dg-gateway) 55%, var(--stroke-primary)) !important;
+}
+.md-typeset .mermaid .userNode > rect,
+.md-typeset .mermaid .userNode > polygon,
+.md-typeset .mermaid .userNode > path {
+  fill: color-mix(in srgb, var(--dg-user) 14%, var(--bg-surface-container)) !important;
+  stroke: color-mix(in srgb, var(--dg-user) 55%, var(--stroke-primary)) !important;
+}
+
+/* --- Zoom affordance (set by mermaid-zoom.js on a rendered diagram) -------- */
+/* The badge gets its own band above the drawing (badge offset + height + gap)
+   so it never sits on a top-right node. */
+.md-typeset .mermaid[data-dg-zoomable] {
+  position: relative;
+  padding-top: calc(var(--space-12) + 24px + var(--space-8));
+  cursor: zoom-in;
+}
+.md-typeset .mermaid[data-dg-zoomable]::after {
+  content: "Click to zoom";
+  position: absolute;
+  top: var(--space-12);
+  right: var(--space-12);
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 var(--space-8);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-16);
+  color: var(--fg-secondary);
+  background: var(--bg-surface-container);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-6);
+  pointer-events: none;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+.md-typeset .mermaid[data-dg-zoomable]:hover::after,
+.md-typeset .mermaid[data-dg-zoomable]:focus-visible::after {
+  color: var(--fg-primary);
+  border-color: var(--stroke-secondary);
+}
+.md-typeset .mermaid[data-dg-zoomable]:focus-visible {
+  outline: none;
+  box-shadow: var(--dg-focus-ring);
+}
+
+/* --- Lightbox -------------------------------------------------------------- */
+/* Scrim is light on purpose (the wrapper forces the light scheme), so the
+   diagram reads as paper with dark text in every site theme. */
+.dg-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  background: color-mix(in srgb, var(--bg-surface-main) 98%, transparent);
+  backdrop-filter: blur(12px);
+}
+.dg-lightbox[hidden] {
+  display: none;
+}
+body.dg-lightbox-open {
+  overflow: hidden;
+}
+
+.dg-lightbox__stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: grab;
+}
+.dg-lightbox__stage.is-dragging {
+  cursor: grabbing;
+}
+.dg-lightbox__canvas {
+  transform-origin: center center;
+  transition: transform 40ms linear;
+  will-change: transform;
+}
+
+/* The clone keeps its SVG id (Mermaid's id-scoped style must survive) and is
+   wrapped in `.md-typeset .mermaid`, so every rule above still applies. Drop
+   the card chrome and let it overflow so pan/zoom is not clipped. */
+.dg-lightbox .mermaid {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  width: 92vw;
+  height: 84vh;
+}
+/* Scrim = main surface, so plain nodes swap to the container fill and stay a
+   step apart from the background (the in-page inverse). Per-chain nodes are
+   excluded: this rule shares specificity with theirs and comes later. */
+.dg-lightbox .mermaid .node:not(.relayNode, .assethubNode, .peopleNode, .bulletinNode, .developerNode, .dotnsNode, .gatewayNode, .userNode) > rect,
+.dg-lightbox .mermaid .node:not(.relayNode, .assethubNode, .peopleNode, .bulletinNode, .developerNode, .dotnsNode, .gatewayNode, .userNode) > polygon,
+.dg-lightbox .mermaid .node:not(.relayNode, .assethubNode, .peopleNode, .bulletinNode, .developerNode, .dotnsNode, .gatewayNode, .userNode) > path,
+.dg-lightbox .mermaid .node > circle,
+.dg-lightbox .mermaid rect.actor,
+.dg-lightbox .mermaid .labelBox,
+.dg-lightbox .mermaid .activation0,
+.dg-lightbox .mermaid .activation1,
+.dg-lightbox .mermaid .activation2 {
+  fill: var(--bg-surface-container) !important;
+}
+.dg-lightbox .mermaid svg {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+/* Toolbar: app icon buttons. */
+.dg-lightbox__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  padding: var(--space-12);
+  padding-bottom: calc(var(--space-12) + env(safe-area-inset-bottom, 0px));
+}
+.dg-lightbox__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 var(--space-10);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-20);
+  color: var(--fg-secondary);
+  background: var(--bg-surface-container);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-8);
+  cursor: pointer;
+  transition: color 150ms ease, background 150ms ease, border-color 150ms ease;
+}
+.dg-lightbox__btn:hover {
+  color: var(--fg-primary);
+  background: var(--bg-action-secondary-hover);
+}
+.dg-lightbox__btn:active {
+  background: var(--bg-surface-nested);
+}
+.dg-lightbox__btn:focus-visible {
+  outline: none;
+  box-shadow: var(--dg-focus-ring);
+}
+.dg-lightbox__btn--close {
+  margin-left: var(--space-8);
+}

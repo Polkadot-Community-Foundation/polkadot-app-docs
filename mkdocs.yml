@@ -1,7 +1,9 @@
 # Polkadot App Docs — MkDocs Material configuration.
-# The visual identity is fully contained in material-overrides/assets/stylesheets/
-# (theme.css + fonts.css) and the two palette schemes below. Revamping the look
-# means editing those files — content pages stay untouched plain Markdown.
+# The visual identity lives in material-overrides/assets/stylesheets/ and mirrors
+# the Polkadot app clients: tokens.css is GENERATED from the app design system
+# (tools/build-design-tokens.mjs) and carries the four named themes (berlin /
+# tokyo / malta / lisbon, light + dark); chrome / content / components / diagrams
+# style the site with those tokens only. Content pages stay plain Markdown.
 
 site_name: Polkadot App Docs
 site_description: >-
@@ -16,13 +18,20 @@ repo_url: https://github.com/Polkadot-Community-Foundation/polkadot-app-docs
 repo_name: polkadot-app-docs
 edit_uri: edit/main/docs/
 
+# Load order matters: fonts, then tokens, then the layers that consume them.
 extra_css:
   - assets/stylesheets/fonts.css
-  - assets/stylesheets/theme.css
+  - assets/stylesheets/tokens.css
+  - assets/stylesheets/chrome.css
+  - assets/stylesheets/content.css
+  - assets/stylesheets/components.css
+  - assets/stylesheets/diagrams.css
 
-# Click-to-zoom lightbox for the Mermaid diagrams (self-contained, no CDN).
+# mermaid-zoom.js: click-to-zoom lightbox for the Mermaid diagrams (no CDN).
+# theme-picker.js: the header theme picker (berlin / tokyo / malta / lisbon).
 extra_javascript:
   - assets/javascripts/mermaid-zoom.js
+  - assets/javascripts/theme-picker.js
 
 validation:
   absolute_links: ignore
@@ -40,7 +49,7 @@ theme:
   custom_dir: material-overrides
   favicon: assets/images/polkadot.png
   logo: assets/images/polkadot.png
-  font: false # DM Sans is self-hosted (assets/stylesheets/fonts.css); no Google Fonts CDN.
+  font: false # Inter / Manrope / Martian Mono are self-hosted (fonts.css); no Google Fonts CDN.
   features:
     - navigation.tabs
     - navigation.tabs.sticky
@@ -48,25 +57,28 @@ theme:
     - navigation.top
     - navigation.path
     - navigation.indexes
+    - navigation.footer # prev/next links, so a page does not end at the article panel
     - toc.follow
     - content.code.copy
     - content.code.annotate
     - content.tooltips
     - search.suggest
     - search.highlight
-  # Dark scheme is the default; the toggle lets readers switch to light. The
-  # first entry is what loads first, so polkadot-dark leads. (No prefers-color-
-  # scheme media queries — the docs open dark for everyone, matching the new
-  # black-and-white-forward identity with per-chain diagram colour.)
+  # Like the app: first visit follows the OS light/dark preference (the media
+  # queries), the toggle overrides it. Light is listed first so the pre-JS
+  # body attribute defaults to light. The named theme (berlin / tokyo / malta /
+  # lisbon) is orthogonal and handled by the header theme picker.
   palette:
-    - scheme: polkadot-dark
-      toggle:
-        icon: octicons/sun-24
-        name: Switch to light mode
-    - scheme: polkadot-light
+    - media: "(prefers-color-scheme: light)"
+      scheme: polkadot-light
       toggle:
         icon: octicons/moon-24
         name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: polkadot-dark
+      toggle:
+        icon: octicons/sun-24
+        name: Switch to light mode
 
 markdown_extensions:
   - abbr

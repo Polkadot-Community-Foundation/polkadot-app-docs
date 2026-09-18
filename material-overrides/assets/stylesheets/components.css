@@ -1,0 +1,602 @@
+/* components.css — app-idiom components: buttons (.dg-btn), badges, cards and
+   chips (.dg-card/.dg-cards/.dg-chip), the home page (.home-*, .hero-btn,
+   .intro-cta*, .rail-tile*, .entry-chip) and the Updates section
+   (.dg-update-*). Colour, type, radius and spacing come from tokens.css only.
+   Reduced motion is handled globally in chrome.css. */
+
+:root {
+  --dg-space-20: calc(var(--space-16) + var(--space-4));
+}
+
+/* --- Buttons ------------------------------------------------------------- */
+.dg-btn,
+.hero-btn,
+.md-typeset .dg-btn,
+.md-typeset .hero-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  box-sizing: border-box;
+  height: var(--dg-control-md);
+  padding: 0 var(--space-16);
+  border: var(--border-width-1) solid transparent;
+  border-radius: var(--radius-8);
+  background: var(--bg-action-primary);
+  color: var(--fg-primary-inverted);
+  font-family: var(--type-body-medium-emphasized-family);
+  font-size: var(--type-body-medium-emphasized-size);
+  font-weight: var(--type-body-medium-emphasized-weight);
+  line-height: var(--type-body-medium-emphasized-line-height);
+  letter-spacing: var(--type-body-medium-emphasized-tracking);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dg-motion), border-color var(--dg-motion), color var(--dg-motion);
+}
+.dg-btn--large,
+.hero-btn,
+.md-typeset .hero-btn {
+  height: var(--dg-control-lg);
+}
+/* .hero-btn--primary is the primary button (the base style). App parity: the
+   lisbon light primary sits at 3.1:1, as in the app; not corrected here. */
+.hero-btn--primary,
+.md-typeset .hero-btn--primary {
+  background: var(--bg-action-primary);
+  color: var(--fg-primary-inverted);
+}
+.dg-btn:hover,
+.hero-btn:hover,
+.md-typeset .dg-btn:hover,
+.md-typeset .hero-btn:hover {
+  background: var(--bg-action-primary-hover);
+  color: var(--fg-primary-inverted);
+  text-decoration: none;
+}
+.dg-btn--secondary,
+.md-typeset .dg-btn--secondary {
+  background: var(--bg-action-secondary);
+  color: var(--fg-primary);
+}
+.dg-btn--secondary:hover,
+.md-typeset .dg-btn--secondary:hover {
+  background: var(--bg-action-secondary-hover);
+  color: var(--fg-primary);
+}
+.dg-btn--outline,
+.hero-btn--onchain,
+.md-typeset .dg-btn--outline,
+.md-typeset .hero-btn--onchain {
+  background: var(--bg-action-primary-inverted);
+  border-color: var(--stroke-secondary);
+  color: var(--fg-primary);
+}
+.dg-btn--outline:hover,
+.hero-btn--onchain:hover,
+.md-typeset .dg-btn--outline:hover,
+.md-typeset .hero-btn--onchain:hover {
+  background: var(--bg-action-primary-inverted-hover);
+  border-color: var(--stroke-tertiary);
+  color: var(--fg-primary);
+}
+.dg-btn:focus-visible,
+.hero-btn:focus-visible,
+.md-typeset .dg-btn:focus-visible,
+.md-typeset .hero-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--dg-focus-ring);
+}
+
+/* --- Badges -------------------------------------------------------------- */
+/* Outline variant: stroke-primary on the container surface. Text stays
+   fg-secondary (fg-tertiary is below AA on every surface). */
+.md-typeset .dg-chip,
+.md-typeset .intro-cta__tag,
+.dg-update-status__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  box-sizing: border-box;
+  height: 24px;
+  padding: 0 var(--space-8);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-6);
+  background: var(--bg-surface-container);
+  color: var(--fg-secondary);
+  font-family: var(--type-label-medium-family);
+  font-size: var(--type-label-medium-size);
+  font-weight: var(--type-label-medium-weight);
+  line-height: var(--type-label-medium-line-height);
+  letter-spacing: var(--type-label-medium-tracking);
+  text-transform: none;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+/* Primary badge: the "current" marker (app recipe, kept even where the app's
+   own primary colour is below AA, e.g. lisbon light). */
+.dg-update-status--current .dg-update-status__badge,
+.dg-update-card--current .dg-update-status__badge {
+  border-color: transparent;
+  background: var(--bg-action-primary);
+  color: var(--fg-primary-inverted);
+}
+/* Inline chip next to a heading; an optional --chip hue shows as a status dot. */
+.md-typeset .dg-chip {
+  margin-left: var(--space-8);
+}
+.md-typeset .dg-chip::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-9999);
+  background: var(--chip, var(--fg-tertiary));
+}
+
+/* --- Cards --------------------------------------------------------------- */
+.md-typeset .dg-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-12);
+  margin: var(--space-16) 0 var(--space-24);
+}
+.md-typeset .dg-card {
+  padding: var(--space-16);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-8);
+  background: var(--bg-surface-container);
+  box-shadow: var(--dg-shadow-card);
+  color: var(--fg-secondary);
+  font-size: var(--type-body-medium-size);
+  line-height: var(--type-body-medium-line-height);
+}
+.md-typeset .dg-card > :first-child { margin-top: 0; }
+.md-typeset .dg-card > :last-child { margin-bottom: 0; }
+.md-typeset .dg-card b,
+.md-typeset .dg-card strong {
+  display: block;
+  margin-bottom: var(--space-4);
+  color: var(--fg-primary);
+  font-family: var(--type-title-small-family);
+  font-size: var(--type-title-small-size);
+  font-weight: var(--type-title-small-weight);
+  line-height: var(--type-title-small-line-height);
+  letter-spacing: var(--type-title-small-tracking);
+}
+.md-typeset .dg-card a {
+  color: var(--fg-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* --- Home: hero ----------------------------------------------------------- */
+.home-hero {
+  padding: var(--space-40) 0 var(--space-32);
+}
+.md-typeset .home-eyebrow {
+  margin: 0 0 var(--space-12);
+  color: var(--fg-secondary);
+  font-family: var(--type-label-medium-family);
+  font-size: var(--type-label-medium-size);
+  font-weight: var(--type-label-medium-weight);
+  line-height: var(--type-label-medium-line-height);
+  letter-spacing: var(--type-label-medium-tracking);
+  text-transform: none;
+}
+.md-typeset .home-hero h1 {
+  max-width: 16ch;
+  margin: 0;
+  color: var(--fg-primary);
+  font-family: var(--type-display-medium-family);
+  font-size: var(--type-display-medium-size);
+  font-weight: var(--type-display-medium-weight);
+  line-height: var(--type-display-medium-line-height);
+  letter-spacing: var(--type-display-medium-tracking);
+  text-wrap: balance;
+}
+/* One-line lead under the h1 (hook for docs/index.md; not rendered yet). */
+.md-typeset .home-hero__lead {
+  max-width: 36rem;
+  margin: var(--space-16) 0 0;
+  color: var(--fg-secondary);
+  font-size: var(--type-body-large-size);
+  line-height: var(--type-body-large-line-height);
+  text-wrap: pretty;
+}
+.home-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  margin-top: var(--space-24);
+}
+/* Wide viewports (home has no sidebar there): the headline alone leaves the
+   right half of the row empty, so the lead and the buttons move beside it,
+   bottom-aligned with the headline. */
+@media screen and (min-width: 76.25em) {
+  .home-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 32rem) minmax(0, 1fr);
+    column-gap: var(--space-40);
+    align-items: end;
+  }
+  .md-typeset .home-hero > .home-eyebrow {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .md-typeset .home-hero > h1 {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .md-typeset .home-hero__lead {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: end;
+    margin-top: 0;
+    padding-bottom: var(--space-8);
+  }
+  .home-hero__actions {
+    grid-column: 2;
+    grid-row: 3;
+    margin-top: var(--space-16);
+  }
+}
+
+/* Home section headings keep the content.css recipe; only the gap to the
+   cards below widens. */
+body:has(.home-hero) .md-typeset h2 {
+  margin: var(--space-40) 0 var(--space-16);
+}
+
+/* --- Home: widget card idiom (path cards + explore tiles) ----------------- */
+.intro-cta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-16);
+  margin: 0;
+}
+.home-rail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-16);
+  margin: 0;
+}
+.md-typeset .intro-cta__card,
+.md-typeset .rail-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--dg-space-20);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-12);
+  background: var(--bg-surface-container);
+  box-shadow: var(--dg-shadow-card);
+  color: var(--fg-primary);
+  text-decoration: none;
+  transition: border-color var(--dg-motion);
+}
+.md-typeset .intro-cta__card:hover,
+.md-typeset .rail-tile:hover {
+  border-color: var(--stroke-secondary);
+  color: var(--fg-primary);
+  text-decoration: none;
+}
+.md-typeset .intro-cta__card:focus-visible,
+.md-typeset .rail-tile:focus-visible {
+  outline: none;
+  box-shadow: var(--dg-focus-ring), var(--dg-shadow-card);
+}
+.intro-cta__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  margin-bottom: var(--space-16);
+}
+.intro-cta__icon,
+.rail-tile__icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--dg-control-lg);
+  height: var(--dg-control-lg);
+  border-radius: var(--radius-12);
+  background: var(--bg-illustration-light);
+  color: var(--fg-primary);
+}
+/* Both path cards share one look; the modifier keeps no accent of its own. */
+.md-typeset .intro-cta__card--dev {
+  border-color: var(--stroke-primary);
+}
+.md-typeset .intro-cta__card--dev:hover {
+  border-color: var(--stroke-secondary);
+}
+/* Dark surfaces: the illustration tint matches the card, so use the nested surface. */
+[data-md-color-scheme="polkadot-dark"] .intro-cta__icon,
+[data-md-color-scheme="polkadot-dark"] .rail-tile__icon {
+  background: var(--bg-surface-nested);
+}
+.intro-cta__icon svg,
+.rail-tile__icon svg {
+  width: var(--dg-icon);
+  height: var(--dg-icon);
+}
+.rail-tile__icon {
+  margin-bottom: var(--space-16);
+}
+.md-typeset .intro-cta__title,
+.md-typeset .rail-tile b {
+  margin: 0 0 var(--space-4);
+  color: var(--fg-primary);
+  font-family: var(--type-title-large-family);
+  font-size: var(--type-title-large-size);
+  font-weight: var(--type-title-large-weight);
+  line-height: var(--type-title-large-line-height);
+  letter-spacing: var(--type-title-large-tracking);
+}
+.md-typeset .intro-cta__desc,
+.md-typeset .rail-tile__desc {
+  margin: 0;
+  color: var(--fg-secondary);
+  font-size: var(--type-body-medium-size);
+  line-height: var(--type-body-medium-line-height);
+}
+.md-typeset .intro-cta__desc {
+  margin-bottom: var(--space-16);
+}
+.md-typeset .intro-cta__desc code {
+  font-size: var(--type-code-small-size);
+}
+/* Link row at the foot of a path card. */
+.md-typeset .intro-cta__go {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: auto;
+  color: var(--fg-link);
+  font-family: var(--type-body-medium-emphasized-family);
+  font-size: var(--type-body-medium-emphasized-size);
+  font-weight: var(--type-body-medium-emphasized-weight);
+  line-height: var(--type-body-medium-emphasized-line-height);
+  letter-spacing: var(--type-body-medium-emphasized-tracking);
+  transition: color var(--dg-motion);
+}
+.md-typeset .intro-cta__card:hover .intro-cta__go {
+  color: var(--fg-link-hover);
+}
+.intro-cta__go span {
+  line-height: 1;
+}
+.rail-tile__arrow {
+  position: absolute;
+  top: var(--dg-space-20);
+  right: var(--dg-space-20);
+  color: var(--fg-tertiary);
+  font-size: var(--font-size-16);
+  line-height: 1;
+  transition: color var(--dg-motion);
+}
+.md-typeset .rail-tile:hover .rail-tile__arrow {
+  color: var(--fg-primary);
+}
+
+/* --- Home: outro (two list cards) ----------------------------------------- */
+.home-outro {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  align-items: start;
+  gap: var(--space-16);
+  margin: var(--space-40) 0 var(--space-16);
+}
+.home-outro__col {
+  min-width: 0;
+  padding: var(--space-8);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-12);
+  background: var(--bg-surface-container);
+  box-shadow: var(--dg-shadow-card);
+}
+/* Group label, as in the app's list headers. */
+.md-typeset .home-outro__label {
+  display: block;
+  margin: 0;
+  padding: var(--space-8) var(--space-12);
+  color: var(--fg-secondary);
+  font-family: var(--type-label-medium-family);
+  font-size: var(--type-label-medium-size);
+  font-weight: var(--type-label-medium-weight);
+  line-height: var(--type-label-medium-line-height);
+  letter-spacing: var(--type-label-medium-tracking);
+  text-transform: none;
+}
+.md-typeset .home-outro__label::before {
+  content: none;
+}
+/* The guides list is the content.css .dg-links row (32px, chevron); inside the
+   card it only loses its outer margin. Entry rows are label/value pairs. */
+.md-typeset .home-outro .dg-links {
+  margin: 0;
+}
+.home-entry {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.md-typeset .entry-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  box-sizing: border-box;
+  min-height: var(--dg-control-sm);
+  padding: var(--space-4) var(--space-12);
+  border: 0;
+  border-radius: var(--radius-6);
+  background: transparent;
+  box-shadow: none;
+  color: var(--fg-primary);
+  font-size: var(--type-body-medium-size);
+  line-height: var(--type-body-medium-line-height);
+  text-decoration: none;
+  transition: background-color var(--dg-motion);
+}
+.md-typeset .entry-chip:hover {
+  background: var(--bg-surface-nested);
+  color: var(--fg-primary);
+  text-decoration: none;
+}
+.md-typeset .entry-chip:focus-visible {
+  outline: none;
+  box-shadow: var(--dg-focus-ring);
+}
+.md-typeset .entry-chip .lbl {
+  color: var(--fg-primary);
+  font-family: var(--type-body-medium-family);
+  font-size: var(--type-body-medium-size);
+  font-weight: var(--type-body-medium-weight);
+  letter-spacing: var(--type-body-medium-tracking);
+  text-transform: none;
+}
+.md-typeset .entry-chip .val {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-width: 0;
+  color: var(--fg-secondary);
+  font-family: var(--type-code-small-family);
+  font-size: var(--type-code-small-size);
+  font-weight: var(--type-code-small-weight);
+  line-height: var(--type-code-small-line-height);
+  letter-spacing: var(--type-code-small-tracking);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.md-typeset .entry-chip .val::after {
+  content: "\2197";
+  color: var(--fg-tertiary);
+  font-family: var(--font-sans);
+  transition: color var(--dg-motion);
+}
+.md-typeset .entry-chip:hover .val::after {
+  color: var(--fg-primary);
+}
+
+/* --- Updates section ------------------------------------------------------ */
+/* Banner text and link styles are chrome.css's (.dg-announce). */
+.dg-announce__update {
+  margin-left: var(--space-8);
+}
+/* Status ribbon above an entry: the Alert idiom. */
+.md-typeset .dg-update-status,
+.dg-update-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8) var(--space-12);
+  margin: 0 0 var(--space-24);
+  padding: var(--space-12) var(--space-16);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-8);
+  background: var(--bg-surface-container);
+  color: var(--fg-secondary);
+  font-size: var(--type-body-medium-size);
+  line-height: var(--type-body-medium-line-height);
+}
+.md-typeset .dg-update-status a {
+  color: var(--fg-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.md-typeset .dg-update-status a:hover {
+  color: var(--fg-link-hover);
+}
+.dg-update-list {
+  display: grid;
+  gap: var(--space-12);
+  margin: var(--space-24) 0 0;
+}
+.md-typeset .dg-update-card,
+.dg-update-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-16) var(--dg-space-20);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-12);
+  background: var(--bg-surface-container);
+  box-shadow: var(--dg-shadow-card);
+  color: var(--fg-primary);
+  text-decoration: none;
+  transition: border-color var(--dg-motion);
+}
+.md-typeset .dg-update-card:hover,
+.md-typeset .dg-update-card:focus,
+.md-typeset .dg-update-card--current {
+  border-color: var(--stroke-secondary);
+  color: var(--fg-primary);
+  text-decoration: none;
+}
+.md-typeset .dg-update-card:focus-visible {
+  outline: none;
+  box-shadow: var(--dg-focus-ring), var(--dg-shadow-card);
+}
+.dg-update-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+  color: var(--fg-secondary);
+  font-size: var(--type-body-small-size);
+  line-height: var(--type-body-small-line-height);
+}
+.dg-update-card__date {
+  color: var(--fg-secondary);
+}
+.dg-update-card__title {
+  color: var(--fg-primary);
+  font-family: var(--type-title-medium-family);
+  font-size: var(--type-title-medium-size);
+  font-weight: var(--type-title-medium-weight);
+  line-height: var(--type-title-medium-line-height);
+}
+.dg-update-card__summary {
+  color: var(--fg-secondary);
+  font-size: var(--type-body-medium-size);
+  line-height: var(--type-body-medium-line-height);
+}
+
+/* --- Responsive ------------------------------------------------------------- */
+@media screen and (max-width: 59.984375em) {
+  .intro-cta,
+  .home-rail,
+  .home-outro,
+  .md-typeset .dg-cards {
+    grid-template-columns: 1fr;
+  }
+}
+@media screen and (max-width: 44.984375em) {
+  .home-hero {
+    padding: var(--space-24) 0;
+  }
+  .md-typeset .home-hero h1 {
+    font-size: var(--type-display-small-size);
+    line-height: var(--type-display-small-line-height);
+    letter-spacing: var(--type-display-small-tracking);
+  }
+  .home-hero__actions .hero-btn,
+  .home-hero__actions .dg-btn {
+    flex: 1 1 auto;
+  }
+}
+
+/* --- 404 -------------------------------------------------------------------- */
+/* Buttons sit on one row and wrap on a phone; the page is short, so the panel
+   hugs its content instead of leaving an empty band. */
+.md-typeset .dg-404-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  margin-top: var(--space-24);
+}

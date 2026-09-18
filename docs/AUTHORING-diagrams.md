@@ -3,7 +3,7 @@
 Two things style the docs' Mermaid diagrams, and **both are global** — they apply
 to every diagram on every page automatically, with no per-diagram edits.
 
-## 1. Base look (CSS) — `theme.css`
+## 1. Base look (CSS) — `diagrams.css`
 
 Every diagram gets: rounded nodes, surface-matched fills, quiet edges, pill-shaped
 monospace edge labels, dashed rounded subgraph clusters, and full light/dark
@@ -27,12 +27,12 @@ table, so each system chain / actor gets its stable hue everywhere:
 | Green | user, wallet | `userNode` |
 
 Process/step nodes that match nothing stay neutral — which is the intended look.
-The colours themselves live in `theme.css` as `--dg-*` tokens; the JS only adds
+The colours themselves live in `diagrams.css` as `--dg-*` tokens; the JS only adds
 classes.
 
 ### Tuning globally
 
-- **Change a hue:** edit the `--dg-*` token in `theme.css`.
+- **Change a hue:** edit the `--dg-*` token in `diagrams.css`.
 - **Change what matches:** edit the `RULES` table in `mermaid-chain-colors.js`
   (order = priority, first match wins).
 

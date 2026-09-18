@@ -1,0 +1,17 @@
+{#-
+  404 page. Material's stock template renders a bare heading, which leaves the
+  one page with no next step also with no way out. Buttons reuse the app button
+  recipe from components.css.
+-#}
+{% extends "main.html" %}
+
+{% block content %}
+  <h1>Page not found</h1>
+  <p>That page has moved or never existed. The search box in the header covers the
+  whole site; these are the usual entry points.</p>
+  <p class="dg-404-actions">
+    <a class="dg-btn" href="{{ base_url }}/">Home</a>
+    <a class="dg-btn dg-btn--outline" href="{{ base_url }}/guides/">Guides</a>
+    <a class="dg-btn dg-btn--outline" href="{{ base_url }}/reference/">Reference</a>
+  </p>
+{% endblock %}

@@ -63,6 +63,17 @@
 {% endblock %}
 
 {#-
+  Storage guard: Material's __md_get (partials/javascripts/base.html, included
+  just before this block) reads localStorage unguarded, and its palette script
+  calls it inline. With site data blocked that throws, the light/dark toggle
+  never mounts and the OS preference is ignored. Wrapping the two helpers turns
+  a storage failure into "follow the OS, no persistence".
+
+  Pre-paint theme: the picker (partials/header.html + theme-picker.js) stores
+  the chosen app theme in localStorage['dg-theme']; applying it on <html> here,
+  before the body renders, avoids a flash of the default (berlin). Light/dark is
+  Material's own palette toggle.
+
   On the on-chain build (mkdocs.onchain.yml sets extra.onchain: true) the reader
   is already viewing docs.dev-dot.li, so hide the "On-chain docs" hero button.
   The button itself lives in the shared index.md; gating it here keeps the two
@@ -70,6 +81,8 @@
 -#}
 {% block extrahead %}
   {{ super() }}
+  <script>(function(){var g=window.__md_get,s=window.__md_set;if(typeof g!=="function")return;window.__md_get=function(){try{return g.apply(this,arguments)}catch(e){return null}};window.__md_set=function(){try{return s.apply(this,arguments)}catch(e){}}})()</script>
+  <script>(function(){try{var t=localStorage.getItem("dg-theme");if(t==="berlin"||t==="tokyo"||t==="malta"||t==="lisbon")document.documentElement.setAttribute("data-dg-theme",t)}catch(e){}})()</script>
   {%- if config.extra.onchain %}
   <style>.hero-btn--onchain{display:none!important;}</style>
   {%- endif %}

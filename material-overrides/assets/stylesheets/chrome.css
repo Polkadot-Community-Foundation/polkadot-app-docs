@@ -1,0 +1,1497 @@
+/* chrome.css — site chrome, in the Polkadot app's design language.
+   Owns: the Material variable bridge, global foundation, header, tabs, search,
+   left nav, right TOC, breadcrumb, back-to-top, footer, banner, mobile drawer,
+   theme-picker popover, the article panel + page grid, print.
+   Colours, radii, spacing and type come from tokens.css roles only. */
+
+/* --- Material bridge ----------------------------------------------------- */
+:root {
+  --md-text-font: var(--font-sans);
+  --md-code-font: var(--font-mono);
+  --md-text-font-family: var(--font-sans);
+  --md-code-font-family: var(--font-mono);
+
+  /* Shared chrome constants (theme-independent). */
+  --dg-header-h: 56px;
+  --dg-motion: 150ms ease;
+  --dg-control-sm: 32px;
+  --dg-control-md: 36px;
+  --dg-control-lg: 40px;
+  --dg-icon: 20px;
+  --dg-icon-sm: 16px;
+  /* Page grid: rail widths, shared with the footer so prev/next sits in the
+     article column. Both rails only exist from 76.25em up. */
+  --dg-sidebar-w: 16.5rem;
+  --dg-toc-w: 16rem;
+}
+
+/* Roles switch with theme × scheme, so one mapping serves every combination. */
+[data-md-color-scheme="polkadot-light"],
+[data-md-color-scheme="polkadot-dark"] {
+  --md-default-bg-color: var(--bg-surface-main);
+  --md-default-fg-color: var(--fg-primary);
+  --md-default-fg-color--light: var(--fg-secondary);
+  --md-default-fg-color--lighter: var(--fg-tertiary);
+  --md-default-fg-color--lightest: var(--stroke-primary);
+  --md-typeset-color: var(--fg-primary);
+  --md-typeset-a-color: var(--fg-link);
+  --md-typeset-table-color: var(--stroke-primary);
+  --md-typeset-table-color--light: var(--bg-surface-nested);
+  --md-typeset-mark-color: color-mix(in srgb, var(--amber-400) 32%, transparent);
+  --md-typeset-del-color: color-mix(in srgb, var(--red-500) 16%, transparent);
+  --md-typeset-ins-color: color-mix(in srgb, var(--green-500) 16%, transparent);
+  --md-typeset-kbd-color: var(--bg-surface-nested);
+  --md-typeset-kbd-accent-color: var(--bg-surface-container);
+  --md-typeset-kbd-border-color: var(--stroke-tertiary);
+
+  --md-primary-fg-color: var(--bg-surface-container);
+  --md-primary-fg-color--light: var(--bg-surface-nested);
+  --md-primary-fg-color--dark: var(--bg-surface-nested);
+  --md-primary-bg-color: var(--fg-primary);
+  --md-primary-bg-color--light: var(--fg-secondary);
+  --md-accent-fg-color: var(--fg-primary);
+  --md-accent-fg-color--transparent: var(--bg-selection-container-hover);
+  --md-accent-bg-color: var(--fg-primary-inverted);
+  --md-accent-bg-color--light: var(--fg-secondary-inverted);
+
+  --md-code-bg-color: var(--bg-surface-nested);
+  --md-code-fg-color: var(--fg-primary);
+  --md-code-hl-color: color-mix(in srgb, var(--amber-400) 24%, transparent);
+  --md-code-hl-color--light: color-mix(in srgb, var(--amber-400) 12%, transparent);
+
+  --md-admonition-fg-color: var(--fg-primary);
+  --md-admonition-bg-color: var(--bg-surface-container);
+  --md-warning-fg-color: var(--fg-primary);
+  --md-warning-bg-color: var(--bg-surface-nested);
+
+  --md-footer-bg-color: var(--bg-surface-main);
+  --md-footer-bg-color--dark: var(--bg-surface-main);
+  --md-footer-fg-color: var(--fg-primary);
+  --md-footer-fg-color--light: var(--fg-secondary);
+  --md-footer-fg-color--lighter: var(--fg-secondary);
+
+  --md-shadow-z1: 0 1px 2px 0 var(--shadow-soft);
+  --md-shadow-z2: 0 1px 2px 0 var(--shadow-soft);
+  --md-shadow-z3: 0 8px 24px -8px var(--shadow-soft);
+
+  /* Chrome recipes that reference theme roles. They stay on this selector:
+     var() inside a custom property resolves where it is declared, and the
+     roles are not defined on :root. */
+  --dg-focus-ring: 0 0 0 2px var(--bg-surface-container), 0 0 0 4px var(--fg-secondary);
+  --dg-focus-ring-soft: 0 0 0 2px color-mix(in srgb, var(--stroke-tertiary) 35%, transparent);
+  --dg-shadow-card: 0 1px 2px 0 var(--shadow-soft);
+  --dg-shadow-pop: 0 1px 2px 0 var(--shadow-soft), 0 8px 24px -8px var(--shadow-soft);
+  /* Small text on bg-surface-nested; the tinted dark themes need a brighter step. */
+  --dg-fg-on-nested: var(--fg-secondary);
+}
+[data-dg-theme="tokyo"] [data-md-color-scheme="polkadot-dark"],
+[data-dg-theme="malta"] [data-md-color-scheme="polkadot-dark"],
+[data-dg-theme="lisbon"] [data-md-color-scheme="polkadot-dark"] {
+  --dg-fg-on-nested: var(--fg-secondary-hover);
+}
+
+[data-md-color-scheme="polkadot-light"] {
+  color-scheme: light;
+  --md-code-hl-number-color: var(--amber-800);
+  --md-code-hl-special-color: var(--red-700);
+  --md-code-hl-function-color: var(--violet-700);
+  --md-code-hl-constant-color: var(--topaz-700);
+  --md-code-hl-keyword-color: var(--blue-700);
+  --md-code-hl-string-color: var(--green-800);
+  --md-code-hl-name-color: var(--fg-primary);
+  --md-code-hl-operator-color: var(--fg-secondary);
+  --md-code-hl-punctuation-color: var(--fg-secondary);
+  --md-code-hl-comment-color: var(--fg-secondary);
+  --md-code-hl-generic-color: var(--fg-secondary);
+  --md-code-hl-variable-color: var(--fg-primary);
+}
+
+[data-md-color-scheme="polkadot-dark"] {
+  color-scheme: dark;
+  --md-code-hl-number-color: var(--amber-400);
+  --md-code-hl-special-color: var(--red-400);
+  --md-code-hl-function-color: var(--violet-400);
+  --md-code-hl-constant-color: var(--topaz-300);
+  --md-code-hl-keyword-color: var(--blue-400);
+  --md-code-hl-string-color: var(--green-400);
+  --md-code-hl-name-color: var(--fg-primary);
+  --md-code-hl-operator-color: var(--fg-secondary);
+  --md-code-hl-punctuation-color: var(--fg-secondary);
+  --md-code-hl-comment-color: var(--fg-secondary-hover);
+  --md-code-hl-generic-color: var(--fg-secondary);
+  --md-code-hl-variable-color: var(--fg-primary);
+}
+
+/* --- Foundation ---------------------------------------------------------- */
+/* Tokens are rem-based at a 16px root; Material's 125% root would inflate them. */
+html {
+  font-size: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-surface-main);
+  color: var(--fg-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-medium-size);
+  line-height: var(--type-body-medium-line-height);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--fg-primary) 16%, transparent);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--stroke-tertiary) 60%, transparent) transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--stroke-tertiary) 60%, transparent);
+  border-radius: var(--radius-4);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--stroke-tertiary);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--dg-focus-ring);
+}
+
+.md-skip {
+  background: var(--bg-surface-container-inverted);
+  color: var(--fg-primary-inverted);
+  border-radius: var(--radius-8);
+  font-size: var(--type-body-medium-size);
+}
+
+.md-overlay {
+  background-color: var(--bg-surface-overlay);
+}
+
+/* Copy-to-clipboard toast. */
+.md-dialog {
+  background: var(--bg-surface-container-inverted);
+  border-radius: var(--radius-8);
+  box-shadow: var(--dg-shadow-pop);
+  min-width: 0;
+  padding: var(--space-8) var(--space-12);
+}
+.md-dialog__inner {
+  color: var(--fg-primary-inverted);
+  font-size: var(--type-body-medium-size);
+  line-height: var(--type-body-medium-line-height);
+}
+
+/* Tooltips (content.tooltips): a small container card. */
+.md-tooltip2 {
+  --md-default-bg-color: var(--bg-surface-container);
+}
+.md-tooltip2__inner {
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-6);
+  box-shadow: var(--dg-shadow-pop);
+  color: var(--fg-primary);
+}
+[role="tooltip"] > .md-tooltip2__inner {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--type-body-small-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--type-body-small-line-height);
+}
+[role="dialog"] > .md-tooltip2__inner {
+  padding: 0 var(--space-12);
+  font-size: var(--type-body-medium-size);
+  line-height: var(--type-body-medium-line-height);
+}
+
+/* --- Grid ---------------------------------------------------------------- */
+.md-grid {
+  max-width: 85rem;
+}
+
+.md-main__inner {
+  margin-top: var(--space-24);
+  padding: 0 var(--space-16);
+}
+
+/* Sidebars: Material reserves a scrollbar gutter with padding-right on
+   [dir=ltr]; the twins below win by source order and keep a small gutter. */
+.md-sidebar__inner,
+[dir="ltr"] .md-sidebar__inner {
+  padding-right: var(--space-8);
+}
+[dir="rtl"] .md-sidebar__inner {
+  padding-left: var(--space-8);
+  padding-right: 0;
+}
+@media screen and (min-width: 76.25em) {
+  .md-sidebar {
+    width: var(--dg-sidebar-w);
+    padding: var(--space-8) 0 var(--space-24);
+  }
+}
+/* Both rails appear together: below 76.25em the left nav is a drawer, so the
+   TOC goes too rather than ragging into a ~190px column. */
+@media screen and (max-width: 76.234375em) {
+  .md-sidebar--secondary,
+  .md-sidebar--secondary:not([hidden]) {
+    display: none;
+  }
+}
+/* Sticky offset is for the in-flow desktop rails only; the mobile drawer is
+   fixed and must keep Material's top: 0 or it slices the header. */
+@media screen and (min-width: 76.25em) {
+  .md-sidebar--secondary {
+    width: var(--dg-toc-w);
+  }
+  .md-header--lifted ~ .md-container .md-sidebar,
+  .md-sidebar {
+    top: var(--dg-header-h);
+  }
+}
+.md-header--lifted ~ .md-container .md-typeset :target {
+  --md-scroll-margin: calc(var(--dg-header-h) + var(--space-24));
+}
+
+/* --- Banner (.dg-announce) ----------------------------------------------- */
+.md-banner {
+  background-color: var(--bg-surface-nested);
+  color: var(--dg-fg-on-nested);
+  border-bottom: var(--border-width-1) solid var(--stroke-primary);
+}
+.md-banner__inner {
+  margin: 0 auto;
+}
+.dg-announce {
+  padding: var(--space-6) var(--space-16);
+  font-size: var(--type-body-small-size);
+  line-height: var(--type-body-small-line-height);
+  text-align: center;
+  text-wrap: pretty;
+}
+.dg-announce strong {
+  color: var(--fg-primary);
+  font-weight: var(--font-weight-medium);
+}
+.md-typeset .dg-announce a {
+  color: var(--fg-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--stroke-tertiary);
+}
+.md-typeset .dg-announce a:hover {
+  text-decoration-color: currentcolor;
+}
+/* Phones: one line. The bare explanatory text node has no element to hide,
+   so it is collapsed via font-size; the label and the update link keep theirs
+   and the link truncates when the line is too narrow. */
+@media screen and (max-width: 59.984375em) {
+  .dg-announce {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    padding: var(--space-6) var(--space-12);
+    font-size: 0;
+    line-height: var(--type-body-small-line-height);
+  }
+  .dg-announce > strong,
+  .dg-announce > .dg-announce__update {
+    font-size: var(--type-body-small-size);
+    line-height: var(--type-body-small-line-height);
+  }
+  .dg-announce > strong {
+    flex: 0 0 auto;
+  }
+  .dg-announce > .dg-announce__update {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* --- Header -------------------------------------------------------------- */
+.md-header,
+.md-header--shadow {
+  background-color: var(--bg-surface-container);
+  color: var(--fg-primary);
+  border-bottom: var(--border-width-1) solid var(--stroke-primary);
+  box-shadow: none;
+  transition: none;
+}
+.md-header[hidden] {
+  transform: none;
+}
+
+.md-header__inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--space-8);
+  height: var(--dg-header-h);
+  padding: 0 var(--space-16);
+}
+
+.md-header__button.md-logo {
+  display: flex;
+  align-items: center;
+  height: var(--dg-control-sm);
+  margin: 0 var(--space-8) 0 0;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-8);
+}
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 26px;
+  width: auto;
+}
+/* The mark ships white; invert it on light surfaces. */
+[data-md-color-scheme="polkadot-light"] .md-header__button.md-logo img,
+[data-md-color-scheme="polkadot-light"] .md-nav__button.md-logo img {
+  filter: invert(1);
+}
+
+.md-header__button.md-icon,
+.dg-theme-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: var(--dg-control-sm);
+  height: var(--dg-control-sm);
+  margin: 0;
+  padding: var(--space-6);
+  border: 0;
+  border-radius: var(--radius-8);
+  background: transparent;
+  color: var(--fg-secondary);
+  cursor: pointer;
+  opacity: 1;
+  transition: background-color var(--dg-motion), color var(--dg-motion);
+}
+.md-header__button.md-icon svg,
+.dg-theme-btn svg {
+  width: var(--dg-icon);
+  height: var(--dg-icon);
+  fill: currentcolor;
+}
+.md-header__button.md-icon:hover,
+.dg-theme-btn:hover {
+  background: var(--bg-action-secondary-hover);
+  color: var(--fg-primary);
+  opacity: 1;
+}
+.md-header__button.md-icon:active,
+.dg-theme-btn:active,
+.dg-theme-btn[aria-expanded="true"] {
+  background: var(--bg-surface-nested);
+  color: var(--fg-primary);
+}
+.md-header__button[hidden],
+.md-header__option label[hidden] {
+  display: none;
+}
+/* The picker ships a stroke-only Lucide icon; it must out-rank the fill rule
+   above, which also matches this button (.md-header__button.md-icon). */
+.md-header__button.dg-theme-btn svg {
+  fill: none;
+}
+.md-header__button.dg-theme-btn svg circle {
+  fill: currentcolor;
+}
+.md-header__option {
+  display: inline-flex;
+  align-items: center;
+}
+/* The tabs are the only flexible item and they are hidden below 76.25em, so
+   the first right-hand control of each range takes the slack instead. */
+@media screen and (min-width: 60em) {
+  .md-header__feedback {
+    margin-inline-start: auto;
+  }
+}
+@media screen and (max-width: 59.984375em) {
+  .md-header__button.md-icon[for="__search"] {
+    margin-inline-start: auto;
+  }
+  /* The search field is an off-canvas overlay here, so its zero-width box in
+     the row would otherwise double the gap after the search icon. */
+  .md-search {
+    margin-inline-start: calc(-1 * var(--space-8));
+  }
+}
+@media screen and (min-width: 60em) {
+  .md-header__button[for="__search"] {
+    display: none;
+  }
+}
+@media screen and (min-width: 76.25em) {
+  .md-header__button[for="__drawer"] {
+    display: none;
+  }
+}
+
+/* Feedback link: ghost button. */
+.md-header__feedback {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  height: var(--dg-control-sm);
+  padding: 0 var(--space-12);
+  border-radius: var(--radius-8);
+  color: var(--fg-secondary);
+  font-size: var(--type-body-medium-emphasized-size);
+  font-weight: var(--type-body-medium-emphasized-weight);
+  line-height: var(--type-body-medium-emphasized-line-height);
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color var(--dg-motion), color var(--dg-motion);
+}
+.md-header__feedback:hover {
+  background: var(--bg-selection-container-hover);
+  color: var(--fg-primary);
+}
+@media screen and (max-width: 59.984375em) {
+  .md-header__feedback {
+    display: none;
+  }
+}
+
+/* --- Tabs: app segmented control ----------------------------------------- */
+.md-tabs {
+  background: transparent;
+  color: inherit;
+  line-height: inherit;
+}
+.md-header__inner > .md-tabs {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  height: 100%;
+  overflow: hidden;
+}
+@media screen and (max-width: 76.234375em) {
+  .md-header__inner > .md-tabs {
+    display: none;
+  }
+}
+.md-header__inner > .md-tabs .md-grid {
+  width: auto;
+  max-width: none;
+  margin: 0;
+}
+.md-tabs__list {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-10);
+  background: var(--bg-surface-nested);
+  overflow: hidden;
+}
+.md-tabs__item {
+  height: auto;
+  padding: 0;
+  white-space: nowrap;
+}
+.md-tabs__link {
+  display: inline-flex;
+  align-items: center;
+  height: calc(var(--dg-control-md) - 2 * var(--space-4));
+  margin: 0;
+  padding: 0 var(--space-12);
+  border-radius: var(--radius-6);
+  color: var(--dg-fg-on-nested);
+  font-size: var(--type-body-medium-emphasized-size);
+  font-weight: var(--type-body-medium-emphasized-weight);
+  line-height: var(--type-body-medium-emphasized-line-height);
+  opacity: 1;
+  transition: background-color var(--dg-motion), color var(--dg-motion);
+}
+/* Hover steps towards the raised segment (the hover role can equal the track). */
+.md-tabs__link:hover,
+.md-tabs__link:focus {
+  color: var(--fg-primary);
+  background: color-mix(in srgb, var(--bg-action-primary-inverted) 60%, transparent);
+  opacity: 1;
+}
+.md-tabs__item--active .md-tabs__link {
+  color: var(--fg-primary);
+  background: var(--bg-action-primary-inverted);
+  box-shadow: var(--dg-shadow-card);
+}
+.md-tabs__item--active .md-tabs__link:focus-visible {
+  box-shadow: var(--dg-focus-ring), var(--dg-shadow-card);
+}
+
+/* --- Search -------------------------------------------------------------- */
+.md-search__form,
+[data-md-toggle="search"]:checked ~ .md-header .md-search__form {
+  height: var(--dg-control-md);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-8);
+  background: var(--bg-surface-nested);
+  color: var(--fg-primary);
+  box-shadow: none;
+  transition: border-color var(--dg-motion), background-color var(--dg-motion), box-shadow var(--dg-motion);
+}
+.md-search__form:hover {
+  background: var(--bg-surface-nested);
+  border-color: var(--stroke-secondary);
+}
+/* The open state (toggle checked) outranks a bare :focus-within, so the
+   focus rules carry the same prefix. */
+.md-search__form:focus-within,
+[data-md-toggle="search"]:checked ~ .md-header .md-search__form:focus-within {
+  border-color: var(--stroke-tertiary);
+  box-shadow: var(--dg-focus-ring-soft);
+}
+.md-search__form:has(.md-search__input:focus-visible),
+[data-md-toggle="search"]:checked ~ .md-header .md-search__form:has(.md-search__input:focus-visible) {
+  box-shadow: var(--dg-focus-ring);
+}
+.md-search__input {
+  height: 100%;
+  color: var(--fg-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-medium-size);
+  line-height: var(--type-body-medium-line-height);
+}
+/* Input and its autocomplete ghost share metrics; Material scopes theirs by [dir]. */
+.md-search__input,
+.md-search__suggest,
+[dir] .md-search__input,
+[dir] .md-search__suggest {
+  padding-left: calc(var(--space-24) + var(--space-12));
+  padding-right: calc(var(--space-24) + var(--space-12));
+}
+.md-search__input:focus-visible {
+  box-shadow: none;
+}
+.md-search__input::placeholder,
+.md-search__input ~ .md-search__icon {
+  color: var(--fg-tertiary);
+}
+/* Icons sit in a 24px box, vertically centred whatever the field height. */
+.md-search__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-24);
+  height: var(--space-24);
+  color: var(--fg-tertiary);
+}
+.md-search__icon svg {
+  width: var(--dg-icon);
+  height: var(--dg-icon);
+}
+.md-search__icon[for="__search"],
+.md-search__options {
+  top: 50%;
+  transform: translateY(-50%);
+}
+[dir="ltr"] .md-search__icon[for="__search"] {
+  left: var(--space-8);
+}
+[dir="rtl"] .md-search__icon[for="__search"] {
+  right: var(--space-8);
+}
+[dir="ltr"] .md-search__options {
+  right: var(--space-8);
+}
+[dir="rtl"] .md-search__options {
+  left: var(--space-8);
+}
+.md-search__options .md-search__icon {
+  color: var(--fg-secondary);
+}
+.md-search__suggest {
+  color: var(--fg-tertiary);
+  font-size: var(--type-body-medium-size);
+}
+@media screen and (min-width: 60em) {
+  .md-search__inner {
+    width: 14rem;
+  }
+  .md-search {
+    padding: 0;
+  }
+  /* Results: a floating container card under the field. Material sets the
+     bottom radii as [dir]-scoped longhands, so they are matched here. */
+  .md-search__output,
+  [dir] .md-search__output {
+    top: calc(var(--dg-control-md) + var(--space-6));
+    border-radius: var(--radius-12);
+    border-bottom-left-radius: var(--radius-12);
+    border-bottom-right-radius: var(--radius-12);
+    border: var(--border-width-1) solid var(--stroke-primary);
+    background: var(--bg-surface-container);
+  }
+  [data-md-toggle="search"]:checked ~ .md-header .md-search__output {
+    box-shadow: var(--dg-shadow-pop);
+  }
+  [data-md-toggle="search"]:checked ~ .md-header .md-search__inner,
+  .md-search__scrollwrap {
+    width: 26rem;
+  }
+}
+.md-search__scrollwrap {
+  background: var(--bg-surface-container);
+}
+.md-search-result__meta {
+  background: var(--bg-surface-nested);
+  color: var(--dg-fg-on-nested);
+  font-size: var(--type-label-medium-size);
+  font-weight: var(--type-label-medium-weight);
+  line-height: var(--dg-control-sm);
+  padding: 0 var(--space-16);
+}
+.md-search-result__item {
+  box-shadow: 0 -1px var(--stroke-primary);
+}
+.md-search-result__link {
+  transition: background-color var(--dg-motion);
+}
+.md-search-result__link:hover,
+.md-search-result__link:focus {
+  background: var(--bg-selection-container-hover);
+}
+/* The list clips an outer ring; keep the focus cue inside the row. */
+.md-search-result__link:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--fg-secondary);
+}
+.md-search-result__article {
+  padding: 0 var(--space-16);
+}
+.md-search-result .md-typeset,
+.md-search .md-search-result .md-typeset p {
+  margin: var(--space-8) 0;
+  color: var(--fg-secondary);
+  font-size: var(--type-body-small-size);
+  line-height: var(--type-body-small-line-height);
+}
+.md-search .md-search-result .md-typeset code {
+  font-size: var(--type-code-small-size);
+  padding: 0 var(--space-4);
+}
+.md-search-result .md-typeset h1 {
+  margin: var(--space-10) 0;
+  color: var(--fg-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-medium-emphasized-size);
+  font-weight: var(--type-body-medium-emphasized-weight);
+  line-height: var(--type-body-medium-emphasized-line-height);
+}
+.md-search-result .md-typeset h2 {
+  color: var(--fg-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-medium-size);
+  font-weight: var(--font-weight-medium);
+  margin: var(--space-8) 0;
+}
+.md-search-result__terms {
+  color: var(--fg-secondary);
+  font-size: var(--type-body-small-size);
+  font-style: normal;
+}
+.md-search-result mark {
+  color: var(--fg-primary);
+  background: var(--md-typeset-mark-color);
+  text-decoration: none;
+  border-radius: var(--radius-2);
+}
+.md-search-result__more > summary > div {
+  color: var(--fg-secondary);
+  font-size: var(--type-body-small-size);
+  padding: var(--space-8) var(--space-16);
+}
+.md-search-result__more > summary:hover > div,
+.md-search-result__more > summary:focus > div {
+  color: var(--fg-primary);
+  background: var(--bg-selection-container-hover);
+}
+.md-search-result__icon {
+  display: none;
+}
+@media screen and (max-width: 59.984375em) {
+  .md-search__form,
+  [data-md-toggle="search"]:checked ~ .md-header .md-search__form {
+    height: var(--dg-header-h);
+    border: 0;
+    border-bottom: var(--border-width-1) solid var(--stroke-primary);
+    border-radius: 0;
+    background: var(--bg-surface-container);
+  }
+  [data-md-toggle="search"]:checked ~ .md-header .md-search__form:focus-within,
+  [data-md-toggle="search"]:checked ~ .md-header .md-search__form:has(.md-search__input:focus-visible) {
+    box-shadow: none;
+  }
+  .md-search__input,
+  .md-search__suggest,
+  [dir] .md-search__input,
+  [dir] .md-search__suggest {
+    padding-left: calc(var(--space-32) + var(--space-12));
+    padding-right: calc(var(--space-32) + var(--space-12));
+    font-size: var(--type-body-large-size);
+  }
+  .md-search__icon[for="__search"] {
+    color: var(--fg-secondary);
+  }
+  [dir="ltr"] .md-search__icon[for="__search"] {
+    left: var(--space-12);
+  }
+  [dir="rtl"] .md-search__icon[for="__search"] {
+    right: var(--space-12);
+  }
+  [dir="ltr"] .md-search__options {
+    right: var(--space-12);
+  }
+  [dir="rtl"] .md-search__options {
+    left: var(--space-12);
+  }
+  .md-search__output {
+    top: var(--dg-header-h);
+  }
+  .md-search__overlay {
+    background: var(--bg-surface-container);
+  }
+}
+
+/* --- Left nav (primary) -------------------------------------------------- */
+.md-nav {
+  font-size: var(--type-body-medium-size);
+  line-height: var(--type-body-medium-line-height);
+}
+.md-nav__link {
+  color: var(--fg-secondary);
+  transition: background-color var(--dg-motion), color var(--dg-motion);
+}
+.md-nav__link[for],
+.md-nav__item--section > .md-nav__link[for] {
+  color: var(--fg-secondary);
+}
+.md-nav__link[for]:hover,
+.md-nav__link[for]:focus,
+.md-nav__link[href]:hover,
+.md-nav__link[href]:focus,
+.md-nav--primary .md-nav__item--active > .md-nav__link:hover,
+.md-nav--primary .md-nav__item--active > .md-nav__link:focus {
+  color: var(--fg-primary);
+}
+.md-nav__link[for]:hover code,
+.md-nav__link[href]:hover code {
+  background: var(--bg-surface-nested);
+  color: var(--fg-primary);
+}
+.md-nav__link--active,
+.md-nav__item .md-nav__link--active,
+.md-nav__item .md-nav__link--active code,
+.md-nav--primary .md-nav__item--active > .md-nav__link {
+  color: var(--fg-primary);
+}
+
+@media screen and (min-width: 76.25em) {
+  .md-nav--primary .md-nav__list,
+  [dir="ltr"] .md-nav--primary .md-nav__list,
+  [dir="rtl"] .md-nav--primary .md-nav__list {
+    padding: 0;
+  }
+  [dir="ltr"] .md-nav--primary .md-nav__item > .md-nav__link,
+  [dir="rtl"] .md-nav--primary .md-nav__item > .md-nav__link {
+    margin-right: 0;
+    margin-left: 0;
+  }
+  [dir="ltr"] .md-nav--lifted > .md-nav__list > .md-nav__item > .md-nav:not(.md-nav--secondary),
+  [dir="rtl"] .md-nav--lifted > .md-nav__list > .md-nav__item > .md-nav:not(.md-nav--secondary),
+  [dir="ltr"] .md-nav__item--section > .md-nav,
+  [dir="rtl"] .md-nav__item--section > .md-nav {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .md-nav--primary .md-nav__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    min-height: var(--dg-control-sm);
+    margin-top: var(--space-2);
+    padding: var(--space-6) var(--space-12);
+    border-radius: var(--radius-6);
+    color: var(--fg-secondary);
+  }
+  .md-nav--primary .md-nav__link .md-ellipsis {
+    flex: 1 1 auto;
+  }
+  /* The nav sits on the canvas, so "one step up" is the container surface
+     (nested equals the canvas in every light theme). */
+  .md-nav--primary .md-nav__link[href]:hover,
+  .md-nav--primary .md-nav__link[for]:hover {
+    background: var(--bg-surface-container);
+    color: var(--fg-primary);
+  }
+  .md-nav--primary .md-nav__link--active,
+  .md-nav--primary .md-nav__item--active > .md-nav__link.md-nav__link--active {
+    background: var(--bg-surface-container);
+    box-shadow: inset 0 0 0 var(--border-width-1) var(--stroke-primary);
+    color: var(--fg-primary);
+    font-weight: var(--font-weight-medium);
+  }
+  .md-nav--primary .md-nav__link--active:focus-visible,
+  .md-nav--primary .md-nav__item--active > .md-nav__link.md-nav__link--active:focus-visible {
+    box-shadow: var(--dg-focus-ring), inset 0 0 0 var(--border-width-1) var(--stroke-primary);
+  }
+  /* Container rows (link + expander) share one pill. */
+  .md-nav--primary .md-nav__container {
+    padding: 0;
+    gap: 0;
+  }
+  .md-nav--primary .md-nav__container > .md-nav__link {
+    margin-top: 0;
+  }
+  .md-nav--primary .md-nav__container > .md-nav__link[for] {
+    flex: 0 0 auto;
+    padding: var(--space-6);
+  }
+  /* Group labels. */
+  .md-nav--primary .md-nav__item--section {
+    margin: var(--space-16) 0 0;
+  }
+  /* A group opening the section needs no extra air: the heading already gave it. */
+  .md-nav--lifted > .md-nav__list > .md-nav__item--active > .md-nav > .md-nav__list > .md-nav__item--section:first-child {
+    margin-top: 0;
+  }
+  .md-nav--primary .md-nav__item--section > .md-nav__link {
+    min-height: 0;
+    margin-top: 0;
+    padding: var(--space-8) var(--space-12);
+    color: var(--fg-secondary);
+    font-size: var(--type-label-medium-size);
+    font-weight: var(--type-label-medium-weight);
+    line-height: var(--type-label-medium-line-height);
+    background: transparent;
+  }
+  /* Lifted: the current top-level section is the sticky sidebar heading. With
+     navigation.indexes it is a container wrapping a link, without it a bare
+     label; both render as the same row, on the rows' left rail. */
+  .md-nav--lifted > .md-nav__list > .md-nav__item--active > .md-nav__link {
+    display: flex;
+    align-items: center;
+    min-height: var(--dg-control-sm);
+    margin: 0 0 var(--space-4);
+    padding: var(--space-4) var(--space-12);
+    color: var(--fg-primary);
+    font-family: var(--font-accent);
+    font-size: var(--type-title-small-size);
+    font-weight: var(--type-title-small-weight);
+    line-height: var(--type-title-small-line-height);
+    background: var(--bg-surface-main);
+    box-shadow: 0 0 0 var(--space-4) var(--bg-surface-main);
+  }
+  .md-nav--lifted > .md-nav__list > .md-nav__item--active > .md-nav__link:hover {
+    background: var(--bg-surface-main);
+  }
+  .md-nav--lifted > .md-nav__list > .md-nav__item--active > .md-nav__link .md-nav__icon,
+  .md-nav--lifted > .md-nav__list > .md-nav__item--active > .md-nav__container > .md-nav__link[for] {
+    display: none;
+  }
+  /* The container is the heading box; the link inside it adds nothing. */
+  .md-nav--lifted > .md-nav__list > .md-nav__item--active > .md-nav__container > .md-nav__link,
+  .md-nav--lifted > .md-nav__list > .md-nav__item--active > .md-nav__container > .md-nav__link:hover,
+  .md-nav--lifted > .md-nav__list > .md-nav__item--active > .md-nav__container > .md-nav__link--active {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border-radius: var(--radius-6);
+    color: inherit;
+    font: inherit;
+    background: transparent;
+    box-shadow: none;
+  }
+  .md-nav--lifted > .md-nav__list > .md-nav__item--active > .md-nav__container > .md-nav__link:focus-visible {
+    box-shadow: var(--dg-focus-ring);
+  }
+  /* Nested (non-section) children indent under their parent. */
+  .md-nav--primary .md-nav__item--nested:not(.md-nav__item--section) > .md-nav > .md-nav__list {
+    margin-left: var(--space-12);
+    padding-left: var(--space-8);
+    border-left: var(--border-width-1) solid var(--stroke-primary);
+  }
+  .md-nav--primary .md-nav__icon {
+    width: var(--dg-icon-sm);
+    height: var(--dg-icon-sm);
+    margin: 0;
+    color: var(--fg-secondary);
+  }
+  .md-nav--primary .md-nav__link:hover .md-nav__icon {
+    color: var(--fg-primary);
+  }
+  .md-nav__item--nested > .md-nav__link[for] .md-nav__icon:after,
+  .md-nav__item--nested > .md-nav__container > .md-nav__link[for] .md-nav__icon:after {
+    transition: transform var(--dg-motion);
+  }
+}
+
+/* --- Right TOC (secondary) ----------------------------------------------- */
+/* Same breakpoint as the rail itself; below it the TOC is the drawer's nested
+   list and keeps the primary-nav treatment. */
+@media screen and (min-width: 76.25em) {
+  .md-nav--secondary .md-nav__title {
+    padding: var(--space-8) var(--space-12) var(--space-4);
+    color: var(--fg-secondary);
+    font-size: var(--type-label-medium-size);
+    font-weight: var(--type-label-medium-weight);
+    line-height: var(--type-label-medium-line-height);
+    background: var(--bg-surface-main);
+    box-shadow: 0 0 0 var(--space-4) var(--bg-surface-main);
+  }
+  .md-nav--secondary > .md-nav__list,
+  [dir="ltr"] .md-nav--secondary > .md-nav__list,
+  [dir="rtl"] .md-nav--secondary > .md-nav__list {
+    margin: 0;
+    padding: 0 0 var(--space-8);
+    border-left: var(--border-width-1) solid var(--stroke-primary);
+  }
+  [dir="ltr"] .md-nav--secondary .md-nav__list,
+  [dir="rtl"] .md-nav--secondary .md-nav__list {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  [dir="ltr"] .md-nav--secondary .md-nav__item > .md-nav__link,
+  [dir="rtl"] .md-nav--secondary .md-nav__item > .md-nav__link {
+    margin-right: 0;
+    margin-left: calc(-1 * var(--border-width-1));
+  }
+  .md-nav--secondary .md-nav__item .md-nav__link {
+    margin: 0 0 0 calc(-1 * var(--border-width-1));
+    padding: var(--space-4) var(--space-4) var(--space-4) var(--space-12);
+    border-left: var(--border-width-2) solid transparent;
+    color: var(--fg-secondary);
+    font-size: var(--type-body-medium-size);
+    line-height: var(--type-body-medium-line-height);
+  }
+  .md-nav--secondary .md-nav .md-nav__link {
+    padding-left: calc(var(--space-12) + var(--space-8));
+  }
+  .md-nav--secondary .md-nav .md-nav .md-nav__link {
+    padding-left: calc(var(--space-12) + var(--space-16));
+  }
+  .md-nav--secondary .md-nav__link:hover {
+    color: var(--fg-primary);
+  }
+  .md-nav--secondary .md-nav__link--active,
+  .md-nav--secondary .md-nav__item .md-nav__link--active {
+    border-left-color: var(--fg-primary);
+    color: var(--fg-primary);
+    font-weight: var(--font-weight-medium);
+  }
+}
+
+/* --- Mobile drawer ------------------------------------------------------- */
+@media screen and (max-width: 76.234375em) {
+  .md-sidebar--primary,
+  [dir="ltr"] .md-sidebar--primary {
+    width: 18rem;
+    left: -18rem;
+    background: var(--bg-surface-container);
+    border-right: var(--border-width-1) solid var(--stroke-primary);
+  }
+  [dir="rtl"] .md-sidebar--primary {
+    left: auto;
+    right: -18rem;
+    border-right: 0;
+    border-left: var(--border-width-1) solid var(--stroke-primary);
+  }
+  [data-md-toggle="drawer"]:checked ~ .md-container .md-sidebar--primary {
+    transform: translateX(18rem);
+    box-shadow: var(--dg-shadow-pop);
+  }
+  [dir="rtl"] [data-md-toggle="drawer"]:checked ~ .md-container .md-sidebar--primary {
+    transform: translateX(-18rem);
+  }
+  .md-nav--primary,
+  .md-nav--primary .md-nav {
+    background: var(--bg-surface-container);
+  }
+  .md-nav--primary .md-nav__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    height: var(--dg-header-h);
+    padding: 0 var(--space-16);
+    background: var(--bg-surface-container);
+    color: var(--fg-primary);
+    font-family: var(--font-accent);
+    font-size: var(--type-title-small-size);
+    font-weight: var(--type-title-small-weight);
+    line-height: var(--dg-header-h);
+    border-bottom: var(--border-width-1) solid var(--stroke-primary);
+    box-shadow: none;
+  }
+  .md-nav--primary .md-nav__title .md-nav__button {
+    position: static;
+    margin: 0;
+    padding: 0;
+    height: 26px;
+  }
+  .md-nav--primary .md-nav__title .md-nav__button img {
+    height: 26px;
+  }
+  .md-nav--primary .md-nav__title .md-nav__icon {
+    position: static;
+    width: var(--dg-icon);
+    height: var(--dg-icon);
+    color: var(--fg-secondary);
+  }
+  .md-nav--primary .md-nav__title[for="__drawer"] .md-nav__icon {
+    display: none;
+  }
+  .md-nav--primary .md-nav__title ~ .md-nav__list {
+    background: var(--bg-surface-container);
+    box-shadow: none;
+    padding: var(--space-8) 0;
+  }
+  .md-nav--primary .md-nav__item {
+    border-top: 0;
+  }
+  .md-nav--primary .md-nav__link {
+    align-items: center;
+    min-height: 44px;
+    padding: var(--space-8) var(--space-16);
+    color: var(--fg-primary);
+  }
+  .md-nav--primary .md-nav__link[for],
+  .md-nav--primary .md-nav__item--section > .md-nav__link {
+    color: var(--fg-primary);
+  }
+  /* Section expander next to a row link: a 44px-wide target of its own. */
+  .md-nav--primary .md-nav__container > .md-nav__link[for] {
+    flex: 0 0 auto;
+    justify-content: center;
+    min-width: 44px;
+    padding: 0 var(--space-12);
+  }
+  .md-nav--primary .md-nav__link:active,
+  .md-nav--primary .md-nav__link[href]:hover {
+    background: var(--bg-selection-container-hover);
+  }
+  .md-nav--primary .md-nav__item--active > .md-nav__link,
+  .md-nav--primary .md-nav__link--active {
+    background: var(--bg-surface-nested);
+    font-weight: var(--font-weight-medium);
+  }
+  .md-nav--primary .md-nav__icon {
+    width: var(--dg-icon);
+    height: var(--dg-icon);
+    color: var(--fg-secondary);
+  }
+  .md-nav__source {
+    background: var(--bg-surface-nested);
+    color: var(--dg-fg-on-nested);
+    border-bottom: var(--border-width-1) solid var(--stroke-primary);
+  }
+  .md-source__repository {
+    font-size: var(--type-body-small-size);
+  }
+}
+
+/* --- Breadcrumb ---------------------------------------------------------- */
+.md-path {
+  margin: 0 0 var(--space-12);
+  padding: 0;
+  color: var(--fg-secondary);
+  font-size: var(--type-body-small-size);
+  line-height: var(--type-body-small-line-height);
+}
+.md-path__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+.md-path__item:not(:first-child) {
+  gap: var(--space-4);
+}
+.md-path__item:not(:first-child)::before {
+  width: var(--space-14);
+  height: var(--space-14);
+  background-color: var(--fg-tertiary);
+}
+.md-path__link {
+  color: var(--fg-secondary);
+  transition: color var(--dg-motion);
+}
+.md-path__link:hover,
+.md-path__link:focus {
+  color: var(--fg-primary);
+}
+
+/* --- Article panel ------------------------------------------------------- */
+.md-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 50rem;
+  margin: 0 auto var(--space-16);
+  padding: var(--space-24);
+  background: var(--bg-surface-container);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-16);
+  box-shadow: var(--dg-shadow-card);
+}
+/* The panel padding is the inset; Material's [dir]-scoped inner margins go. */
+.md-content__inner,
+[dir] .md-sidebar--primary:not([hidden]) ~ .md-content > .md-content__inner,
+[dir] .md-sidebar--secondary:not([hidden]) ~ .md-content > .md-content__inner {
+  margin: 0;
+  padding-top: 0;
+}
+.md-content__inner::before {
+  display: none;
+}
+.md-content__inner > :first-child {
+  margin-top: 0;
+}
+@media screen and (min-width: 60em) {
+  .md-content {
+    padding: var(--space-40);
+  }
+}
+/* With both rails up, the panel sits next to the nav; without them it centres. */
+@media screen and (min-width: 76.25em) {
+  .md-content {
+    margin-left: var(--space-24);
+    margin-right: var(--space-24);
+  }
+}
+
+/* Home: no sidebar column on desktop, no card; components.css owns .home-*. */
+body:has(.home-hero) .md-main__inner {
+  display: block;
+}
+@media screen and (min-width: 76.25em) {
+  body:has(.home-hero) .md-sidebar {
+    display: none;
+  }
+}
+body:has(.home-hero) .md-content {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* --- Back to top --------------------------------------------------------- */
+.md-top {
+  top: calc(var(--dg-header-h) + var(--space-16));
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--dg-control-md);
+  padding: 0 var(--space-16) 0 var(--space-12);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-9999);
+  background: var(--bg-surface-container);
+  color: var(--fg-primary);
+  font-size: var(--type-body-medium-emphasized-size);
+  font-weight: var(--type-body-medium-emphasized-weight);
+  line-height: var(--type-body-medium-emphasized-line-height);
+  box-shadow: var(--dg-shadow-pop);
+  transition: background-color var(--dg-motion), transform var(--dg-motion), opacity var(--dg-motion);
+}
+.md-top svg {
+  width: var(--dg-icon);
+  height: var(--dg-icon);
+}
+.md-top:hover {
+  background: var(--bg-action-primary-inverted-hover);
+  color: var(--fg-primary);
+}
+.md-top:focus-visible {
+  box-shadow: var(--dg-focus-ring), var(--dg-shadow-pop);
+}
+
+/* --- Footer -------------------------------------------------------------- */
+.md-footer {
+  background: transparent;
+  color: var(--fg-secondary);
+}
+/* Prev/next: two app cards in the article column, directly under the panel.
+   Insets mirror .md-main__inner padding + sidebar + .md-content margin; the
+   50rem cap and left alignment match the panel where it stops growing. */
+.md-footer__inner,
+.md-footer__inner:not([hidden]) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, calc(25rem - var(--space-8))));
+  justify-content: start;
+  column-gap: var(--space-16);
+  margin: 0 auto;
+  /* Padding, not margin: it must not collapse with the panel's bottom margin.
+     8px on top of that 16px gives the cards the 24px section gap. */
+  padding: var(--space-8) var(--space-16) var(--space-40);
+  overflow: visible;
+}
+/* No rails: the cards take the article panel's own box (max-width + auto
+   margins), so they stay under it wherever it centres. */
+@media screen and (min-width: 45em) and (max-width: 76.234375em) {
+  body:not(:has(.home-hero)) .md-footer__inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: calc(50rem + 2 * var(--space-16));
+  }
+}
+@media screen and (min-width: 76.25em) {
+  .md-footer__inner,
+  .md-footer__inner:not([hidden]) {
+    padding-left: calc(var(--space-16) + var(--dg-sidebar-w) + var(--space-24));
+    padding-right: calc(var(--space-16) + var(--dg-toc-w) + var(--space-24));
+  }
+}
+/* Home has no panel and no rails: the cards ride the .home-outro tracks, a
+   full section gap below the last card. */
+body:has(.home-hero) .md-footer__inner {
+  grid-template-columns: 1.35fr 1fr;
+  padding-left: var(--space-16);
+  padding-right: var(--space-16);
+  padding-top: var(--space-40);
+}
+@media screen and (max-width: 59.984375em) {
+  body:has(.home-hero) .md-footer__inner {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-12);
+  }
+  body:has(.home-hero) .md-footer__link--prev,
+  body:has(.home-hero) .md-footer__link--next {
+    grid-column: 1;
+  }
+}
+.md-footer__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  min-width: 0;
+  min-height: var(--dg-control-lg);
+  margin: 0;
+  padding: var(--space-10) var(--space-12);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-8);
+  background: var(--bg-surface-container);
+  box-shadow: var(--dg-shadow-card);
+  color: var(--fg-primary);
+  opacity: 1;
+  transition: border-color var(--dg-motion), background-color var(--dg-motion);
+}
+.md-footer__link--prev {
+  grid-column: 1;
+}
+.md-footer__link--next,
+[dir="ltr"] .md-footer__link--next,
+[dir="rtl"] .md-footer__link--next {
+  grid-column: 2;
+  margin: 0;
+}
+.md-footer__link:hover,
+.md-footer__link:focus {
+  border-color: var(--stroke-secondary);
+  background: var(--bg-action-primary-inverted-hover);
+  opacity: 1;
+}
+.md-footer__link:focus-visible {
+  box-shadow: var(--dg-focus-ring);
+}
+.md-footer__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--type-body-medium-emphasized-size);
+  font-weight: var(--type-body-medium-emphasized-weight);
+  line-height: var(--type-body-medium-emphasized-line-height);
+}
+.md-footer__direction {
+  display: block;
+  color: var(--fg-secondary);
+  font-size: var(--type-label-medium-size);
+  font-weight: var(--type-label-medium-weight);
+  line-height: var(--type-label-medium-line-height);
+  opacity: 1;
+}
+.md-footer__button.md-icon {
+  flex: 0 0 auto;
+  width: var(--dg-icon);
+  height: var(--dg-icon);
+  margin: 0;
+  padding: 0;
+  color: var(--fg-secondary);
+}
+.md-footer__button.md-icon svg {
+  display: block;
+  width: var(--dg-icon);
+  height: var(--dg-icon);
+  fill: currentcolor;
+}
+.md-footer__link:hover .md-footer__button.md-icon {
+  color: var(--fg-primary);
+}
+/* Phones: Material drops the previous title, so that card shrinks to its icon. */
+@media screen and (max-width: 44.984375em) {
+  .md-footer__inner,
+  .md-footer__inner:not([hidden]) {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .md-footer__link--prev {
+    padding: var(--space-10);
+  }
+}
+.md-footer-meta {
+  background: transparent;
+  border-top: var(--border-width-1) solid var(--stroke-primary);
+}
+.md-footer-meta__inner {
+  padding: var(--space-16);
+}
+.md-copyright,
+.md-copyright__highlight {
+  margin: 0;
+  padding: 0;
+  color: var(--fg-secondary);
+  font-size: var(--type-body-small-size);
+  line-height: var(--type-body-small-line-height);
+}
+.md-typeset .md-copyright a {
+  color: var(--fg-primary);
+}
+
+/* --- Theme picker popover ------------------------------------------------ */
+.dg-theme {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+.dg-theme-pop {
+  position: absolute;
+  top: calc(100% + var(--space-8));
+  right: 0;
+  z-index: 6;
+  display: flex;
+  gap: var(--space-12);
+  padding: var(--space-12);
+  background: var(--bg-surface-container);
+  border: var(--border-width-1) solid var(--stroke-primary);
+  border-radius: var(--radius-12);
+  box-shadow: var(--dg-shadow-pop);
+}
+.dg-theme-pop[hidden] {
+  display: none;
+}
+.dg-theme-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+}
+.dg-theme-swatch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--dg-control-lg);
+  height: var(--dg-control-lg);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-9999);
+  background: var(--swatch);
+  color: var(--fg-static-white);
+  cursor: pointer;
+  transition: box-shadow var(--dg-motion);
+}
+.dg-theme-swatch:hover {
+  box-shadow: 0 0 0 2px var(--bg-surface-container), 0 0 0 3px var(--stroke-secondary);
+}
+.dg-theme-swatch[aria-checked="true"] {
+  box-shadow: 0 0 0 2px var(--bg-surface-container), 0 0 0 3px var(--stroke-tertiary);
+}
+.dg-theme-swatch:focus-visible {
+  box-shadow: var(--dg-focus-ring);
+}
+.dg-theme-swatch svg {
+  display: none;
+  width: var(--dg-icon);
+  height: var(--dg-icon);
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2.5;
+}
+.dg-theme-swatch[aria-checked="true"] svg {
+  display: block;
+}
+.dg-theme-name {
+  color: var(--fg-secondary);
+  font-size: var(--type-label-medium-size);
+  font-weight: var(--type-label-medium-weight);
+  line-height: var(--type-label-medium-line-height);
+  text-align: center;
+}
+.dg-theme-swatch[aria-checked="true"] + .dg-theme-name,
+.dg-theme-swatch[aria-checked="true"] ~ .dg-theme-name {
+  color: var(--fg-primary);
+}
+
+/* --- Motion + print ------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  /* !important: Material's own print rules would otherwise re-show these. */
+  .md-banner,
+  .md-header,
+  .md-sidebar,
+  .md-top,
+  .dg-theme-pop {
+    display: none !important;
+  }
+  body {
+    background: var(--bg-surface-container);
+  }
+  .md-main__inner {
+    margin-top: 0;
+    padding: 0;
+  }
+  .md-content {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+  }
+}

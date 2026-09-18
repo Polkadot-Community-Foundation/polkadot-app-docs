@@ -24,7 +24,7 @@ graph TD
   People -->|identity and CASH signals| AH
   AH -.->|contenthash points to bundle CID| Bulletin
 
-  %% Per-chain colour — palette lives in theme.css (.relayNode etc.)
+  %% Per-chain colour — palette lives in diagrams.css (.relayNode etc.)
   classDef relayNode stroke-width:1px;
   classDef assethubNode stroke-width:1px;
   classDef peopleNode stroke-width:1px;
@@ -42,7 +42,7 @@ graph TD
 | People | 1004 | Identity and proof-of-personhood |
 | Bulletin | 1010 | Web-app content storage |
 
-## Asset Hub <span class="dg-chip" style="--chip:#6366f1">para 1000</span>
+## Asset Hub <span class="dg-chip" style="--chip:var(--dg-assethub)">para 1000</span>
 
 Asset Hub is the primary chain for Product developers. It carries the contract,
 asset, and naming machinery used by deployed apps.
@@ -66,13 +66,13 @@ Contracts read a user's personhood tier through a precompile, without calling th
 </div>
 </div>
 
-## People <span class="dg-chip" style="--chip:#0ea5e9">para 1004</span>
+## People <span class="dg-chip" style="--chip:var(--dg-people)">para 1004</span>
 
 The People chain holds identity, proof-of-personhood, and Coinage state. It is
 where usernames are attested, personhood status is recorded, and CASH is held
 and sent through Coinage.
 
-## Bulletin <span class="dg-chip" style="--chip:#14b8a6">para 1010</span>
+## Bulletin <span class="dg-chip" style="--chip:var(--dg-bulletin)">para 1010</span>
 
 The Bulletin chain stores published web-app bundles that the gateway serves.
 
@@ -113,7 +113,7 @@ graph LR
   User -->|https://label.dev-dot.li| GW
   User -->|contract calls| Revive
 
-  %% Per-chain colour — palette lives in theme.css (.relayNode etc.)
+  %% Per-chain colour — palette lives in diagrams.css (.relayNode etc.)
   classDef developerNode stroke-width:1px;
   classDef assethubNode stroke-width:1px;
   classDef dotnsNode stroke-width:1px;

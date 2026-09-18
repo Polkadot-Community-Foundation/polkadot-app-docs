@@ -4,7 +4,7 @@
    Applies the shared chain/actor colour classes (relayNode, assethubNode, …)
    to EVERY Mermaid diagram in the docs automatically, by matching each node's
    label text against a keyword table. No per-diagram edits required — the
-   colours themselves live in theme.css (the --dg-* tokens + .<name>Node rules).
+   colours themselves live in diagrams.css (the --dg-* tokens + .<name>Node rules).
 
    Override: if a node already has an explicit `class ... someNode` in the
    diagram source, it is respected and left untouched. To tune globally, edit
