@@ -92,7 +92,7 @@ the new build:
 | Platform | Where to get it |
 | --- | --- |
 | Android | [Firebase App Distribution](https://appdistribution.firebase.dev/i/f3b79521380b40b9) for registered testers, or the APK on the [latest release](https://github.com/Polkadot-Community-Foundation/polkadot-android-community/releases/latest) |
-| iOS | [TestFlight](https://testflight.apple.com/join/tCzFysKq) |
+| iOS | [TestFlight](https://testflight.apple.com/join/HnBX59vz) |
 | Desktop (macOS / Windows / Linux) | [latest desktop release](https://github.com/Polkadot-Community-Foundation/polkadot-desktop-community/releases/latest) |
 
 The desktop app holds no keys of its own: it pairs with your phone. Once your
