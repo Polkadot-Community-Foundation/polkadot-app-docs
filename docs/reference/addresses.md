@@ -65,8 +65,11 @@ DotNS resolves a `.dot` domain to an app bundle and records ownership. For most
 developers, the important idea is simple: a name points to content, and the
 gateway uses that record to load the app.
 
+Devnet runs DotNS **v1.0.0** (`protocolVersion()` on `DotnsProtocolRegistry`).
+
 | Contract | Devnet address |
 | --- | --- |
+| DotnsProtocolRegistry | `0xdDF3D3838Ff056F15602fC5a65927f185679C36F` |
 | DotnsRegistrar (ERC-721) | `0xc609e0c2DAB4433d55a32FB098Db8788C1956302` |
 | DotnsRegistrarController | `0x59dcF8BfFFa7239243785C3fC336D8Bb22312e8c` |
 | DotnsRegistry | `0xb052E5EfC5ADEff1f21d48DEfb5169Cb394A1a73` |
@@ -81,8 +84,8 @@ gateway uses that record to load the app.
 | Multicall3 | `0x92640655c5c7ee7E42F0B5aD68D205a8A767b81C` |
 
 Some supporting DotNS contracts vary by network and are not reproduced here.
-Read them from the `dotns-sdk` address book for the `devnet` preset when you
-need them.
+Read them from `DotnsProtocolRegistry` (`get(key)`) or from the `dotns-sdk`
+address book for the `devnet` preset when you need them.
 
 See [Naming (DotNS)](../architecture/naming.md) for how these contracts fit
 together.
