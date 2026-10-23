@@ -1,18 +1,13 @@
 # Networks & endpoints
 
-This page explains the network shape behind the Polkadot Products Devnet and
-collects the public entry points you are likely to use. It is written for two
-moments: when you need to know which chain a feature belongs to, and when you
-need to find the current endpoint or gateway without digging through source.
-
-!!! note "Endpoints get re-homed"
-    Paseo endpoints are community-operated and change over time. The `devnet`
-    CLI preset tracks a working set, so prefer it over pasting a URL by hand.
+Which chain does what on the Polkadot Products Devnet, and the public endpoints
+and gateways you are likely to need.
 
 ## The Devnet at a glance
 
-The suite runs on the community-operated **Paseo** network. For what each chain
-is responsible for, see [The network](../architecture/network.md).
+The Devnet runs on the community-operated Paseo network.
+[The network](../architecture/network.md) explains what each chain is
+responsible for.
 
 | Parameter | Value |
 | --- | --- |
@@ -21,9 +16,9 @@ is responsible for, see [The network](../architecture/network.md).
 | Native token | PAS, 10 decimals |
 | Web gateway | `dev-dot.li` |
 
-## How tools target a network
+## How tools pick a network
 
-The CLIs all select a network preset, but CDM uses a different flag name:
+All the CLIs take a network preset, but `cdm` uses a different flag name:
 
 ```bash
 pad ./dist my-app.dot --env devnet      # @polkadot-community-foundation/polkadot-app-deploy
@@ -31,19 +26,15 @@ dotns ... --env devnet                  # @polkadot-community-foundation/dotns-c
 cdm ...  -n devnet                      # @polkadot-community-foundation/cdm-cli
 ```
 
-The preset name for this environment is **`devnet`**. A preset bundles the
-endpoints and registry addresses a tool needs, which is why using the right
-value matters.
-
-!!! tip
-    Do not guess a preset name. The wrong preset points at the wrong endpoints
-    or contract addresses.
+For this Devnet the preset is `devnet`. A preset bundles the endpoints and
+registry addresses a tool needs, so a wrong preset points the tool at the wrong
+endpoints or contract addresses. Don't guess the name.
 
 ## Parachains and para IDs
 
-Product development targets **Asset Hub (1000)**, **People (1004)**, and
-**Bulletin (1010)**. Other system parachains share the relay but are not part of
-the Product surface.
+Product development targets Asset Hub (1000), People (1004) and Bulletin
+(1010). Other system parachains share the relay but are not part of the Product
+surface.
 
 ## Public endpoints and gateways
 
@@ -57,7 +48,7 @@ The web gateway is a client-side resolver that serves `.dot` apps over HTTPS:
 
 ### Reference apps and app installs
 
-Deployed reference Products and the Polkadot app download links are listed in
+The deployed reference Products and the Polkadot app download links are in
 [More resources](./resources.md).
 
 ### Faucet
@@ -66,29 +57,29 @@ Deployed reference Products and the Polkadot app download links are listed in
 
 ### Storage authorization
 
-Publishing an app writes to the Bulletin Chain, which is **authorization-based**,
-not fee-based, and separate from the token faucet above: a deploy account needs
-an authorization grant (a byte / transaction quota) before it can upload. Grant
-one from the **Faucet** tab of the
+Publishing an app writes to the Bulletin Chain, which works by authorization,
+not by fees. This is separate from the token faucet above: a deploy account
+needs an authorization grant (a byte and transaction quota) before it can
+upload. Grant one from the Faucet tab of the
 [Bulletin Chain Console](https://paritytech.github.io/polkadot-bulletin-chain/)
 after selecting the **Products Devnet** network. See
 [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization).
 
 ### Node RPC endpoints
 
-The `devnet` preset already carries an endpoint for each chain, so the CLIs
-connect without configuration. Use the lists below when you need to point a tool
-or a browser explorer at a chain directly, or when the endpoint a preset picked
-is down.
+The `devnet` preset already has an endpoint for each chain, so the CLIs connect
+without any setup. Use the lists below when you need to point a tool or a
+browser-based explorer at a chain directly, or when the endpoint a preset
+picked is down.
 
-Paseo is community-operated: each chain is served by several independent
-providers, and any single endpoint can go offline or be re-homed. If one fails,
-try another in the same list.
+Paseo is community-operated. Each chain is served by several independent
+providers, and any single endpoint can go offline or move. If one fails, try
+another from the same list. The `devnet` preset tracks a working set, so prefer
+it over pasting a URL by hand.
 
-!!! tip "`Unable to connect` lines are usually retries"
-    The CLIs reconnect transparently, and a run that prints several
-    `Unable to connect` lines normally still completes. Only reach for a
-    different endpoint if the command actually fails.
+The CLIs reconnect on their own. A run that prints several `Unable to connect`
+lines normally still completes, so only switch endpoints if the command
+fails.
 
 **Relay**
 
@@ -116,36 +107,37 @@ try another in the same list.
 
 #### Ethereum JSON-RPC
 
-Contract tooling that speaks Ethereum JSON-RPC (Hardhat, `cast`, viem) needs the
-ETH-RPC endpoint for Asset Hub rather than a Substrate WebSocket endpoint:
+Contract tooling that speaks Ethereum JSON-RPC (Hardhat, `cast`, viem) needs
+the ETH-RPC endpoint for Asset Hub, not a Substrate WebSocket endpoint:
 
 - `https://eth-rpc-testnet.polkadot.io`
 
-See [Deploy contracts with CDM](../guides/deploy-contracts-cdm.md) for how this
-is used.
+[Deploy & register contracts](../guides/deploy-contracts-cdm.md) covers
+contract deployment.
 
 #### Bulletin IPFS gateways
 
-An app bundle stored on Bulletin is addressed by CID. Serving it over HTTP takes
-an IPFS gateway peered to a Bulletin node — the Bulletin RPC endpoints above do
-**not** serve `/ipfs/` themselves:
+An app bundle stored on Bulletin is addressed by CID. Serving it over HTTP
+takes an IPFS gateway peered to a Bulletin node. The Bulletin RPC endpoints
+above do not serve `/ipfs/` themselves.
 
-- `https://devnet-ipfs.api.polkadotcommunity.foundation` — operated by the
-  Polkadot Community Foundation, and the gateway the deploy tooling defaults to
+- `https://devnet-ipfs.api.polkadotcommunity.foundation`: operated by the
+  Polkadot Community Foundation, and the gateway the deploy tooling uses by
+  default
 
 Tools append `/ipfs/<cid>` to this bare origin.
 
-For a curated list of the contract and registry addresses, see the
-[Addresses & registries](./addresses.md) reference page.
+Contract and registry addresses are in
+[Addresses & registries](./addresses.md).
 
 ## Source of the runtimes
 
 The Paseo relay and system parachain runtimes live in
-[`paseo-network/runtimes`](https://github.com/paseo-network/runtimes). Use that
-repository when you need to verify chain-level details such as para IDs, pallets,
-precompiles, or runtime constants.
+[`paseo-network/runtimes`](https://github.com/paseo-network/runtimes). Go there
+to check chain-level details such as para IDs, pallets, precompiles or runtime
+constants.
 
 ## Learn more
 
-- [The network](../architecture/network.md) — what each chain is responsible for
-- [Addresses & registries](./addresses.md) — concrete contract addresses
+- [The network](../architecture/network.md): what each chain is responsible for
+- [Addresses & registries](./addresses.md): contract addresses

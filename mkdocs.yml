@@ -129,25 +129,21 @@ extra:
 
 nav:
   - Home: index.md
-  # "Get started" blends the platform introduction with the two entry paths
-  # (users, developers) under one section (clicking the tab lands on the
-  # Introduction). introduction.md must appear ONCE in the nav — listing it here
-  # AND as a top-level tab put it in the sidebar twice.
+  # One entry page per audience. The tab lands on the first one.
   - Get started:
-      - Introduction: introduction.md
       - For users: getting-started/users.md
-      - Developer quickstart: getting-started/developers.md
+      - For developers: getting-started/developers.md
   - Guides:
       - guides/index.md
       - For users:
           - Create an account & get funds: guides/create-account.md
           - Back up & restore your account: guides/back-up-your-account.md
           - Get & use CASH: guides/get-and-use-cash.md
-          - Messaging & calls: guides/messaging-and-calls.md
           - Username & proof of personhood: guides/username-and-personhood.md
           - Discover & open apps: guides/discover-and-open-apps.md
+          - Messaging & calls: guides/messaging-and-calls.md
       - For developers:
-          - Build & Publish Applications: guides/build-and-publish.md
+          - Build & publish an app: guides/build-and-publish.md
           - Register a .dot domain: guides/register-a-dot-name.md
           - Deploy & register contracts: guides/deploy-contracts-cdm.md
           - Use platform services from the SDK: guides/platform-services-sdk.md

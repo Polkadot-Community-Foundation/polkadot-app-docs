@@ -57,8 +57,7 @@ mkdocs build   # outputs to ./site
 | Section | Path | What it covers |
 | --- | --- | --- |
 | Home | `docs/index.md` | Gentle entry point into the documentation |
-| Introduction | `docs/introduction.md` | Mental model, main flows, and where to go next |
-| Getting started | `docs/getting-started/` | First steps for users and developers |
+| Get started | `docs/getting-started/` | First steps for users, and for developers (what a Product is and how the pieces fit) |
 | Architecture | `docs/architecture/` | How the platform pieces fit together |
 | Guides | `docs/guides/` | Task-oriented walkthroughs |
 | Reference | `docs/reference/` | Networks, packages, addresses, glossary, links |

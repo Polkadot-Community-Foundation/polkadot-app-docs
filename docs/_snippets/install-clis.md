@@ -1,7 +1,6 @@
-!!! warning "Node.js 22 or newer"
-    `pad` and `cdm` both require Node 22+. On Node 20 they fail at startup with
-    an unrelated-looking error (a module `SyntaxError`, or
-    `Missing WebSocket class`). Check with `node --version` before installing.
+`pad` and `cdm` both require Node.js 22 or newer. On Node 20 they fail at
+startup with an unrelated-looking error (a module `SyntaxError`, or
+`Missing WebSocket class`), so check with `node --version` before installing.
 
 ```bash
 npm i -g @polkadot-community-foundation/dotns-cli@latest            # dotns
@@ -10,23 +9,23 @@ npm i -g @polkadot-community-foundation/cdm-cli@latest              # cdm
 ```
 
 Install only what you need: `pad` publishes (and can register the name for
-you), `dotns` manages names in depth, `cdm` is only for contracts. The first two
-are large — expect a few minutes and roughly 1.5 GB across the global prefix and
-the npm cache, with no progress output while npm works.
+you), `dotns` manages names in depth, and `cdm` is only for contracts. The first
+two are large. Expect a few minutes and roughly 1.5 GB across the global prefix
+and the npm cache, with no progress output while npm works.
 
 Always take the latest release. These CLIs carry the current contract addresses
 and network presets inside them, so an older copy can talk to a retired
-deployment and report success while nothing changes. Re-run the same command to
-upgrade one you already have.
+deployment and report success while nothing changes. To upgrade one you already
+have, re-run the same command.
 
-!!! note "Installing on ARM64 (e.g. Termux / Android)"
-    On some ARM64 platforms a transitive dependency (`node-datachannel`, used
-    for optional peer-to-peer CID verification) ships no prebuilt binary, and its
-    native build fails during `npm i -g`. Skip the build with `--ignore-scripts`:
+On some ARM64 platforms (for example Termux on Android), a transitive
+dependency, `node-datachannel`, ships no prebuilt binary, and its native build
+fails during `npm i -g`. It is only used for optional peer-to-peer CID
+verification, so skip the build with `--ignore-scripts`:
 
-    ```bash
-    npm i -g --ignore-scripts @polkadot-community-foundation/dotns-cli@latest
-    ```
+```bash
+npm i -g --ignore-scripts @polkadot-community-foundation/dotns-cli@latest
+```
 
-    Only the peer-to-peer verification path is unavailable in this mode; the
-    CLI's gateway-based CID verification still works.
+In this mode only the peer-to-peer verification path is unavailable. The CLI's
+gateway-based CID verification still works.

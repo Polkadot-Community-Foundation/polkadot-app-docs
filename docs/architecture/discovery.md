@@ -1,17 +1,15 @@
 # App discovery: Browse
 
 Browse is the app-discovery directory for the Polkadot Products Devnet. It
-answers a practical question — *which `.dot` apps exist, and how do I open
-one?* — without turning the directory into the source of truth for app metadata.
+tells people which `.dot` apps exist and how to open them, but it is not the
+source of truth for app metadata.
 The on-chain listing is deliberately small; the user-facing name, description,
 and icon are resolved from DotNS records and content storage at read time.
 
-The reference directory runs at [browse.dev-dot.li](https://browse.dev-dot.li). Its source
-lives in the source repository
-[paritytech/browse](https://github.com/paritytech/browse).
+The reference directory runs at [browse.dev-dot.li](https://browse.dev-dot.li),
+and its source is in [paritytech/browse](https://github.com/paritytech/browse).
 
-!!! note "Unaudited"
-    The contracts described here are prototype code that has not been audited.
+The contracts described here are unaudited prototype code.
 
 ## What discovery helps you do
 
@@ -21,9 +19,9 @@ replacement for DotNS or app delivery; it sits on top of them.
 
 The system has three responsibilities:
 
-- **Registry** — records that a `.dot` label should appear in discovery.
-- **Reader SDK** — reads registry entries and joins them with DotNS metadata.
-- **Client UI** — renders cards and opens the selected app in the host or web
+- Registry: records that a `.dot` label should appear in discovery.
+- Reader SDK: reads registry entries and joins them with DotNS metadata.
+- Client UI: renders cards and opens the selected app in the host or web
   gateway.
 
 ## What a listing actually holds
@@ -86,16 +84,17 @@ after it writes the name's contenthash. See
 
 The client builds the directory from the registry every time it loads:
 
-1. **Enumerate** — read published labels from the registry.
-2. **Resolve labels** — turn label identifiers back into `.dot` labels.
-3. **Hydrate** — read each name's content hash, manifest, and any available
+1. Enumerate: read published labels from the registry.
+2. Resolve labels: turn label identifiers back into `.dot` labels.
+3. Hydrate: read each name's content hash, manifest, and any available
    attestation or certificate data.
-4. **Render** — build product cards from `displayName`, `description`, and the icon (fetched
-   through the host's preimage manager, not a raw gateway URL), with certificate badges.
+4. Render: build product cards from `displayName`, `description` and the icon
+   (fetched through the host's preimage manager, not a raw gateway URL), with
+   certificate badges.
 
-Discovery reads do not need a signer and do not send transactions. Opening an
-app is a handoff: inside the Polkadot app, Browse asks the host to navigate to
-the `.dot` domain; in a browser, it opens the web gateway.
+Reading the directory needs no signer and sends no transactions. To open an
+app, Browse hands off: inside the Polkadot app it asks the host to navigate to
+the `.dot` domain, and in a browser it opens the web gateway.
 
 ```mermaid
 flowchart LR
@@ -107,10 +106,10 @@ flowchart LR
   UI -->|browser| W["open label.dev-dot.li"]
 ```
 
-!!! tip
-    Because the registry stores only labelhash + publisher + timestamp, re-skinning an app
-    (new name, description, or icon) needs no registry write at all — you update the DotNS
-    `manifest` record and the directory reflects it on the next hydrate.
+The registry stores only the labelhash, the publisher and a timestamp. So to
+change an app's name, description or icon, you don't write to the registry at
+all. You update the DotNS `manifest` record, and the directory picks it up on
+the next hydrate.
 
 ## Common blockers
 
@@ -123,6 +122,6 @@ flowchart LR
 
 ## Learn more
 
-- [browse](https://github.com/paritytech/browse) — source for the directory and its client
-- [App delivery](./app-delivery.md) — the pipeline that writes the contenthash and manifest
+- [browse](https://github.com/paritytech/browse): source for the directory and its client
+- [App delivery](./app-delivery.md): the pipeline that writes the contenthash and manifest
 - [List your app in Browse](../guides/list-in-browse.md) — do it
