@@ -49,9 +49,9 @@ can get Devnet funds from the [Polkadot faucet](https://faucet.polkadot.io).
 
 ## On-chain registries
 
-Three registries make the platform's names, contracts and apps discoverable.
-Each network has its own deployment, so always resolve the address for the
-network you are targeting.
+Two registries make the platform's names and apps discoverable. Each network
+has its own deployment, so always resolve the address for the network you are
+targeting.
 
 ### DotNS (the `.dot` naming system)
 
@@ -82,28 +82,6 @@ book for the `devnet` preset when you need them.
 
 See [Naming (DotNS)](../architecture/naming.md) for how these contracts fit
 together.
-
-### CDM `ContractRegistry`
-
-The Contract Dependency Manager (CDM) keeps a global package-name registry for
-contracts. `cdm install` and app frontends use it to turn a contract name into a
-deployed address and ABI.
-
-| Registry | Address |
-| --- | --- |
-| `ContractRegistry` (Devnet) | `0x05662b3dbd5dd9f2ff92d67630477e84b0b37c1f` |
-
-Shared system contracts registered in it:
-
-| CDM name | Address |
-| --- | --- |
-| `@polkadot/contexts` | `0x65317D46e8F62682002F9A769F7Bd8d63f8100Ba` |
-| `@polkadot/profiles` | `0xaFa90438a1cBEd95A1fbA380226b27226e36C71B` |
-| `@polkadot/threads` | `0x9F8c47b542856ABDa30F665eE4c7071444E39f50` |
-| `@mock/reputation` | `0xa92964b3D49953086D01124cE0508932519edaDD` |
-
-Resolve values like these from the on-chain `ContractRegistry` instead of
-hard-coding them. See [Smart contracts & CDM](../architecture/contracts.md).
 
 ### Browse `Publisher`
 
@@ -157,12 +135,12 @@ it.
 ## How addresses are resolved by tooling
 
 You rarely paste these addresses by hand. The CLIs select the `devnet` network
-preset (`--env devnet` for `pad` and `dotns`, `-n devnet` for CDM), and that
-preset carries the RPC endpoints and the full address book. Apps and frontends
-resolve names to addresses at runtime through the registries above. When you
-need a value directly, read it from the preset instead of assuming it.
+preset (`--env devnet`), and that preset carries the RPC endpoints and the full
+address book. Apps and frontends resolve names to addresses at runtime through
+the registries above. When you need a value directly, read it from the preset
+instead of assuming it.
 
 ## Sources
 
 - [paseo-network/runtimes](https://github.com/paseo-network/runtimes): parachains, assets, precompiles
-- Contract source: [dotns](https://github.com/paritytech/dotns) · [CDM](https://github.com/paritytech/contract-dependency-manager) · [browse](https://github.com/paritytech/browse) · [attestation-protocol](https://github.com/paritytech/attestation-protocol) · [AccountDataStore](https://github.com/paritytech/polkadot-mobile-datastore-contract-community)
+- Contract source: [dotns](https://github.com/paritytech/dotns) · [browse](https://github.com/paritytech/browse) · [attestation-protocol](https://github.com/paritytech/attestation-protocol) · [AccountDataStore](https://github.com/paritytech/polkadot-mobile-datastore-contract-community)

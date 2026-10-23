@@ -53,13 +53,11 @@ wallet, key handling or low-level payment flow.
 
 ## How users get CASH
 
-There are three common ways:
+Users get CASH inside the Polkadot app, in two ways:
 
-1. Get CASH in the app. Devnet builds can offer a top-up action that funds the
+1. Top up in the app. Devnet builds can offer a top-up action that funds the
    account and brings value into the CASH balance.
-2. Use the faucet. The public Polkadot faucet can provide devnet funds,
-   especially native PAS for fees.
-3. Earn rewards. Some app and personhood flows can reward users with value that
+2. Earn rewards. Some app and personhood flows can reward users with value that
    then shows up as CASH.
 
 Once onboarding completes, the balance in the user's Pocket updates and they

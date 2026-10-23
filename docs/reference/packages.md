@@ -1,8 +1,8 @@
 # Packages & tools
 
 Which packages to install for a Product project. Your app code needs the
-Product SDK, pinned to the version the hosts speak. The CLIs register names,
-publish bundles and manage contracts.
+Product SDK, pinned to the version the hosts speak. The CLIs register names
+and publish bundles.
 
 ## Developer packages
 
@@ -12,25 +12,18 @@ Most projects only need a few direct dependencies:
 |---------|---------|---------|-----|
 | [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) | `npm i @parity/product-sdk@0.39.0` | TypeScript SDK for building apps: multi-chain access, transactions, signing, contract calls, cloud storage, and identity. Pinned: see [Install the SDK version the hosts speak](#install-the-sdk-version-the-hosts-speak). | — |
 | [`@polkadot-community-foundation/dotns-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli) | `npm i -g @polkadot-community-foundation/dotns-cli@latest` | CLI for the `.dot` naming system: register names, set content/address records, manage reverse names and stores. | `dotns` |
-| [`@polkadot-community-foundation/polkadot-app-deploy`](https://www.npmjs.com/package/@polkadot-community-foundation/polkadot-app-deploy) | `npm i -g @polkadot-community-foundation/polkadot-app-deploy@latest` | Deploy CLI: uploads a built static bundle to Bulletin, binds it to a `.dot` domain, and optionally lists it. `pad-bootstrap` (same package) authorizes the Bulletin storage pool. | `pad`, `pad-bootstrap` |
-| [`@polkadot-community-foundation/cdm-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-cli) | `npm i -g @polkadot-community-foundation/cdm-cli@latest` | Contract Dependency Manager: build, deploy, publish, register, and install PolkaVM contracts. | `cdm` |
-| [`@polkadot-community-foundation/cdm-env`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-env) | `npm i @polkadot-community-foundation/cdm-env` | Maps a network name to its Asset Hub / Bulletin RPCs, IPFS gateway, and CDM registry address. | — |
+| [`@polkadot-community-foundation/polkadot-app-deploy`](https://www.npmjs.com/package/@polkadot-community-foundation/polkadot-app-deploy) | `npm i -g @polkadot-community-foundation/polkadot-app-deploy@latest` | Deploy CLI: uploads a built static bundle to Bulletin, and binds it to a `.dot` domain. `pad-bootstrap` (same package) authorizes the Bulletin storage pool. | `pad`, `pad-bootstrap` |
 
-`pad` and `cdm` require Node 22+. On Node 20 they fail at startup with an
+`pad` requires Node 22+. On Node 20 it fails at startup with an
 unrelated-looking error, so check `node --version` first.
 
-Install the CLIs and `cdm-env` at their latest release, and re-run the same
-command to upgrade. They carry network presets and contract addresses, and a
-stale copy is the usual cause of a command that succeeds while nothing changes
-on chain. The Product SDK is the one package to pin, as described below.
+Install the CLIs at their latest release, and re-run the same command to
+upgrade. They carry network presets and contract addresses, and a stale copy is
+the usual cause of a command that succeeds while nothing changes on chain. The
+Product SDK is the one package to pin, as described below.
 
-All the CLIs select a network preset, and for this Devnet it is `devnet`:
-`--env devnet` for `pad` and `dotns`, `-n devnet` for `cdm`.
-
-!!! warning "`-n` is not the same flag everywhere"
-    CDM's `-n` (`--name`) is the network, while `dotns`'s `-n` is the domain
-    label. `cdm`'s own `--help` also lists its presets from a stale set that
-    omits `devnet`. The preset is valid anyway.
+Both CLIs select a network preset with `--env`, and for this Devnet it is
+`--env devnet`.
 
 ## Product SDK family
 
@@ -122,7 +115,6 @@ TrUAPI lives in [trinity-user-agents](https://github.com/paritytech/trinity-user
 | Deploy | `@polkadot-community-foundation/polkadot-app-deploy` | `pad` | Publishes a built static bundle, stores it on Bulletin, and points a `.dot` domain at it. |
 | Storage bootstrap | `@polkadot-community-foundation/polkadot-app-deploy` | `pad-bootstrap` | Authorizes the Bulletin storage pool `pad` uploads with, using an authorizer key. Ships in the same package as `pad`. |
 | DotNS | `@polkadot-community-foundation/dotns-cli` | `dotns` | Registers and manages `.dot` domains: `register`, `lookup`, `content`, `primary`, `transfer`, `store`, `pop`, and more. |
-| CDM | `@polkadot-community-foundation/cdm-cli` | `cdm` | Builds, deploys, publishes, and registers PolkaVM contracts. |
 
 A typical deploy binds a built bundle to a name on a chosen network:
 
@@ -134,16 +126,6 @@ The account `pad` deploys with must hold a live Bulletin storage authorization,
 because `pad` never authorizes itself. See
 [Get storage authorization](../guides/build-and-publish.md#get-storage-authorization).
 
-### CDM libraries
-
-The `cdm` CLI is built on shared libraries that apps and other tools can reuse:
-
-| Package | Install | Purpose |
-|---------|---------|---------|
-| [`@polkadot-community-foundation/cdm-env`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-env) | `npm i @polkadot-community-foundation/cdm-env` | Resolves a network name to registry and endpoint information. |
-| `@parity/cdm-builder` | `npm i @parity/cdm-builder` | Shared build, deploy, publish, and install pipeline. |
-| [`@parity/product-sdk-contracts`](https://www.npmjs.com/package/@parity/product-sdk-contracts) | `npm i @parity/product-sdk-contracts` | Runtime contract resolution and ABI use from Product apps. |
-
 ## Where your app runs
 
 Your Product runs inside the Polkadot app or the web gateway. Download links,
@@ -152,5 +134,5 @@ the deployed reference Products and source repositories are in
 
 ## Learn more
 
-- Source: [product-sdk](https://github.com/paritytech/product-sdk) · [trinity-user-agents](https://github.com/paritytech/trinity-user-agents) (TrUAPI) · [polkadot-app-deploy](https://github.com/paritytech/polkadot-app-deploy) · [dotns-sdk](https://github.com/paritytech/dotns-sdk) · [CDM](https://github.com/paritytech/contract-dependency-manager)
+- Source: [product-sdk](https://github.com/paritytech/product-sdk) · [trinity-user-agents](https://github.com/paritytech/trinity-user-agents) (TrUAPI) · [polkadot-app-deploy](https://github.com/Polkadot-Community-Foundation/polkadot-app-deploy) · [dotns-sdk](https://github.com/Polkadot-Community-Foundation/dotns-sdk)
 - [Networks & endpoints](./networks.md): which network these tools target

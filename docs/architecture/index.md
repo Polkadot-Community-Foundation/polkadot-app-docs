@@ -27,8 +27,8 @@ chain storage and back. Each subsystem has its own page with the details.
 - Storage & data: one content-addressed [Bulletin store](storage.md) holds both
   app bundles and app runtime data (through Cloud Storage). Writes need an
   authorization, and reads are open.
-- Smart contracts & CDM: [contracts](contracts.md) are PolkaVM bytecode on
-  Asset Hub, deployed and indexed by the Contract Dependency Manager.
+- Smart contracts: [contracts](contracts.md) are PolkaVM bytecode running on
+  `pallet-revive` on Asset Hub.
 - Identity & personhood: [proof-of-personhood](identity.md) tiers (Lite and
   Full) and a precompile any contract can read.
 - Money: [CASH](money.md), a devnet "digital dollar" spent through the
@@ -51,11 +51,10 @@ flowchart TD
     SDK["@parity/product-sdk"]
     PAD["polkadot-app-deploy (pad)"]
     DOTNS["@polkadot-community-foundation/dotns-cli"]
-    CDM["@polkadot-community-foundation/cdm-cli"]
   end
 
   subgraph Net["Devnet"]
-    AH["Asset Hub (1000)<br/>pallet-revive + assets<br/>DotNS + CDM registries"]
+    AH["Asset Hub (1000)<br/>pallet-revive + assets<br/>DotNS contracts"]
     PEOPLE["People (1004)<br/>identity + personhood<br/>Coinage + statement store"]
     BULLETIN["Bulletin (1010)<br/>app bundles + chat media"]
   end
@@ -69,7 +68,6 @@ flowchart TD
   PAD -->|upload bundle| BULLETIN
   PAD -->|register name + contenthash| AH
   DOTNS -->|reserve .dot| AH
-  CDM -->|deploy + register| AH
 
   AH -.->|contenthash = CID| BULLETIN
   PEOPLE -.->|ring roots via XCM| AH
@@ -108,11 +106,10 @@ gateway and in the app's browser. What differs is who you have to trust.
    manages its own node connections or keys. Keys on the device sign, and the
    user approves each signature in a native modal.
 
-From here the running app draws on the rest of the platform: it resolves package
-names to contract addresses through the [CDM registry](contracts.md),
-reads a caller's [personhood tier](identity.md) from the precompile
-at `0x…0a010000`, moves [CASH](money.md), or lists itself in
-[Browse](discovery.md). Messaging and calls run over the same
+From here the running app draws on the rest of the platform: it calls
+[contracts](contracts.md) on Asset Hub, reads a caller's
+[personhood tier](identity.md) from the precompile at `0x…0a010000`, or moves
+[CASH](money.md). Messaging and calls run over the same
 [People-chain statement store](messaging.md) the app already uses.
 
 ## Where to go next

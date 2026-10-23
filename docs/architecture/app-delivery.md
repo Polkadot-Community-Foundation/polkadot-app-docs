@@ -74,10 +74,6 @@ it, the CLI updates the name's content hash. That one on-chain record is what
 turns a name into an app. [Naming (DotNS)](naming.md) explains ownership and
 resolution.
 
-Optionally, `--publish` calls `Publisher.publish(label)` so directory apps such
-as Browse can enumerate your app; it is silently skipped on networks that have
-no Publisher contract configured. See [App discovery (Browse)](discovery.md).
-
 A deploy config can also publish manifest records. Product apps use those
 records to describe executables, labels and icons to the host.
 
@@ -113,10 +109,9 @@ it is `<label>.dot`.
 - **The name cannot be updated.** The signer must own the `.dot` domain.
 - **The app opens but has stale content.** Confirm the name's content hash points
   to the latest CID and that the gateway is resolving the expected network.
-- **The app is live but hard to find.** Use `--publish` so Browse can list it.
 
 ## Learn more
 
-- [polkadot-app-deploy](https://github.com/paritytech/polkadot-app-deploy): source for the `pad` CLI
+- [polkadot-app-deploy](https://github.com/Polkadot-Community-Foundation/polkadot-app-deploy): source for the `pad` CLI
 - [dotli-community](https://github.com/paritytech/dotli-community): the gateway loader
 - [Build & publish an app](../guides/build-and-publish.md): publish one yourself

@@ -74,11 +74,7 @@ flowchart TD
   D -- yes --> R[Listing appears in Browse]
 ```
 
-Listing is not a separate deploy step. The `pad` deploy CLI
-([`@polkadot-community-foundation/polkadot-app-deploy`](https://www.npmjs.com/package/@polkadot-community-foundation/polkadot-app-deploy))
-can call `Publisher.publish(label)` as part of a deploy when you pass `--publish`, right
-after it writes the name's contenthash. See
-[Delivery: how apps ship](./app-delivery.md) for that pipeline.
+The `pad` deploy CLI no longer lists apps as part of a deploy.
 
 ## How a listing is consumed
 
@@ -102,7 +98,7 @@ flowchart LR
   L --> C["ContentResolver.contenthash<br/>drop non-live"]
   C --> M["ContentResolver.text manifest<br/>displayName/desc/icon"]
   M --> UI[Product cards]
-  UI -->|host| H["hostApi.navigateTo label.dot"]
+  UI -->|host| H["host navigates to label.dot"]
   UI -->|browser| W["open label.dev-dot.li"]
 ```
 
@@ -113,15 +109,10 @@ the next hydrate.
 
 ## Common blockers
 
-- **The app is deployed but not listed.** Publishing and listing are separate.
-  Use `pad --publish` or publish the label through Browse tooling.
 - **The app has no card metadata.** Update the DotNS manifest record with a
   display name, description, and icon.
-- **The publish call fails.** Check that the signer owns the `.dot` domain and has
-  enough personhood for the current rate limit.
 
 ## Learn more
 
 - [browse](https://github.com/paritytech/browse): source for the directory and its client
 - [App delivery](./app-delivery.md): the pipeline that writes the contenthash and manifest
-- [List your app in Browse](../guides/list-in-browse.md) — do it

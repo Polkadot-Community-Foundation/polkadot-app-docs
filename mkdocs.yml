@@ -145,9 +145,7 @@ nav:
       - For developers:
           - Build & publish an app: guides/build-and-publish.md
           - Register a .dot domain: guides/register-a-dot-name.md
-          - Deploy & register contracts: guides/deploy-contracts-cdm.md
           - Use platform services from the SDK: guides/platform-services-sdk.md
-          - List your app in Browse: guides/list-in-browse.md
   - Architecture:
       - architecture/index.md
       - The network: architecture/network.md
@@ -155,7 +153,7 @@ nav:
       - Naming (DotNS): architecture/naming.md
       - App delivery: architecture/app-delivery.md
       - Storage & data: architecture/storage.md
-      - Smart contracts & CDM: architecture/contracts.md
+      - Smart contracts: architecture/contracts.md
       - Identity & personhood: architecture/identity.md
       - Money (CASH & funding): architecture/money.md
       - App discovery (Browse): architecture/discovery.md

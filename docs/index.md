@@ -59,7 +59,7 @@ template: home.html
 <a class="rail-tile" href="guides/">
   <span class="rail-tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
   <b>Guides</b>
-  <span class="rail-tile__desc">Step by step: create an account, get CASH, publish an app, deploy contracts, list in Browse.</span>
+  <span class="rail-tile__desc">Step by step: create an account, get CASH, register a <code>.dot</code> domain, publish an app.</span>
   <span class="rail-tile__arrow">&rarr;</span>
 </a>
 <a class="rail-tile" href="reference/">

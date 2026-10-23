@@ -14,15 +14,16 @@ pipeline.
 
 --8<-- "install-clis.md"
 
-Every command below targets the Devnet with `--env devnet`. Pass it every time,
-because `pad`'s own default is a different network.
+Every command below targets the Devnet with `--env devnet`. `pad` already
+defaults to `devnet`, but pass the flag every time anyway, so a command never
+lands on another network by accident.
 
 Your signing account needs three things before the first on-chain step:
 
 1. Native tokens on Asset Hub for fees. See
    [Faucet](../reference/networks.md#faucet).
-2. A mapped EVM address. `dotns`, `pad` and `cdm` all sign PolkaVM
-   transactions on Asset Hub, and an unmapped account fails on its first one.
+2. A mapped EVM address. `dotns` and `pad` both sign PolkaVM transactions on
+   Asset Hub, and an unmapped account fails on its first one.
    Map it once with `dotns account map --env devnet`.
 3. A Bulletin storage authorization, so it can upload your bundle. See
    [below](#get-storage-authorization).
@@ -94,10 +95,6 @@ is a minimal React + Vite + TypeScript app on Product SDK 0.39.0, so it speaks
 the hosts' TrUAPI version. It shows the app-scoped product account (SS58 and
 H160 addresses) and signs a message via `@parity/product-sdk-signer`.
 
-[dotli-starter](https://github.com/paritytech/dotli-starter), the plain
-HTML/CSS/JS starter, still targets the previous host protocol, so an app built
-from it cannot talk to the current hosts.
-
 Your app runs as a Product inside the Polkadot host (mobile, desktop or the web
 gateway). The host lends it a signer and routes all chain RPC. You reach the
 platform through `@parity/product-sdk`: `createApp(config)` returns an app with
@@ -114,10 +111,7 @@ npm install
 npm run build   # emits dist/
 ```
 
-The output (`dist/`) is what you publish. If your app uses contracts, deploy
-and register its PolkaVM contracts first and record them in a `cdm.json`
-manifest with the `cdm` CLI. See
-[Deploy & register contracts](deploy-contracts-cdm.md).
+The output (`dist/`) is what you publish.
 
 ## 3. Register a .dot domain
 
@@ -152,9 +146,10 @@ pad ./dist <name>.dot --env devnet --mnemonic "$MNEMONIC"
 
 Keep the phrase in an environment variable, and never commit or print it.
 
-`pad` also has a `login` mode that signs with your Polkadot app instead of a
-local key. These guides use `--mnemonic` throughout, which is why every run
-reports `Storage signer: … (no session)`.
+`pad` can also sign in with your Polkadot app: run `pad login` and pair your
+phone. While you are signed in, `pad` registers and deploys with a local key,
+then hands the name to your app account, so your phone signs nothing. These
+guides use `--mnemonic` throughout.
 
 `pad` uploads the bundle to Bulletin (skipping unchanged blocks on repeat
 deploys), registers the name if needed and writes the content hash on Asset
@@ -201,21 +196,6 @@ Writing root manifest text record on my-cool-app.dot (177 B)…
 
 `executables` also accepts `widget` and `worker` entries, published to the
 `widget.` and `worker.` subnames.
-
-### List it in Browse
-
-Add `--publish` to list the app in the on-chain Publisher registry:
-
-```bash
-pad ./dist <name>.dot --env devnet --mnemonic "$MNEMONIC" --publish
-```
-
-!!! note "`--publish` needs proof of personhood"
-    Publishing is gated on-chain: the account must own the label **and** hold
-    proof of personhood (Lite lists 1/day, Full 5/day), which today comes from
-    the Polkadot app rather than the CLI. Without it the publish step reports
-    `NoPersonhood` and the deploy itself still succeeds — the app is live, just
-    not listed. See [List your app in Browse](list-in-browse.md).
 
 ## Reference apps
 

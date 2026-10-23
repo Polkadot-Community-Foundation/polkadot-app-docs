@@ -43,8 +43,8 @@ Know these before you design around it:
 - Reads only work inside a container. The client fetches through the
   host/light-client path, and there is no public IPFS-gateway fallback.
 - Pick the right network. `cloudStorage.environment` must be `devnet` for this
-  network. It defaults to `paseo`, a different chain, and nothing errors if you
-  get it wrong: your data is written somewhere you did not expect.
+  network. It defaults to `paseo`, a different chain that a Devnet host does not
+  serve, so `createApp()` fails if you leave it out.
 
 The [Product SDK guide](../guides/platform-services-sdk.md#store-and-retrieve-data-cloud-storage)
 has the API details and the `Result` pattern.

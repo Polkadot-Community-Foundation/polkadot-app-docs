@@ -49,7 +49,7 @@ assets and naming that deployed apps use.
 <div class="dg-cards" markdown="1">
 <div class="dg-card" markdown="1">
 **pallet-revive**
-The PolkaVM smart-contract environment. CDM, DotNS and application contracts run here.
+The PolkaVM smart-contract environment. DotNS and application contracts run here.
 </div>
 <div class="dg-card" markdown="1">
 **Assets + ERC-20 precompiles**
@@ -85,8 +85,8 @@ does not cost devnet tokens.
 Addresses, endpoints and CIDs are network-specific. They change when a network
 is redeployed, so nothing in the platform hard-codes them. Instead, each
 command-line tool selects a network preset (`--env devnet` for `pad` and
-`dotns`, `-n devnet` for CDM), and the preset carries the endpoints and address
-book for that network.
+`dotns`), and the preset carries the endpoints and address book for that
+network.
 
 The addresses themselves are in
 [Addresses & registries](../reference/addresses.md).

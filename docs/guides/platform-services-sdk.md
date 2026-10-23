@@ -167,7 +167,7 @@ import {
   createContractRuntimeFromClient,
 } from "@parity/product-sdk/contracts";
 
-// client and manager as above; address and abi come from your CDM package.
+// client and manager as above; address and abi are your contract's.
 const runtime = createContractRuntimeFromClient(client.raw.assetHub, devnet_asset_hub);
 const contract = createContract(runtime, address, abi, { signerManager: manager });
 ```
@@ -178,9 +178,6 @@ optional fourth argument supplies the signer: pass `{ signerManager }` for
 Read-only `.query()` calls need no account and fall back to the keyless
 `QUERY_FALLBACK_ORIGIN`. `ensureContractAccountMapped(runtime, address, signer)`
 maps an account for `pallet-revive` when a call needs it.
-
-To get a contract's address and ABI from its package name, see
-[Deploy & register contracts (CDM)](deploy-contracts-cdm.md).
 
 ## Read identity and personhood
 
@@ -285,5 +282,5 @@ another product.
 
 - [product-sdk](https://github.com/paritytech/product-sdk): SDK source
 - [Claude Code plugin](https://github.com/paritytech/product-sdk#claude-code-plugin): agent skills for every SDK area. See the [developer quickstart](../getting-started/developers.md#build-with-claude-code)
-- [Deploy & register contracts (CDM)](deploy-contracts-cdm.md): resolve a contract by name
+- [Smart contracts](../architecture/contracts.md): contracts on Asset Hub
 - [Identity & personhood](../architecture/identity.md): the model behind the precompile

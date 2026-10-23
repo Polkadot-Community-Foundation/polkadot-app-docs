@@ -176,7 +176,7 @@ dotns primary set my-cool-app --env devnet
 dotns primary status --env devnet
 
 # Transfer ownership to another address or label
-dotns lookup transfer my-cool-app --to <address-or-label> --env devnet
+dotns lookup transfer my-cool-app --destination <address-or-label> --env devnet
 
 # Create a subname under a name you own
 dotns register subname --env devnet

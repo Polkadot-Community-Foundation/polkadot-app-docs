@@ -145,7 +145,7 @@ The CDM `ContractRegistry` is redeployed at
 a brand-new contract name. Every name and version from the old registry at
 `0x59b0245778917af55224e5f8fb55f7f8d452619f` was migrated with its owner, so
 you keep your names. The current addresses live in
-[Addresses & registries](../reference/addresses.md#cdm-contractregistry).
+[Addresses & registries](../reference/addresses.md).
 
 Upgrade in this order:
 

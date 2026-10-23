@@ -33,14 +33,14 @@ flowchart TD
   subgraph S[Developer tooling]
     SDK[Product SDK<br/>@parity/product-sdk]
     HOST[Host protocol: TrUAPI<br/>@parity/truapi]
-    CLIS[CLIs: pad / dotns / cdm]
+    CLIS[CLIs: pad / dotns]
   end
   subgraph P[Platform services on Paseo]
     NAME[DotNS naming<br/>Asset Hub contracts]
     STORE[Bulletin content storage]
     ID[Identity + personhood<br/>People chain]
     MONEY[CASH + assets<br/>People chain / Asset Hub]
-    CONTRACTS[PolkaVM contracts<br/>pallet-revive + CDM]
+    CONTRACTS[PolkaVM contracts<br/>pallet-revive]
     BROWSE[Browse directory<br/>Publisher registry]
   end
   APP --> BUNDLE
@@ -50,16 +50,16 @@ flowchart TD
   SDK --> HOST
   CLIS --> NAME
   CLIS --> STORE
-  CLIS --> CONTRACTS
   HOST --> ID
   HOST --> MONEY
+  HOST --> CONTRACTS
   NAME --> STORE
   BROWSE --> NAME
 ```
 
 The Polkadot app keeps keys on the device, runs each Product in a sandbox and
-speaks TrUAPI to it. You use the SDK in your app code, and the CLIs to name,
-publish and deploy. The services on the chains handle naming, storage,
+speaks TrUAPI to it. You use the SDK in your app code, and the CLIs to name
+and publish your app. The services on the chains handle naming, storage,
 identity, money, contracts and discovery.
 
 When you get stuck, first work out which of these layers the problem is in. The
@@ -99,13 +99,10 @@ npm i @parity/product-sdk@0.39.0
 
 ## 2. Choose a network preset
 
-Every CLI takes the network as a flag. For this Devnet it is `devnet`:
-`--env devnet` for `pad` and `dotns`, and `-n devnet` for `cdm`.
-
-!!! warning "Always pass the flag"
-    The same binaries ship `paseo` and `paseo-next` presets pointing at other
-    networks, and the default is not `devnet`. Omit the flag and your app lands
-    on a different chain, where nothing on this Devnet can see it.
+Both CLIs take the network as a flag, and for this Devnet it is `--env devnet`.
+`pad` and `dotns` already default to `devnet`, but they also ship presets for
+other networks. Pass `--env devnet` anyway, so a command never lands on another
+chain by accident.
 
 ## 3. Build a web app with the Product SDK
 
@@ -186,7 +183,7 @@ dotns register domain --name my-cool-app --env devnet
 ```
 
 Pick a label whose stem (the label without any trailing digits) is nine
-characters or longer. Shorter ones are gated behind proof of personhood. Registration is a
+characters or longer. Shorter ones need proof of personhood or are reserved. Registration is a
 commit-reveal flow that takes a few minutes, so check that it landed before you
 move on:
 
@@ -213,21 +210,6 @@ Your app is now live as `my-cool-app.dot` in the Polkadot app and at
 and icon in the directory, add a product config. See
 [Add card metadata](../guides/build-and-publish.md#add-card-metadata).
 
-To also list it in Browse, add `--publish`. That step needs proof of personhood,
-which today comes from the Polkadot app rather than the CLI; without it the
-deploy still succeeds and the app simply is not listed. See
-[List your app in Browse](../guides/list-in-browse.md).
-
-## 6. Deploy contracts with `cdm` (optional)
-
-Smart contracts on this Devnet are PolkaVM contracts on Asset Hub. The Contract
-Dependency Manager (`cdm`) builds and deploys them, publishes their metadata,
-and registers their addresses so other apps can find a contract by name.
-
-`cdm` needs a Rust toolchain that `npm i -g` does not install, so run
-`cdm setup` first. [Deploy & register contracts](../guides/deploy-contracts-cdm.md)
-has the full sequence.
-
 ## Next steps
 
 Each step above has a full guide under the **Guides** tab:
@@ -246,23 +228,11 @@ Each step above has a full guide under the **Guides** tab:
 
     Account setup, name rules and the commit-reveal flow.
 
--   **[Deploy & register contracts](../guides/deploy-contracts-cdm.md)**
-
-    ---
-
-    Build, deploy and register PolkaVM contracts with `cdm`.
-
 -   **[Use platform services from the SDK](../guides/platform-services-sdk.md)**
 
     ---
 
     Chains, storage, contracts and identity from your app.
-
--   **[List your app in Browse](../guides/list-in-browse.md)**
-
-    ---
-
-    Get your Product into the in-app directory.
 
 </div>
 

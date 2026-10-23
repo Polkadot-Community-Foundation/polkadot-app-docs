@@ -57,12 +57,7 @@ that your own app appears after you list it. Publishing requires ownership of th
 
 PolkaVM is the contract execution layer on Asset Hub, available through
 `pallet-revive`. If your Product needs custom on-chain logic, this is most
-likely where your contracts run.
-
-### CDM (Contract Dependency Manager)
-
-The build, deploy, registry and dependency tool for PolkaVM contracts. Use CDM
-to publish a contract package that other Products can find by name. See the
+likely where your contracts run. See the
 [contracts architecture](../architecture/contracts.md).
 
 ## Storage and delivery
@@ -108,8 +103,8 @@ and chain access. `@parity/truapi` is the Product-side client, and
 
 `@polkadot-community-foundation/polkadot-app-deploy` (bin: `pad`) is the CLI
 that publishes a built static bundle and points a `.dot` domain at it. On this
-Devnet, use the `devnet` preset: `pad` and `dotns` take it with `--env devnet`,
-and CDM uses `-n devnet`.
+Devnet, use the `devnet` preset: `pad` and `dotns` take it with
+`--env devnet`.
 
 ## Identity and personhood
 
@@ -147,9 +142,9 @@ EVM `0x…` address instead. See [Addresses & registries](addresses.md).
 
 ### CASH
 
-The name users see for a Devnet digital-dollar asset. Users can get CASH
-through in-app flows, rewards or supporting faucet flows, depending on the
-current build.
+The name users see for a Devnet digital-dollar asset. Users get CASH inside
+the Polkadot app, through in-app flows or rewards, depending on the current
+build. See [Get & use CASH](../guides/get-and-use-cash.md).
 
 ### PAS
 

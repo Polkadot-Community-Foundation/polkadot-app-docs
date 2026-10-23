@@ -31,9 +31,8 @@ For detail these docs do not cover, go to the source.
 
 - [product-sdk](https://github.com/paritytech/product-sdk): the Product SDK, also a [Claude Code plugin](https://github.com/paritytech/product-sdk#claude-code-plugin) with [agent skills](https://github.com/paritytech/product-sdk/tree/main/product-sdk/skills)
 - [trinity-user-agents](https://github.com/paritytech/trinity-user-agents): TrUAPI, the host protocol client and the host runtime
-- [polkadot-app-deploy](https://github.com/paritytech/polkadot-app-deploy): the `pad` deploy CLI
-- [dotns](https://github.com/paritytech/dotns) · [dotns-sdk](https://github.com/paritytech/dotns-sdk): naming contracts, CLI and UI
-- [contract-dependency-manager](https://github.com/paritytech/contract-dependency-manager): CDM
+- [polkadot-app-deploy](https://github.com/Polkadot-Community-Foundation/polkadot-app-deploy): the `pad` deploy CLI
+- [dotns](https://github.com/paritytech/dotns) · [dotns-sdk](https://github.com/Polkadot-Community-Foundation/dotns-sdk): naming contracts, CLI and UI
 - [browse](https://github.com/paritytech/browse): the discovery directory
 - [dotli-community](https://github.com/paritytech/dotli-community): the web gateway
 - [paseo-network/runtimes](https://github.com/paseo-network/runtimes): chain runtimes

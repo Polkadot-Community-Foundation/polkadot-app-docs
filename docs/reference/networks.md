@@ -18,12 +18,11 @@ responsible for.
 
 ## How tools pick a network
 
-All the CLIs take a network preset, but `cdm` uses a different flag name:
+Both CLIs take a network preset with `--env`:
 
 ```bash
 pad ./dist my-app.dot --env devnet      # @polkadot-community-foundation/polkadot-app-deploy
 dotns ... --env devnet                  # @polkadot-community-foundation/dotns-cli
-cdm ...  -n devnet                      # @polkadot-community-foundation/cdm-cli
 ```
 
 For this Devnet the preset is `devnet`. A preset bundles the endpoints and
@@ -111,9 +110,6 @@ Contract tooling that speaks Ethereum JSON-RPC (Hardhat, `cast`, viem) needs
 the ETH-RPC endpoint for Asset Hub, not a Substrate WebSocket endpoint:
 
 - `https://eth-rpc-testnet.polkadot.io`
-
-[Deploy & register contracts](../guides/deploy-contracts-cdm.md) covers
-contract deployment.
 
 #### Bulletin IPFS gateways
 

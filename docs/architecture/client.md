@@ -43,8 +43,9 @@ action. For native devnet tokens to pay transaction fees, use the faucet at
 <https://faucet.polkadot.io>.
 
 Identity, chat and payments each live on specific parachains. The People Chain
-carries your username and the chat statement store. Asset Hub carries payments
-and the DotNS name registry. The Bulletin Chain serves dApp content and chat
+carries your username, the chat statement store and CASH, which is held and
+sent through Coinage. Asset Hub holds other assets, such as pUSD and USDt, and
+the DotNS contracts. The Bulletin Chain serves dApp content and chat
 attachments.
 
 ## The app browser
