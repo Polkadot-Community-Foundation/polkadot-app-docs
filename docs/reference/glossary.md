@@ -40,7 +40,7 @@ renders it in a sandboxed iframe.
 
 ### `.dot` domain
 
-A human-readable name, such as `survey.dot`, that maps to a deployed app bundle.
+A human-readable name, such as `calculator.dot`, that maps to a deployed app bundle.
 For most users it works like an app name. For developers it is the name you
 register, update, and publish through DotNS tooling.
 
@@ -108,11 +108,14 @@ your app access to host-provided wallet, chain, storage, contract, and identity
 services. The SDK is designed to run inside the Polkadot app or the web gateway,
 not as a standalone wallet. See [Packages & tools](packages.md).
 
-### Host API
+### TrUAPI (host protocol)
 
-`@novasamatech/host-api` is the protocol between a Product and the Polkadot app
-host. Use it directly when you need lower-level access to host capabilities such
-as accounts, signing, storage, chat, payments, or remote chain access.
+TrUAPI is the protocol between a Product and its host, the Polkadot app or the
+web gateway: accounts, signing, permissions, storage, chat, payments and chain
+access. `@parity/truapi` is the Product-side client, and
+`@parity/product-sdk-host` speaks it for you. It replaced the earlier Host API
+(`@novasamatech/host-api`). See
+[Packages & tools](packages.md#host-protocol-truapi).
 
 ### Deploy CLI (`pad`)
 

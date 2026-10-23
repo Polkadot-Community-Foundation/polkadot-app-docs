@@ -32,7 +32,7 @@ Source is the place to go for detail these docs intentionally do not duplicate.
 **Platform and tooling**
 
 - [product-sdk](https://github.com/paritytech/product-sdk) — the Product SDK, also a [Claude Code plugin](https://github.com/paritytech/product-sdk#claude-code-plugin) with [agent skills](https://github.com/paritytech/product-sdk/tree/main/product-sdk/skills)
-- [triangle-js-sdks](https://github.com/paritytech/triangle-js-sdks) — Host API and host-side stack
+- [trinity-user-agents](https://github.com/paritytech/trinity-user-agents) — TrUAPI: the host protocol client and the host runtime
 - [polkadot-app-deploy](https://github.com/paritytech/polkadot-app-deploy) — the `pad` deploy CLI
 - [dotns](https://github.com/paritytech/dotns) · [dotns-sdk](https://github.com/paritytech/dotns-sdk) — naming contracts, CLI, and UI
 - [contract-dependency-manager](https://github.com/paritytech/contract-dependency-manager) — CDM
@@ -48,12 +48,8 @@ Source is the place to go for detail these docs intentionally do not duplicate.
 
 **Reference Products**
 
-- [simple-survey](https://github.com/paritytech/simple-survey)
-  · [Rock-Paper-Scissors](https://github.com/paritytech/Rock-Paper-Scissors)
-  · [feedback-board](https://github.com/paritytech/feedback-board)
-  · [mercado-community](https://github.com/paritytech/mercado-community)
-  · [localdot-community](https://github.com/paritytech/localdot-community)
-  · [playground-app-template](https://github.com/paritytech/playground-app-template)
+- [Calculator, Stopwatch, Countdown Timer, Alarm Clock, Chess Clock and Unit Converter](https://github.com/paritytech/browse/tree/main/apps/registry/tests/fixture-projects) — the reference apps above
+- [playground-app-template](https://github.com/Polkadot-Community-Foundation/playground-app-template) — a starter app on the Product SDK
 
 ## Protocol background
 

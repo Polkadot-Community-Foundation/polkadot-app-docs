@@ -12,7 +12,7 @@ copy:
 
 | Snippet | Owns | Included by |
 | --- | --- | --- |
-| `reference-apps.md` | The list of deployed reference Products | `reference/resources.md`, `guides/discover-and-open-apps.md` |
+| `reference-apps.md` | The list of deployed reference Products | `reference/resources.md`, `guides/discover-and-open-apps.md`, `guides/build-and-publish.md` |
 | `install-app.md` | Where to get the Polkadot app | `reference/resources.md`, `getting-started/users.md` |
 | `install-clis.md` | Installing the CLIs, incl. the Node version floor | `getting-started/developers.md`, `guides/build-and-publish.md` |
 | `faucet.md` | Getting devnet funds: which chain, which address | `guides/create-account.md`, `reference/networks.md` |

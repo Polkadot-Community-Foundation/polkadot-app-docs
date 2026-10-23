@@ -113,7 +113,7 @@ flowchart LR
     PC -- "status 0=None/1=Lite/2=Full + contextAlias" --> App
 ```
 
-Application front-ends that run inside the Polkadot app or the web gateway at [https://dev-dot.li](https://dev-dot.li) obtain identity and host information through the app's developer packages — [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) and [`@novasamatech/host-api`](https://www.npmjs.com/package/@novasamatech/host-api). The exact surface those packages expose for username and personhood status is defined in their own repositories.
+Application front-ends that run inside the Polkadot app or the web gateway at [https://dev-dot.li](https://dev-dot.li) obtain identity and host information through the app's developer packages — [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk), which talks to the host over TrUAPI ([`@parity/truapi`](https://www.npmjs.com/package/@parity/truapi)). The exact surface those packages expose for username and personhood status is defined in their own repositories.
 
 ## General attestations
 

@@ -87,16 +87,14 @@ needs the authorization above.
 
 ## 1. Scaffold with the Product SDK
 
-Start from a reference template rather than an empty directory. The playground
-template ([playground-template.dev-dot.li](https://playground-template.dev-dot.li),
-source
-[playground-app-template](https://github.com/paritytech/playground-app-template))
-is a minimal React + Vite + TypeScript app wired to the Host API: it surfaces the
-app-scoped product account (SS58 and H160 addresses) and signs a message via
-`@parity/product-sdk-signer`. For a plain HTML/CSS/JS starting point, use
-[dotli-starter](https://github.com/paritytech/dotli-starter),
-which detects the host container with `@parity/product-sdk-host` and submits
-extrinsics through the host provider.
+Start from a template rather than an empty directory. The playground template
+([playground-app-template](https://github.com/Polkadot-Community-Foundation/playground-app-template))
+is a minimal React + Vite + TypeScript app on Product SDK 0.39.0, so it speaks
+the hosts' TrUAPI version: it surfaces the app-scoped product account (SS58 and
+H160 addresses) and signs a message via `@parity/product-sdk-signer`.
+[dotli-starter](https://github.com/paritytech/dotli-starter), the plain
+HTML/CSS/JS starter, still targets the previous host protocol, so an app built
+from it cannot talk to the current hosts.
 
 Your app runs as a *Product* inside the Polkadot host (mobile, desktop, or the
 web gateway), which lends it a signer and routes all chain RPC. Reach the
@@ -220,14 +218,10 @@ pad ./dist <name>.dot --env devnet --mnemonic "$MNEMONIC" --publish
 
 ## Reference apps to study
 
-These are working, deployed examples (source under
-[paritytech](https://github.com/paritytech)):
+These small apps are deployed on the Devnet. Their source is in the
+[browse repository](https://github.com/paritytech/browse/tree/main/apps/registry/tests/fixture-projects):
 
-- **[Simple Survey](https://survey.dev-dot.li)** — storage-indexed app: survey
-  JSON on Bulletin, an Asset Hub contract indexes response CIDs.
-- **[CDM Frontend](https://contracts.dev-dot.li)** and
-  **[DotNS UI](https://dotns.dev-dot.li)** — reference tools for contracts and
-  names.
+--8<-- "reference-apps.md"
 
 ## Learn more
 

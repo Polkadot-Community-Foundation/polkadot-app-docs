@@ -22,7 +22,7 @@ The platform is a small set of cooperating layers:
   (para 1010).
 - **The client tier** — three native [Polkadot app](client.md)
   clients (Android, iOS, Desktop/Web) that hold keys on-device and host dApps in
-  a sandboxed webview via a shared JavaScript **Host API**.
+  a sandboxed webview, talking to them over a shared protocol, **TrUAPI**.
 - **Naming** — [DotNS](naming.md), a set of PolkaVM contracts that
   turn a `.dot` domain into an owner, a resolver, and a content hash.
 - **App delivery** — the [`pad` CLI](app-delivery.md) uploads a
@@ -64,7 +64,7 @@ flowchart TD
     BULLETIN["Bulletin (1010)<br/>app bundles + chat media"]
   end
 
-  APP -->|Host API| SDK
+  APP -->|TrUAPI| SDK
   GW -->|smoldot light client| AH
   SDK -->|host-routed RPC| AH
   SDK --> PEOPLE
@@ -81,15 +81,15 @@ flowchart TD
 
 ## Request path: opening a `.dot` app
 
-Consider a user opening `survey.dot`. The resolution is the same in spirit
+Consider a user opening `calculator.dot`. The resolution is the same in spirit
 whether they use the web gateway or the in-app browser; the trust model differs.
 
 1. **Address to label.** On the web, the user visits
-   `https://survey.dev-dot.li`; the dotli host derives the registrable root and
-   the label `survey` from the subdomain. In the app, the user types `survey.dot`
+   `https://calculator.dev-dot.li`; the dotli host derives the registrable root and
+   the label `calculator` from the subdomain. In the app, the user types `calculator.dot`
    into the browser bar.
 2. **Name to content hash.** The client computes the ENS-style namehash of
-   `survey.dot` (`keccak256(DOT_NODE, keccak256("survey"))`) and reads
+   `calculator.dot` (`keccak256(DOT_NODE, keccak256("calculator"))`) and reads
    `contenthash(node)` from the DotNS **ContentResolver** contract on Asset Hub.
    The web gateway does this trustlessly, reading contract storage directly
    through an in-browser **smoldot** light client — there is no RPC server in the
@@ -101,10 +101,12 @@ whether they use the web gateway or the in-app browser; the trust model differs.
    arrives as a CAR archive, parsed into a file map served by a Service Worker
    virtual filesystem.
 5. **Render sandboxed.** The bundle runs inside a sandboxed iframe (web) or
-   platform webview (app). The client injects the **product-container** bundle
-   (`@novasamatech/host-container` + `@novasamatech/host-api`), which establishes
-   the Spektr `postMessage` channel and exposes `window.injectedWeb3.spektr`.
-6. **App talks to the host.** Through the Host API the dApp requests accounts,
+   platform webview (app). The host opens a **TrUAPI** channel to it: the
+   gateway runs the TrUAPI core (`@parity/truapi-host`) in a Web Worker and
+   hands the iframe a `MessagePort`, and the native apps run the same core. The
+   Product's TrUAPI client (`@parity/truapi`, used by the Product SDK) talks
+   over that channel.
+6. **App talks to the host.** Over TrUAPI the dApp requests accounts,
    permissions, signatures, and chain connections. All chain RPC is routed
    through the host container (the Product SDK is designed to run inside it), so
    the app never manages its own node connections or keys. On-device keys sign;
@@ -116,12 +118,12 @@ sequenceDiagram
     participant C as Client (app / gateway)
     participant AH as Asset Hub (DotNS)
     participant B as Bulletin
-    U->>C: open survey.dot
-    C->>AH: read contenthash(namehash("survey.dot"))
+    U->>C: open calculator.dot
+    C->>AH: read contenthash(namehash("calculator.dot"))
     AH-->>C: 0xe301 + CIDv1
     C->>B: fetch CID (bitswap / IPFS)
     B-->>C: app bundle (CAR)
-    C->>C: render in sandbox + inject Host API
+    C->>C: render in sandbox + open TrUAPI channel
     U->>C: approve signature
     C->>AH: submit signed extrinsic / contract call
 ```

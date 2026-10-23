@@ -175,4 +175,5 @@ nav:
   # updates/index.md; the date in the filename is the identity of the entry.
   - Updates:
       - updates/index.md
+      - "Devnet update: the apps move to TrUAPI": updates/2026-10-devnet-update.md
       - "Devnet update: new apps, X25519 chat, new registries": updates/2026-09-devnet-update.md

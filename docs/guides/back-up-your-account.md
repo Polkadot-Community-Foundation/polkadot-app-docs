@@ -56,10 +56,9 @@ makes you tick a box saying *"I fully understand the risk"*. The account you
 replace cannot be recovered unless you already have its phrase on paper, so go
 and write that down first.
 
-**If your phone has no Google Play.** The `app-polkadot-devnet-nogms.apk`
-download is for phones without Google Play services, and it cannot back up to
-Google Drive at all. On that version, writing the phrase down is your only
-backup, so do it straight away.
+**If your phone has no Google Play.** The app runs without Google Play
+services, but Google Drive backup needs them. On such a phone, writing the
+phrase down is your only backup, so do it straight away.
 
 ### iOS
 

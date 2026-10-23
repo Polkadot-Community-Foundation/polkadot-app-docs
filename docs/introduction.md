@@ -27,7 +27,7 @@ contracts, and storage.
 
 Products are addressed by human-readable `.dot` domains. A name resolves to a
 published bundle, and the bundle runs inside the Polkadot app or the web
-gateway. Your Product talks to the surrounding host through the **Host API**, so
+gateway. Your Product talks to the surrounding host over **TrUAPI**, so
 the same code runs across mobile, desktop, and web without asking users to
 manage raw keys, RPC endpoints, or chain-specific plumbing.
 
@@ -48,7 +48,7 @@ flowchart TD
   end
   subgraph S[Developer tooling]
     SDK[Product SDK<br/>@parity/product-sdk]
-    HOST[Host API<br/>@novasamatech/host-api]
+    HOST[Host protocol: TrUAPI<br/>@parity/truapi]
     CLIS[CLIs: pad / dotns / cdm]
   end
   subgraph P[Platform services on Paseo]
@@ -74,7 +74,7 @@ flowchart TD
 ```
 
 - **The Polkadot app** keeps keys on-device, runs Products in a sandbox, and
-  exposes the Host API.
+  speaks TrUAPI to them.
 - **Your app** is a static web bundle addressed by a `.dot` domain.
 - **The SDK and CLIs** build, name, publish, and connect a Product.
 - **The platform services** provide naming, storage, identity, money, contracts,

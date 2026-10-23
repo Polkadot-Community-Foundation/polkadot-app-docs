@@ -53,7 +53,7 @@ The web gateway is a client-side resolver that serves `.dot` apps over HTTPS:
 
 - Gateway: [https://dev-dot.li](https://dev-dot.li)
 - Any deployed app resolves at `https://<label>.dev-dot.li` (for example
-  `https://survey.dev-dot.li`).
+  `https://calculator.dev-dot.li`).
 
 ### Reference apps and app installs
 
@@ -111,7 +111,6 @@ try another in the same list.
 **Bulletin (1010)**
 
 - `wss://bulletin-paseo.tservices.es:8443`
-- `wss://bulletin-paseo-02.tservices.es:9443`
 - `wss://bullet.sik.rocks`
 - `wss://bullet.tunastaking.eu`
 
@@ -133,9 +132,8 @@ an IPFS gateway peered to a Bulletin node — the Bulletin RPC endpoints above d
 
 - `https://devnet-ipfs.api.polkadotcommunity.foundation` — operated by the
   Polkadot Community Foundation, and the gateway the deploy tooling defaults to
-- `https://bulletin-kubo.tservices.es:9443`
 
-Tools append `/ipfs/<cid>` to these bare origins.
+Tools append `/ipfs/<cid>` to this bare origin.
 
 For a curated list of the contract and registry addresses, see the
 [Addresses & registries](./addresses.md) reference page.

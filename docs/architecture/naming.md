@@ -2,7 +2,7 @@
 
 DotNS is the `.dot` naming system for the Polkadot Products Devnet. It answers a
 single question that every gateway, client, and directory app needs to answer:
-given a human-readable name like `survey.dot`, what does it point to, and who is
+given a human-readable name like `calculator.dot`, what does it point to, and who is
 allowed to change it? This page explains the mental model: ownership, records,
 resolution, and the personhood rules around names.
 

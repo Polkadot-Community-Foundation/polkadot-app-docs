@@ -46,11 +46,11 @@ takes `--mnemonic` on the command line. They can use the same account.
 
 --8<-- "install-clis.md"
 
-Your app code needs the SDK too — see
-[Packages & tools](../reference/packages.md) for the full list:
+Your app code needs the SDK too, at the version the hosts speak — see
+[Packages & tools](../reference/packages.md#install-the-sdk-version-the-hosts-speak):
 
 ```bash
-npm i @parity/product-sdk
+npm i @parity/product-sdk@0.39.0
 ```
 
 ## 2. Choose a network preset
@@ -85,11 +85,14 @@ wallet, storage, chain calls, contracts, and identity.
     [`product-sdk/skills/`](https://github.com/paritytech/product-sdk/tree/main/product-sdk/skills),
     so they also read well as reference for any other agent or editor.
 
+    The skills follow the SDK's `main` branch, which is already past 0.39.0.
+    Tell the agent to keep `@parity/product-sdk@0.39.0`, and check an API
+    against that version when a skill and the installed package disagree.
+
 ```ts
 import { createApp } from "@parity/product-sdk";
 
 const app = await createApp({
-  name: "my-app",
   cloudStorage: { environment: "devnet" }, // defaults to paseo
 });
 
@@ -100,10 +103,10 @@ if (result.ok) console.log(result.value); // the CID
 !!! warning "Run inside a host"
     The SDK expects the Polkadot app or the web gateway to provide the host
     connection. Outside one, `createApp()` itself throws
-    `Host storage unavailable`. Start from the
-    [dotli-starter](https://github.com/paritytech/dotli-starter) template, and
-    use `@parity/host-api-test-sdk` for automated tests. See
-    [Use platform services from the SDK](../guides/platform-services-sdk.md).
+    `createApp requires a host product context`. Start from the
+    [playground-app-template](https://github.com/Polkadot-Community-Foundation/playground-app-template),
+    and use the test host in `@parity/truapi-host` for automated tests. See
+    [Use platform services from the SDK](../guides/platform-services-sdk.md#test-without-the-real-host).
 
 Build your app to a static directory (the reference template uses `vite build` → `dist/`).
 
@@ -218,11 +221,12 @@ cases. Find them all under the **Guides** tab:
 ## Try the reference apps
 
 Working examples are the fastest way to see the shape of a Product — start with
-[Playground](https://playground.dev-dot.li) or
-[Simple Survey](https://survey.dev-dot.li); the full list is in
+[Calculator](https://calculator.dev-dot.li) or
+[Stopwatch](https://stopwatch.dev-dot.li); the full list is in
 [More resources](../reference/resources.md). The
-[dotli-starter](https://github.com/paritytech/dotli-starter) template is a good
-skeleton to build from.
+[playground-app-template](https://github.com/Polkadot-Community-Foundation/playground-app-template)
+is a good skeleton to build from: it is already on the SDK version the hosts
+speak.
 
 To test as an end user, install the app and fund an account — see
 [Create an account & get funds](../guides/create-account.md).

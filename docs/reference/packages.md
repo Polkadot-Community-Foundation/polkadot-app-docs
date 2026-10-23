@@ -2,9 +2,8 @@
 
 Use this page when you are setting up a Product project and need to know which
 SDK, CLI, or helper package belongs in your workflow. The short version is:
-install the Product SDK for app code, use the Host API when you need to speak
-directly to the Polkadot app host, and use the CLIs to register names, publish
-bundles, and manage contracts.
+install the Product SDK, pinned to the version the hosts speak, for app code,
+and use the CLIs to register names, publish bundles, and manage contracts.
 
 ## Developer packages
 
@@ -12,8 +11,7 @@ Most projects only need a few direct dependencies:
 
 | Package | Install | Purpose | Bin |
 |---------|---------|---------|-----|
-| [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) | `npm i @parity/product-sdk` | TypeScript SDK for building apps: multi-chain access, transactions, signing, contract calls, cloud storage, and identity. | — |
-| [`@novasamatech/host-api`](https://www.npmjs.com/package/@novasamatech/host-api) | `npm i @novasamatech/host-api` | Host↔product transport protocol and typed business methods used by apps running inside the Polkadot app. | — |
+| [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) | `npm i @parity/product-sdk@0.39.0` | TypeScript SDK for building apps: multi-chain access, transactions, signing, contract calls, cloud storage, and identity. Pinned: see [Install the SDK version the hosts speak](#install-the-sdk-version-the-hosts-speak). | — |
 | [`@polkadot-community-foundation/dotns-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/dotns-cli) | `npm i -g @polkadot-community-foundation/dotns-cli@latest` | CLI for the `.dot` naming system: register names, set content/address records, manage reverse names and stores. | `dotns` |
 | [`@polkadot-community-foundation/polkadot-app-deploy`](https://www.npmjs.com/package/@polkadot-community-foundation/polkadot-app-deploy) | `npm i -g @polkadot-community-foundation/polkadot-app-deploy@latest` | Deploy CLI: uploads a built static bundle to Bulletin, binds it to a `.dot` domain, and optionally lists it. `pad-bootstrap` (same package) authorizes the Bulletin storage pool. | `pad`, `pad-bootstrap` |
 | [`@polkadot-community-foundation/cdm-cli`](https://www.npmjs.com/package/@polkadot-community-foundation/cdm-cli) | `npm i -g @polkadot-community-foundation/cdm-cli@latest` | Contract Dependency Manager: build, deploy, publish, register, and install PolkaVM contracts. | `cdm` |
@@ -23,12 +21,11 @@ Most projects only need a few direct dependencies:
     `pad` and `cdm` require Node 22+ and fail at startup on Node 20 with an
     unrelated-looking error. Check `node --version` first.
 
-!!! tip "These docs never pin a version"
-    Install the latest release of every package here, and re-run the same
-    command to upgrade. Network presets and contract addresses ship inside
-    these packages, so a stale copy is the usual cause of a command that
-    succeeds while nothing changes on chain. The published versions are on each
-    package's npm page, linked above.
+!!! tip "Take the CLIs at their latest release"
+    The CLIs and `cdm-env` carry network presets and contract addresses, so
+    install their latest release and re-run the same command to upgrade: a
+    stale copy is the usual cause of a command that succeeds while nothing
+    changes on chain. The Product SDK is the one package to pin, as below.
 
 !!! tip "`-n` is not the same flag everywhere"
     All the CLIs select a network preset, and for this Devnet it is `devnet`:
@@ -55,37 +52,72 @@ wallet layer.
 | `@parity/product-sdk-cloud-storage` | Bulletin-backed content storage helpers. |
 | `@parity/product-sdk-host` | Host detection and host-provided services. |
 
-These packages are versioned together in the
-[Product SDK monorepo](https://github.com/paritytech/product-sdk) and are usually
-pulled in through `@parity/product-sdk` rather than installed one by one.
+These packages live in the
+[Product SDK monorepo](https://github.com/paritytech/product-sdk) and are
+versioned separately. `@parity/product-sdk` pins a matching version of each, so
+install them through it rather than one by one.
 
-## Host API packages
+### Install the SDK version the hosts speak
 
-Apps that run inside the Polkadot app talk to the host through the Host API.
-Use this when you need lower-level control over host communication, or when you
-are testing how your app behaves inside the real host protocol.
+Apps talk to their host over TrUAPI, and the Devnet hosts speak the version that
+Product SDK **0.39.0** speaks, so install exactly that:
 
-| Package | Install | Purpose |
-|---------|---------|---------|
-| [`@novasamatech/host-api`](https://www.npmjs.com/package/@novasamatech/host-api) | `npm i @novasamatech/host-api` | Typed host methods for accounts, signing, storage, chat, payments, and remote chain access. |
-| [`@novasamatech/host-api-wrapper`](https://www.npmjs.com/package/@novasamatech/host-api-wrapper) | `npm i @novasamatech/host-api-wrapper` | Product-side runtime that connects a web app to the host bridge. |
-| [`@parity/host-api-test-sdk`](https://www.npmjs.com/package/@parity/host-api-test-sdk) | `npm i -D @parity/host-api-test-sdk @playwright/test` | Test host for end-to-end tests without launching the full app. Exports the fixture from `/playwright`; `@playwright/test` is a peer you install yourself. |
-
-```mermaid
-flowchart LR
-  subgraph iframe[Product iframe]
-    P[Product code] --> W[host-api-wrapper injects injectedWeb3.spektr]
-    W --> T[Transport: SCALE codecs over postMessage]
-    T --> HA[createHostApi business methods]
-  end
-  HA -- host_* / remote_* --> HC[host-container / host-papp]
-  HC --> S[Signing UI + permissions]
-  HC --> RPC[remote chainHead / chainSpec / tx broadcast]
-  RPC --> N[(Devnet chains)]
+```bash
+npm i @parity/product-sdk@0.39.0
 ```
 
-The host-side stack and shared libraries live in the
-[triangle-js-sdks](https://github.com/paritytech/triangle-js-sdks) monorepo.
+Newer SDK releases speak a newer TrUAPI that these hosts do not. If you add SDK
+packages one by one, use the versions `@parity/product-sdk@0.39.0` depends on.
+
+### Current Devnet chain metadata
+
+The Devnet chains run newer runtimes than the metadata in
+`@parity/product-sdk-descriptors`. To get typed access to the current pallets,
+swap in the Polkadot Community Foundation's build of the same package. Add it
+as a dependency and as an override, with the same value in both:
+
+=== "npm"
+
+    ```json
+    {
+      "dependencies": {
+        "@parity/product-sdk-descriptors": "npm:@polkadot-community-foundation/product-sdk-descriptors@0.14.0-pcf.1"
+      },
+      "overrides": {
+        "@parity/product-sdk-descriptors": "npm:@polkadot-community-foundation/product-sdk-descriptors@0.14.0-pcf.1"
+      }
+    }
+    ```
+
+=== "pnpm"
+
+    ```json
+    {
+      "dependencies": {
+        "@parity/product-sdk-descriptors": "npm:@polkadot-community-foundation/product-sdk-descriptors@0.14.0-pcf.1"
+      },
+      "pnpm": {
+        "overrides": {
+          "@parity/product-sdk-descriptors": "npm:@polkadot-community-foundation/product-sdk-descriptors@0.14.0-pcf.1"
+        }
+      }
+    }
+    ```
+
+Your imports stay the same (`@parity/product-sdk-descriptors/...`), and every
+SDK package uses the same copy.
+
+## Host protocol (TrUAPI)
+
+`@parity/product-sdk-host` speaks TrUAPI to the host for you, so apps rarely
+import it directly. For end-to-end tests, use the test host in
+[`@parity/truapi-host`](https://www.npmjs.com/package/@parity/truapi-host); see
+[Test without the real host](../guides/platform-services-sdk.md#test-without-the-real-host).
+TrUAPI lives in [trinity-user-agents](https://github.com/paritytech/trinity-user-agents).
+
+!!! note
+    `@novasamatech/host-api`, `@novasamatech/host-api-wrapper` and
+    `@parity/host-api-test-sdk` do not speak the Devnet hosts' current protocol.
 
 ## Command-line tools
 
@@ -125,5 +157,5 @@ links, deployed reference Products, and source repositories, see
 
 ## Learn more
 
-- Source: [product-sdk](https://github.com/paritytech/product-sdk) · [triangle-js-sdks](https://github.com/paritytech/triangle-js-sdks) · [polkadot-app-deploy](https://github.com/paritytech/polkadot-app-deploy) · [dotns-sdk](https://github.com/paritytech/dotns-sdk) · [CDM](https://github.com/paritytech/contract-dependency-manager)
+- Source: [product-sdk](https://github.com/paritytech/product-sdk) · [trinity-user-agents](https://github.com/paritytech/trinity-user-agents) (TrUAPI) · [polkadot-app-deploy](https://github.com/paritytech/polkadot-app-deploy) · [dotns-sdk](https://github.com/paritytech/dotns-sdk) · [CDM](https://github.com/paritytech/contract-dependency-manager)
 - [Networks & endpoints](./networks.md) — which network these tools target

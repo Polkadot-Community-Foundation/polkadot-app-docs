@@ -9,8 +9,8 @@ smart-contract calls, and a user's identity / proof-of-personhood status.
 
 The SDK is a TypeScript umbrella package with subpath entry points you import
 from directly: `./chain`, `./cloud-storage`, `./contracts`, `./identity`,
-`./host`, `./wallet`, `./local-storage`, `./crypto`, `./address`, `./react`, and
-`./testing`. `./react` (`ProductSDKProvider`, `useChain`, `useWallet`,
+`./individuality`, `./nfts`, `./host`, `./wallet`, `./local-storage`, `./crypto`,
+`./address`, `./renderer`, `./core`, `./react`, and `./testing`. `./react` (`ProductSDKProvider`, `useChain`, `useWallet`,
 `useLocalStorage`, `useProductSDK`) declares `react` `^18 || ^19` as a peer
 dependency — a project without React installed gets a module-not-found error on
 that subpath only.
@@ -19,21 +19,21 @@ that subpath only.
     Every chain call and every storage call is routed through the host
     container — the Polkadot app (mobile or desktop) or the web gateway at
     [dev-dot.li](https://dev-dot.li). Outside a container, `createApp()` itself
-    throws while initialising local storage, before you reach any service:
+    throws before you reach any service:
 
     ```
-    Host storage unavailable. Ensure you are running inside a host container
-    (Polkadot Browser / Desktop).
+    HostUnavailableError: createApp requires a host product context
     ```
 
     A chain call made outside a container throws
     `Host provider unavailable for chain <genesisHash>`. To exercise your app in
     CI, use the [test host](#test-without-the-real-host).
 
-**Operations that can fail return a `Result` instead of throwing.**
+**Most operations that can fail return a `Result` instead of throwing.**
 `Result<T, E>` is `{ ok: true; value: T } | { ok: false; error: E }`, so check
 `res.ok` before reading `res.value`. `ok`, `err` and `isErrorOf` are exported
-from the package root. Every sample below follows this shape.
+from the package root. `createApp`, `getChainAPI` and the `app.wallet` helpers
+throw instead, so wrap those in `try`/`catch`.
 
 ## Connect to the chains
 
@@ -56,16 +56,15 @@ client.raw; // lower-level PAPI handles, keyed by chain name
 client.destroy(); // tear the connections down when you are finished
 ```
 
-`Environment` has four values — `polkadot`, `kusama`, `paseo` and `devnet` — so
-all four typecheck. `polkadot` and `kusama` throw at runtime because their
-Bulletin and Individuality chains are not live yet; the throw is per chain, not
-per environment. Connections are cached by each chain's genesis-hash
-fingerprint.
+`Environment` has five values: `polkadot`, `kusama`, `paseo`, `previewnet` and
+`devnet`. `polkadot` and `kusama` throw before connecting, because their
+Bulletin and Individuality chains are not live yet. Connections are cached by
+each chain's genesis-hash fingerprint.
 
 **Bring your own descriptors.** For a specific or pre-release chain, pass
-descriptors yourself. They live in `@parity/product-sdk-descriptors`, which is a
-separate install (`npm i @parity/product-sdk-descriptors`) — it is not pulled in
-by `@parity/product-sdk`:
+descriptors yourself. They live in `@parity/product-sdk-descriptors`; to import
+from it, add it as a direct dependency, as shown in
+[Current Devnet chain metadata](../reference/packages.md#current-devnet-chain-metadata):
 
 ```ts
 import { createChainClient } from "@parity/product-sdk/chain";
@@ -90,7 +89,7 @@ error on the next line you write.
 
 ```mermaid
 flowchart TD
-  A[App: getChainAPI env] --> B{env in paseo/devnet?}
+  A[App: getChainAPI env] --> B{env in paseo / previewnet / devnet?}
   B -- no --> X[throw: chain not live yet]
   B -- yes --> C[loadDescriptors: assetHub + bulletin + individuality]
   C --> D[createChainClient: cache by genesis fingerprint]
@@ -105,8 +104,9 @@ flowchart TD
 ## Sign transactions
 
 Signing goes through the host wallet, not through keys you manage. Connecting
-returns a `Result` carrying the available accounts; `getSigner()` returns a
-standard PAPI `PolkadotSigner`, but only once an account is selected:
+returns a `Result` carrying the available accounts; `getSigner()` returns the
+selected account's PAPI 3 transaction signer, but only once an account is
+selected:
 
 ```ts
 import { SignerManager } from "@parity/product-sdk/wallet";
@@ -119,7 +119,7 @@ const [account] = connected.value;
 if (!account) throw new Error("Host wallet returned no accounts");
 
 manager.selectAccount(account.address);
-const signer = manager.getSigner(); // PolkadotSigner | null
+const signer = manager.getSigner(); // CommonSignerTxCreator | null
 ```
 
 Because `connect()` reports failure on the `err` channel rather than throwing, a
@@ -137,7 +137,6 @@ behind it see [Storage & data](../architecture/storage.md).
 import { createApp } from "@parity/product-sdk";
 
 const app = await createApp({
-  name: "my-app",
   cloudStorage: { environment: "devnet" },
 });
 
@@ -154,14 +153,15 @@ if (fetched.ok) {
 ```
 
 !!! warning "`cloudStorage.environment` defaults to `paseo`"
-    Omit the option and your app reads and writes Bulletin on Paseo, not on this
-    Devnet — a different chain, so your data is simply not where you expect it
-    and nothing errors. The only two values are `paseo` and `devnet`. Passing
+    Omit the option and the SDK targets Bulletin on Paseo, which a Devnet host
+    does not serve, so `createApp()` fails. Pass `environment: "devnet"`. The
+    values are `paseo`, `previewnet` and `devnet`. Passing
     `cloudStorage: false` disables the service, which is what makes
     `app.cloudStorage` nullable.
 
-`cloud.computeCid(data)` computes a CID without uploading (`calculateCid` from
-the package root does the same without an `App`). Reads are container-only —
+`cloud.computeCid(data)` computes the CID of raw bytes without uploading
+(`calculateCid` from the package root does the same without an `App`). It is
+not the CID `upload()` returns, which is the CID of the stored manifest. Reads are container-only —
 there is no IPFS-gateway fallback.
 
 ## Call smart contracts
@@ -217,23 +217,11 @@ suffix handling — pass the exact value that is registered. Omitting `username`
 triggers a host identity-permission prompt. If your app already connects the
 People chain with `app.chain.connect({ … })`, the lookup reuses that connection.
 
-For privacy-preserving identifiers, derive an alias instead of exposing an
-address. `deriveContextAlias(parentAddress, context)` is deterministic and
-checkable with `verifyContextAlias`; `deriveAnonymousAlias(context,
-ringLocation)` produces a Ring VRF alias that cannot be linked back to the
-parent account:
-
-```ts
-import { deriveContextAlias } from "@parity/product-sdk/identity";
-
-const alias = deriveContextAlias(account.address, "voting-round-1");
-alias.address; // SS58 alias
-alias.h160Address; // the same alias as an EVM address
-```
-
-Both are per-context, so the same user is a different alias in every app.
-`isValidDotNsName` and `normalizeDotNsName` validate and canonicalise a name
-before you use it.
+For an app-scoped account, or a per-context alias that cannot be linked back
+to the user's account, use `SignerManager.getProductAccount()` and
+`SignerManager.getProductAccountAlias()`; both go through the host.
+`isValidDotNsName(name, suffix)` and `normalizeDotNsName(name, suffix)` validate
+and canonicalise a name; pass the TLD suffix, `".dot"` on this Devnet.
 
 For the raw host session — login state, product accounts, ring proofs — call
 `getAccountsProvider()` from `@parity/product-sdk/host`. It is async and
@@ -250,26 +238,35 @@ the full model.
 
 ## Test without the real host
 
-`@parity/host-api-test-sdk` is a thin Playwright host that speaks the real host
-protocol with auto-signed dev accounts, so you can drive your app end-to-end in
-CI. It needs `@playwright/test` as a peer, and the fixture lives on the
-`/playwright` subpath:
+`@parity/truapi-host` ships a Playwright test host that runs the real host
+core with auto-signing dev accounts, so you can drive your app end-to-end in CI:
 
 ```bash
-npm i -D @parity/host-api-test-sdk @playwright/test
+npm i -D @parity/truapi-host@0.25.0 @playwright/test esbuild
 ```
 
 ```ts
-import { test as base } from "@playwright/test";
+import { test as base, expect } from "@playwright/test";
 import {
   createTestHostFixture,
   type TestHost,
-} from "@parity/host-api-test-sdk/playwright";
+} from "@parity/truapi-host/testing/playwright";
 
 const test = base.extend<{ testHost: TestHost }>(
   createTestHostFixture({
     productUrl: "http://localhost:5173",
+    productId: "my-app.dot", // the .dot name your app signs as
     accounts: ["alice"],
+    networks: [
+      {
+        id: "devnet-asset-hub",
+        name: "Devnet Asset Hub",
+        genesisHash: "0xd6eec26135305a8ad257a20d003357284c8aa03d0bdb2b357ab0a22371e11ef2",
+        rpcUrl: "wss://asset-hub-paseo-rpc.n.dwellir.com",
+        tokenSymbol: "PAS",
+        tokenDecimals: 10,
+      },
+    ],
   }),
 );
 
@@ -278,18 +275,18 @@ test("signs a transfer", async ({ testHost }) => {
   await testHost.productFrame().getByRole("button", { name: "Send" }).click();
 
   const signed = await testHost.getSigningLog();
-  // assert on what the host was asked to sign
+  expect(signed.length).toBeGreaterThan(0);
 });
 ```
 
-The fixture embeds your product in an iframe, injects the dev accounts,
-auto-signs signing requests, and proxies chain RPC over WebSocket.
-`switchAccount`, `getSigningLog` and the permission / chat / payment logs let
-tests assert on host behaviour. The shipped `networks` presets are
-`PASEO_ASSET_HUB` (the default), `PREVIEWNET` and `PREVIEWNET_ASSET_HUB` — to
-point the test host at this Devnet, pass your own `NetworkConfig`
-(`{ id, name, genesisHash, rpcUrl, tokenSymbol, tokenDecimals }`) built from
-[Networks & endpoints](../reference/networks.md).
+The fixture embeds your product in an iframe, signs in the dev accounts,
+auto-signs signing requests, and proxies chain RPC to the chains you list.
+`switchAccount`, `getSigningLog` and the permission, notification and chat logs
+let tests assert on host behaviour. Each `networks` entry's `id` suffix sets its
+role (`-asset-hub`, `-people`, `-bulletin`); add People and Bulletin entries
+from [Networks & endpoints](../reference/networks.md) if your app uses them.
+`productId` must be the name your app signs as: the host refuses a signing
+request scoped to another product.
 
 ## Learn more
 

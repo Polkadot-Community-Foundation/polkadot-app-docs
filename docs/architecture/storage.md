@@ -33,7 +33,7 @@ flowchart TD
 ## Cloud Storage: the proper way to store app data
 
 When an app needs to persist data, it uses **Cloud Storage** — content-addressed
-storage backed by Bulletin, exposed through the Host API and the
+storage backed by Bulletin, exposed through TrUAPI and the
 [Product SDK](../guides/platform-services-sdk.md#store-and-retrieve-data-cloud-storage).
 The shape is deliberately small: upload bytes, get a CID, fetch by CID.
 

@@ -41,7 +41,7 @@ The product suite itself targets 1000 / 1004 / 1010.
 ## Native token and stablecoins
 
 The end-user **CASH** display name maps to a Devnet digital-dollar asset. On
-Asset Hub the protected asset ID is `50000413`; the same logical asset can be
+Asset Hub the asset ID is `50000413`; the same logical asset can be
 represented on the People chain for app-facing CASH flows.
 
 | Asset | Asset Hub u32 id | Decimals | Notes |
@@ -120,7 +120,7 @@ discoverable; display metadata lives in DotNS records.
 
 | Contract | Devnet address |
 | --- | --- |
-| Publisher | `0xaab42efbe8ea4d4228c3a11e973f94c17b9a0f2c` |
+| Publisher | `0x8d3CE7Bb2ED68C06306b4C1d5EEe79435AAE0A10` |
 
 Browse also reads attestation-resolver contracts for compliance badges. Those
 addresses are network-specific, so read them from the Browse address book for

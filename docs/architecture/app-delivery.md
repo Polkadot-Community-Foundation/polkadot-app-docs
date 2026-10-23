@@ -90,15 +90,15 @@ iframe.
 
 ```mermaid
 flowchart TD
-  U[User opens survey.dev-dot.li] --> H[Gateway reads label]
-  H --> R[Resolve survey.dot]
+  U[User opens calculator.dev-dot.li] --> H[Gateway reads label]
+  H --> R[Resolve calculator.dot]
   R --> C[Read contenthash]
   C --> D[Decode to CID]
   D --> IF[Render app in sandbox]
   IF --> FE{Fetch content}
   FE -->|Bulletin / light client| V[Verified path]
   FE -->|IPFS gateway| T[Gateway path]
-  V --> RN[App uses Host API bridge]
+  V --> RN[App talks to the host over TrUAPI]
   T --> RN
 ```
 

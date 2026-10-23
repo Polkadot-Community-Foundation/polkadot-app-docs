@@ -43,8 +43,8 @@ A valid manifest needs a display name, description, and icon:
 ```json
 {
   "$v": 1,
-  "displayName": "Simple Survey",
-  "description": "Create and answer on-chain surveys.",
+  "displayName": "Calculator",
+  "description": "A basic calculator.",
   "icon": { "cid": "bafy...", "format": "png" }
 }
 ```

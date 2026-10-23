@@ -3,7 +3,7 @@
 The Polkadot app is the end-user entry point to the Polkadot Products Devnet.
 It keeps keys on the user's device and combines identity, chat, payments, and an
 in-app browser for `.dot` apps. This page describes the client tier across
-mobile and desktop, how apps run inside it through the Host API, and how the app
+mobile and desktop, how apps run inside it over TrUAPI, and how the app
 decides which network it is talking to.
 
 ## What the client tier helps you do
@@ -48,8 +48,8 @@ DotNS name registry, and the Bulletin Chain serves dApp content and chat attachm
 
 The in-app browser addresses dApps by `.dot` domain rather than by URL. A name is
 resolved through DotNS, the referenced content archive is fetched from Bulletin
-or a gateway, and the archive runs inside a sandboxed webview. The app injects a
-Host API bridge so Products can ask the host for account, signing, chain,
+or a gateway, and the archive runs inside a sandboxed webview. The app opens a
+TrUAPI channel so Products can ask the host for account, signing, chain,
 permission, storage, theme, notification, payment, and navigation services.
 
 ```mermaid
@@ -57,7 +57,7 @@ flowchart TD
   U[User opens .dot domain] --> R[Resolve through DotNS]
   R --> A[Fetch app bundle]
   A --> S[Run in sandboxed webview]
-  S --> C[Host API bridge]
+  S --> C[TrUAPI channel]
   C --> H[Native host services]
   H --> ACC[accounts / signing]
   H --> CH[chain connection by genesis hash]
@@ -66,19 +66,19 @@ flowchart TD
   ACC -->|on-device key| K[Hardware-backed keystore]
 ```
 
-Each platform implements the webview and bridge in its native stack, but the
-contract exposed to Products is the same Host API.
+Each platform embeds the webview in its native stack, but Products see the same
+protocol, TrUAPI, everywhere.
 
-## Running dApps through the Host API
+## Running dApps over TrUAPI
 
-Once the webview loads, the Product talks to the host through the injected API.
+Once the webview loads, the Product talks to the host over its TrUAPI channel.
 The host decides which capabilities are available, checks permissions, and
 mediates sensitive actions such as signing.
 
 A typical signing flow looks like this:
 
-1. The dApp calls `hostApi.signPayload`, `signRaw`, or `createTransaction` over the
-   Spektr channel.
+1. The dApp asks the host to sign a payload or raw bytes, or to create a
+   transaction, over TrUAPI.
 2. The native side receives the request and checks the product's granted permissions.
 3. The app shows a signing modal for you to review and approve.
 4. On approval the on-device key signs, and the signature is returned to the dApp;
@@ -87,10 +87,11 @@ A typical signing flow looks like this:
 !!! tip
     If you are building a product, you rarely call these primitives by hand. The
     [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) layer
-    wraps the Host API, and you can test a product end-to-end against a real host with
-    [`@parity/host-api-test-sdk`](https://www.npmjs.com/package/@parity/host-api-test-sdk)
-    — a Node host that embeds your product in an iframe over the real Spektr protocol,
-    injects dev accounts (Alice/Bob), and auto-signs requests.
+    wraps TrUAPI, and you can test a product end-to-end with the
+    [test host](../guides/platform-services-sdk.md#test-without-the-real-host) in
+    [`@parity/truapi-host`](https://www.npmjs.com/package/@parity/truapi-host): it runs
+    the real TrUAPI core, embeds your product in an iframe, signs in dev accounts
+    (Alice, Bob), and auto-signs requests.
 
 ## Selecting the network
 
@@ -127,5 +128,5 @@ environment.
 ## Learn more
 
 - Client source and downloads: [More resources](../reference/resources.md)
-- [host-api-test-sdk](https://github.com/paritytech/host-api-test-sdk) — drive a Product against a real host in CI
+- [Test without the real host](../guides/platform-services-sdk.md#test-without-the-real-host) — drive a Product against the TrUAPI test host in CI
 - [Naming (DotNS)](naming.md) — how the browser resolves a `.dot` domain

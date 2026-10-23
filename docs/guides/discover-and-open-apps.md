@@ -9,13 +9,13 @@ There are three practical entry points:
 
 - **Browse** — the app-discovery directory at
   <https://browse.dev-dot.li>. Search and pick from the list.
-- **A `.dot` domain** — each published app has a name such as `survey.dot`. On the
+- **A `.dot` domain** — each published app has a name such as `calculator.dot`. On the
   desktop app you can type it into the address bar. The mobile app has no
   general address bar, so on mobile you open apps from Browse or by following a
   `.dot` / `.dev-dot.li` link.
 - **A `dev-dot.li` link** — the web gateway serves each app at
   `https://<name>.dev-dot.li` (for example
-  <https://survey.dev-dot.li>). Open it in an ordinary browser.
+  <https://calculator.dev-dot.li>). Open it in an ordinary browser.
 
 You reach the platform through the Polkadot app (mobile and desktop) or the web
 gateway at <https://dev-dot.li>. If you do not have the app yet,
@@ -43,14 +43,14 @@ apps. For the technical path behind that list, see
 
 On the **desktop** app you can go straight to a name:
 
-1. Type the app's name — for example `survey.dot` — into the address bar. (The
+1. Type the app's name — for example `calculator.dot` — into the address bar. (The
    mobile app has no general address bar; on mobile, open the app from Browse or
    by following a link instead.)
 2. The app resolves the name, fetches the app bundle, and opens it in a
    sandboxed webview.
 
 If you are in an ordinary web browser instead, use the gateway form of the same
-name: `https://survey.dev-dot.li`.
+name: `https://calculator.dev-dot.li`.
 
 ## When a name does not resolve
 
