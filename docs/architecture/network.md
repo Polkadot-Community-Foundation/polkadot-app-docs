@@ -1,16 +1,15 @@
 # The network
 
-The Polkadot Products Devnet is a public developer preview that runs on the
-community-operated **Paseo** network: a Paseo relay chain plus a set of system
-parachains. Applications are built against three of those chains — **Asset Hub**,
-**People**, and **Bulletin**. This page maps what each chain is responsible for
-and how they fit together when a Product is deployed and opened.
+The Polkadot Products Devnet runs on the community-operated Paseo network: a
+Paseo relay chain plus a set of system parachains. Apps are built against three
+of those chains: Asset Hub, People and Bulletin. This page shows what each chain
+does, and how they work together when a Product is deployed and opened.
 
 ## Topology
 
 The relay chain is the root of trust. Product flows mostly touch three system
-parachains: **Asset Hub** for contracts and assets, **People** for identity and
-money flows, and **Bulletin** for web-app bundle storage.
+parachains: Asset Hub for contracts and assets, People for identity and money
+flows, and Bulletin for web-app bundle storage.
 
 ```mermaid
 graph TD
@@ -44,17 +43,17 @@ graph TD
 
 ## Asset Hub <span class="dg-chip" style="--chip:var(--dg-assethub)">para 1000</span>
 
-Asset Hub is the primary chain for Product developers. It carries the contract,
-asset, and naming machinery used by deployed apps.
+Asset Hub is the main chain for Product developers. It runs the contracts,
+assets and naming that deployed apps use.
 
 <div class="dg-cards" markdown="1">
 <div class="dg-card" markdown="1">
 **pallet-revive**
-The PolkaVM smart-contract environment. CDM, DotNS, and application contracts run here.
+The PolkaVM smart-contract environment. DotNS and application contracts run here.
 </div>
 <div class="dg-card" markdown="1">
 **Assets + ERC-20 precompiles**
-On-chain assets exposed to contracts through ERC-20-style precompiles, so contracts read and transfer supported assets without Substrate storage details.
+On-chain assets available to contracts through ERC-20-style precompiles, so contracts can read and transfer supported assets without dealing with Substrate storage.
 </div>
 <div class="dg-card" markdown="1">
 **DotNS gateway**
@@ -68,34 +67,33 @@ Contracts read a user's personhood tier through a precompile, without calling th
 
 ## People <span class="dg-chip" style="--chip:var(--dg-people)">para 1004</span>
 
-The People chain holds identity, proof-of-personhood, and Coinage state. It is
-where usernames are attested, personhood status is recorded, and CASH is held
-and sent through Coinage.
+The People chain holds identity, proof-of-personhood and Coinage state.
+Usernames are attested here, personhood status is recorded here, and CASH is
+held and sent here through Coinage.
 
 ## Bulletin <span class="dg-chip" style="--chip:var(--dg-bulletin)">para 1010</span>
 
 The Bulletin chain stores published web-app bundles that the gateway serves.
 
-!!! note
-    Bulletin uploads are **authorization-based, not fee-based**. Rather than
-    charging tokens per upload, storage is gated by an authorizer (Root, sibling
-    parachains, or registered authorizers). This is why publishing an app bundle
-    does not consume devnet tokens.
+Bulletin uploads work by authorization, not by fees. Instead of charging
+tokens per upload, an authorizer (Root, sibling parachains, or registered
+authorizers) decides who can store data. That is why publishing an app bundle
+does not cost devnet tokens.
 
 ## The deployments register
 
-Concrete addresses, endpoints, and CIDs are network-specific: they change when a
-network is redeployed, so nothing in the platform hard-codes them. Instead, each
-command-line tool selects a network preset — `--env devnet` for `pad` and
-`dotns`, `-n devnet` for CDM — and the preset carries the endpoints and address
-book for that network.
+Addresses, endpoints and CIDs are network-specific. They change when a network
+is redeployed, so nothing in the platform hard-codes them. Instead, each
+command-line tool selects a network preset (`--env devnet` for `pad` and
+`dotns`), and the preset carries the endpoints and address book for that
+network.
 
-For the addresses themselves, see
+The addresses themselves are in
 [Addresses & registries](../reference/addresses.md).
 
 ## Deploy and serve flow
 
-The three chains combine into a single application lifecycle:
+Here is how the three chains work together over an app's life:
 
 ```mermaid
 graph LR
@@ -128,15 +126,15 @@ graph LR
   class User userNode
 ```
 
-A developer deploys contracts to Asset Hub via `pallet-revive`, reserves a `.dot`
-name through the DotNS gateway, and uploads the web bundle to Bulletin. The name's
-contenthash resolver is bound to the bundle's CID, and the gateway at
-[https://dev-dot.li](https://dev-dot.li) serves the app at `https://<label>.dev-dot.li`.
-For how contracts and naming fit together, see the
-[contracts](./contracts.md) and [naming](./naming.md) architecture pages, and the
-[developer guides](../guides/index.md).
+A developer deploys contracts to Asset Hub through `pallet-revive`, reserves a
+`.dot` name through the DotNS gateway and uploads the web bundle to Bulletin.
+The name's contenthash resolver is bound to the bundle's CID, and the gateway
+at [https://dev-dot.li](https://dev-dot.li) serves the app at
+`https://<label>.dev-dot.li`. The [contracts](./contracts.md) and
+[naming](./naming.md) pages, and the [developer guides](../guides/index.md),
+go into more detail.
 
 ## Learn more
 
-- [paseo-network/runtimes](https://github.com/paseo-network/runtimes) — the chain runtimes
-- [pallet-revive](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/revive) — the PolkaVM contract environment
+- [paseo-network/runtimes](https://github.com/paseo-network/runtimes): the chain runtimes
+- [pallet-revive](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/revive): the PolkaVM contract environment

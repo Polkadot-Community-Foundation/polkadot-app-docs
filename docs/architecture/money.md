@@ -1,37 +1,36 @@
 # Money: CASH & funding
 
-This page explains the money model used by the Polkadot Products Devnet: what
-**CASH** means in the app, why it is different from the native token used for
-fees, and how funds move through the user-facing flows.
+How money works on the Polkadot Products Devnet: what CASH is in the app, why
+it is different from the native token used for fees, and how funds move when
+people use the app.
 
-## The two balances to understand
+## Two balances
 
-Users see **CASH** in the Polkadot app. CASH is the app-facing name for a devnet
-digital-dollar asset. It is the balance users top up, earn, and send to other
+Users see CASH in the Polkadot app. CASH is the app's name for a devnet
+digital-dollar asset. It is the balance users top up, earn and send to other
 people inside the app.
 
-The chains also have a native token, **PAS**, used for fees and account
+The chains also have a native token, PAS, used for fees and for account
 existential deposits on Paseo-based chains. CASH and PAS are separate:
 
-- **CASH** is the spendable app balance.
-- **PAS** is the native network token used for fees.
+- CASH is the spendable app balance.
+- PAS is the native network token used for fees.
 - Both are devnet-only and have no real value.
 
-This distinction matters when troubleshooting. A user can have CASH for app
-payments but still need a small amount of PAS for network fees or account
-existence.
+Keep this in mind when something goes wrong. A user can have CASH for app
+payments and still need a small amount of PAS for network fees or to keep the
+account in existence.
 
-## Where CASH fits
+## Where CASH lives
 
-CASH is built on the Polkadot asset stack and is used through the **People**
-chain by the Polkadot app. On People, the balance is a local pUSD asset
-(**asset id `1`**) that Coinage denominates and presents as CASH. The same
-logical value is also represented on **Asset Hub**, where the id is
-`50000413` — a protected asset whose Asset-Hub-side transfers are gated.
+CASH is built on the Polkadot asset stack, and the Polkadot app uses it through
+the People chain. On People, the balance is a local pUSD asset (asset id `1`)
+that Coinage denominates and shows as CASH. The same logical value is also
+represented on Asset Hub, with id `50000413`. That is a protected asset, and
+transfers of it on Asset Hub are gated.
 
-For day-to-day use, people do not need to move assets between chains manually.
-The app presents CASH as a single balance and handles the chain-specific work
-behind the scenes.
+Day to day, people don't need to move assets between chains by hand. The app
+shows CASH as a single balance and does the chain-specific work for them.
 
 ```mermaid
 flowchart LR
@@ -43,67 +42,51 @@ flowchart LR
 
 ## How CASH is held
 
-CASH is not treated like a simple account balance in the app. It is held and
-spent through **Coinage**, a People-chain system that represents value as coins.
-When a user sends CASH, the app prepares and submits a Coinage transfer rather
-than a plain token transfer.
+The app does not treat CASH like a simple account balance. It holds and spends
+CASH through Coinage, a People-chain system that represents value as coins.
+When a user sends CASH, the app prepares and submits a Coinage transfer, not a
+plain token transfer.
 
-That model is important for developers because app-facing payment flows should
-use the platform services exposed by the host and SDK. A Product app should not
-try to reimplement the wallet, key handling, or low-level payment flow.
+This matters for developers: payment flows in your app should use the platform
+services that the host and SDK provide. A Product should not try to rebuild the
+wallet, key handling or low-level payment flow.
 
 ## How users get CASH
 
-There are three common paths:
+Users get CASH inside the Polkadot app, in two ways:
 
-1. **Get CASH in the app.** Devnet builds can expose a top-up action that funds
-   the account and onboards value into the CASH balance.
-2. **Use the faucet.** The public Polkadot faucet can provide devnet funds,
-   especially native PAS for fees.
-3. **Earn rewards.** Some app and personhood flows can reward users with value
-   that is later shown as CASH.
+1. Top up in the app. Devnet builds can offer a top-up action that funds the
+   account and brings value into the CASH balance.
+2. Earn rewards. Some app and personhood flows can reward users with value that
+   then shows up as CASH.
 
-The important user expectation is simple: once onboarding completes, the balance
-in your **Pocket** updates and the user can spend it.
+Once onboarding completes, the balance in the user's Pocket updates and they
+can spend it.
 
 ## Sending CASH
 
-Sending CASH is a wallet-mediated action:
+Sending CASH goes through the wallet:
 
 1. The user chooses a recipient and amount in the Polkadot app.
 2. The app prepares the Coinage transfer.
-3. The user approves the action locally.
-4. The app submits the transaction and waits for settlement.
-
-```mermaid
-sequenceDiagram
-  participant User
-  participant App as Polkadot app
-  participant People as People chain
-  User->>App: Send CASH
-  App->>User: Ask for approval
-  User-->>App: Approve locally
-  App->>People: Submit Coinage transfer
-  People-->>App: Transfer settles
-  App-->>User: Balance updates
-```
+3. The user approves the action on the device.
+4. The app submits the transaction and waits for it to settle.
 
 ## What developers should rely on
 
-Developers building Products should treat CASH as a platform service surfaced by
-the host and SDK. The useful integration boundary is:
+Treat CASH as a platform service that the host and SDK provide:
 
-- ask the host for the user's account and permissions;
-- use SDK / host-provided payment and chain APIs;
-- let the Polkadot app handle signing and key custody;
-- display amounts clearly as devnet value.
+- Ask the host for the user's account and permissions.
+- Use the SDK and host-provided payment and chain APIs.
+- Let the Polkadot app handle signing and key custody.
+- Show amounts clearly as devnet value.
 
-Avoid hardcoding operator accounts, funding assumptions, or private chain
-configuration into an app. Network presets, live endpoints, and registry
-addresses are supplied by the Devnet operators.
+Don't hardcode operator accounts, funding assumptions or private chain
+configuration into an app. The Devnet operators supply the network presets,
+live endpoints and registry addresses.
 
 ## Learn more
 
-- [`pallet-coinage`](https://github.com/paritytech/individuality-community/blob/main/pallets/coinage/src/lib.rs) — the source: how CASH is represented as coins, held, and transferred
-- [paseo-network/runtimes](https://github.com/paseo-network/runtimes) — the chain runtimes and asset definitions
-- [Get & use CASH](../guides/get-and-use-cash.md) — do it
+- [`pallet-coinage`](https://github.com/paritytech/individuality-community/blob/main/pallets/coinage/src/lib.rs): the source, showing how CASH is represented as coins, held and transferred
+- [paseo-network/runtimes](https://github.com/paseo-network/runtimes): the chain runtimes and asset definitions
+- [Get & use CASH](../guides/get-and-use-cash.md): get and send CASH yourself

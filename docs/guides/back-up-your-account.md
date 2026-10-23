@@ -1,10 +1,11 @@
 # Back up & restore your account
 
-Your account lives on your phone, and it is held by a **12-word recovery
-phrase**. Back it up to your own cloud, write the phrase down, and know how to
-get the account back. The steps differ a little between Android and iOS.
+Your account lives on your phone, and a 12-word recovery phrase is what holds
+it. This page shows you how to back it up to your own cloud, write the phrase
+down and get the account back on another phone. The steps differ a little
+between Android and iOS.
 
-You will need the app installed. Download links are in
+You need the app installed. Download links are in
 [Get the app](../reference/resources.md#get-the-app).
 
 !!! warning "The recovery phrase *is* the account"
@@ -16,10 +17,10 @@ You will need the app installed. Download links are in
 
 A backup saves one thing: your 12-word phrase. That is enough to bring back your
 account, your username, your CASH and your collectables, because those belong to
-the account itself rather than to the phone.
+the account and not to the phone.
 
-What it does not bring back is anything that only ever lived on the phone. Chat
-history and downloaded photos start fresh on a restored app.
+Anything that only ever lived on the phone does not come back. Chat history and
+downloaded photos start fresh on a restored app.
 
 | | Cloud backup | Written-down phrase |
 | --- | --- | --- |
@@ -50,16 +51,15 @@ already on. Check, and switch it on if it is not.
 Your backup is saved in your own Google Drive, in a folder called
 **`Polkadot App - DO NOT DELETE`**. Do not delete or rename that folder.
 
-**If you see a backup conflict.** Google Drive keeps one Polkadot backup at a
+If you see **Backup conflict**: Google Drive keeps one Polkadot backup at a
 time. Backing up a second account offers to **Override existing backup**, and
 makes you tick a box saying *"I fully understand the risk"*. The account you
 replace cannot be recovered unless you already have its phrase on paper, so go
 and write that down first.
 
-**If your phone has no Google Play.** The `app-polkadot-devnet-nogms.apk`
-download is for phones without Google Play services, and it cannot back up to
-Google Drive at all. On that version, writing the phrase down is your only
-backup, so do it straight away.
+If your phone has no Google Play: the app runs without Google Play services,
+but Google Drive backup needs them. On such a phone, writing the
+phrase down is your only backup, so do it straight away.
 
 ### iOS
 
@@ -75,7 +75,7 @@ backup, so do it straight away.
 
 **Enable iCloud backup** talks you through signing in to iCloud and turning on
 iCloud Drive, with an **Open settings** button. It misses one setting you also
-need: your phrase is stored in the **iCloud Keychain**, so turn that on too under
+need: your phrase is stored in the iCloud Keychain, so turn that on too under
 **Settings → *your name* → iCloud → Passwords and Keychain**. Then come back and
 tap **Backup Your Account**.
 
@@ -100,9 +100,10 @@ not you have a backup yet.
 5. Tap **Tap to reveal**, then copy the 12 words onto paper, in order.
 
 Keep the paper somewhere only you can get to. Android has no copy button on
-purpose. iOS does have **Copy to clipboard** under the words if you keep the
-phrase in a password manager, but paste it and then copy something else straight
-away, because other apps can read whatever is on your clipboard.
+purpose. iOS does have **Copy to clipboard** under the words, for keeping the
+phrase in a password manager. If you use it, paste the phrase and then copy
+something else straight away, because other apps can read whatever is on your
+clipboard.
 
 ## Get your account back on another phone
 
@@ -126,7 +127,8 @@ you with **We found an existing backup** and offers **Recover this backup** or
 ### iOS
 
 iOS does this for you. If it finds your iCloud backup when you open the freshly
-installed app, it restores the account on its own and you have nothing to tap.
+installed app, it restores the account on its own. You don't need to tap
+anything.
 
 If it shows you **Pick Your Username** instead, the phone is signed in to a
 different Apple Account, or iCloud Keychain is switched off. Fix that in the iOS
@@ -144,7 +146,7 @@ works this way.
 ## The hidden debug menu
 
 This test version of the app has a debug menu that the public Polkadot app does
-not. **Shake your phone** to open it, or on Android use **Settings → Debug →
+not. Shake your phone to open it, or on Android use **Settings → Debug →
 Debug menu**. It is meant for testing, and two things in it can cost you an
 account.
 
@@ -162,6 +164,6 @@ which you cannot undo without your written phrase.
 
 ## Learn more
 
-- [Create an account & get funds](create-account.md) — set the account up in the first place
-- [Username & proof of personhood](username-and-personhood.md) — the username that comes back with the account
-- [The Polkadot app (client tier)](../architecture/client.md) — where keys live and why the desktop app has none
+- [Create an account & get funds](create-account.md): set the account up in the first place
+- [Username & proof of personhood](username-and-personhood.md): the username that comes back with the account
+- [The Polkadot app (client tier)](../architecture/client.md): where keys live and why the desktop app has none

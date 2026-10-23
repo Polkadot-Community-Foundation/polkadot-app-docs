@@ -1,15 +1,15 @@
 # Identity & personhood
 
-Identity on the Polkadot Products Devnet answers two related questions: *what
-name does this account use?* and *does this account represent a distinct
-person?* The first is the username flow; the second is proof of personhood. Apps
-can use both signals without holding the user's keys or learning a user's
-cross-application activity.
+Identity on the Polkadot Products Devnet answers two questions about an
+account: what name does it use, and does it belong to a distinct person? The
+first is the username flow. The second is proof of personhood. Apps can use
+both without holding the user's keys or seeing what the user does in other
+apps.
 
 ## The moving parts
 
-Identity spans a small number of independently deployed components. The main
-source repositories are available under [github.com/paritytech](https://github.com/paritytech).
+Identity is spread over a few separately deployed components. The main source
+repositories are under [github.com/paritytech](https://github.com/paritytech).
 
 | Component | Role | Source |
 | --- | --- | --- |
@@ -19,45 +19,53 @@ source repositories are available under [github.com/paritytech](https://github.c
 | `personhood` precompile | A pallet-revive precompile that lets any PolkaVM contract read an account's personhood tier and a per-app alias. | [individuality-community](https://github.com/paritytech/individuality-community) |
 | `attestation-protocol` | An EAS-style, permissionless attestation suite (`SchemaRegistry` + `AttestationService`) for general claims. | [attestation-protocol](https://github.com/paritytech/attestation-protocol) |
 
-!!! note "The identity backend is centralized today"
-    Every other component above is on-chain. `identity-backend` is not: it is an
-    operator-run HTTP service with its own database, and the Lite tier depends on
-    it to attest devices, allocate usernames, and submit the registration. It
-    holds no user keys and cannot sign as a user, but it is a trusted party — and
-    while it is down, username registration stops.
+### The identity backend is centralized today
 
-    This is a devnet shortcut, not the intended end state. Running this role in a
-    decentralized fashion is desirable future work; the Devnet does not
-    demonstrate it, so do not read the current shape as the final architecture.
+Every other component above is on-chain. `identity-backend` is not: it is an
+operator-run HTTP service with its own database, and the Lite tier depends on
+it to attest devices, allocate usernames and submit the registration. It holds
+no user keys and cannot sign as a user, but it is a trusted party, and while it
+is down, username registration stops.
+
+This is a devnet shortcut. Running this role in a decentralized way is
+desirable future work, and the Devnet does not demonstrate it, so don't read
+the current setup as the final architecture.
 
 ## Sessions: proving the device, not the person
 
-Before a client can register anything, it obtains a JWT through a device-attestation handshake. The backend never sees a password; it verifies that a request comes from a genuine, unmodified instance of the app on a genuine device.
+Before a client can register anything, it gets a JWT through a
+device-attestation handshake. The backend never sees a password. It checks that
+the request comes from a genuine, unmodified copy of the app on a genuine
+device.
 
-1. The client requests a **Challenge** — a stateless, self-authenticating freshness nonce the server mints with no server-side storage.
-2. The client produces an **Attestation**: Apple App Attest on iOS, Google Play Integrity or Android key attestation on Android, or a voucher secret for out-of-band enrolment.
-3. The client `POST`s the Attestation and echoed Challenge to `/api/v1/auth/token`, and receives a JWT. `/auth/token/refresh` rotates it.
+1. The client requests a Challenge: a stateless, self-authenticating freshness
+   nonce that the server mints without storing anything.
+2. The client produces an Attestation: Apple App Attest on iOS, Google Play
+   Integrity or Android key attestation on Android, or a voucher secret for
+   out-of-band enrolment.
+3. The client `POST`s the Attestation and the echoed Challenge to
+   `/api/v1/auth/token`, and receives a JWT. `/auth/token/refresh` rotates it.
 
-The important property is that a session proves the device and app instance
-before the backend accepts identity actions from it.
+So a session proves the device and the app instance before the backend accepts
+identity actions from it.
 
 ## Usernames and the Lite tier
 
-A **Lite** person is an account with an attested, human-readable username. The
+A Lite person is an account with an attested, human-readable username. The
 client asks for a base name, the backend allocates an available suffixed name,
 and the user signs the registration. The backend accepts and queues the request
-(returning `202 Accepted`), and a separate worker submits the attestation to the
-People chain asynchronously; it does not take custody of the user's keys or sign
-as the user.
+(returning `202 Accepted`), and a separate worker submits the attestation to
+the People chain later. The backend never takes custody of the user's keys or
+signs as the user.
 
-Registration is not unconditional. On iOS, Apple DeviceCheck limits the number
-of free registrations per device: a device that has already registered gets a
+Registration has limits. On iOS, Apple DeviceCheck limits the number of free
+registrations per device: a device that has already registered gets a
 `PAYMENT_REQUIRED` response on further attempts.
 
 Each new username can also be reflected into the `.dot` naming system, so the
-same human-readable identity works across the app and app-discovery flows. That
-mirroring is operator-run infrastructure; users and Product developers normally
-do not interact with it directly.
+same readable identity works across the app and app discovery. Operator-run
+infrastructure does that mirroring, and users and Product developers normally
+don't interact with it directly.
 
 ```mermaid
 sequenceDiagram
@@ -77,19 +85,21 @@ sequenceDiagram
 
 ## Full personhood and invitation tickets
 
-The **Full** tier is stronger: it represents a person who has completed a
-personhood flow, such as an invitation or game-based proof. The backend can help
-users obtain the tickets or proofs needed to start those flows, but the status
-itself is recorded on-chain.
+The Full tier is stronger. It represents a person who has completed a
+personhood flow, such as an invitation or a game-based proof. The backend can
+help users get the tickets or proofs they need to start those flows, but the
+status itself is recorded on-chain.
 
-!!! warning
-    Whether the Full tier is currently active on the deployed devnet depends on operator-privileged tasks (game scheduling and related runtime configuration). Treat a `None`/`Lite` result as the safe default and do not assume Full personhood is available.
+Whether the Full tier is currently active on the deployed devnet depends on
+operator-privileged tasks (game scheduling and related runtime configuration).
+Treat a `None`/`Lite` result as the safe default, and don't assume Full
+personhood is available.
 
-## How apps consume identity status
+## How apps read identity status
 
-Contracts do not query the backend to check personhood. Personhood state is
-reflected from the People chain to Asset Hub, where PolkaVM contracts can read
-it through the **personhood precompile**.
+Contracts don't ask the backend about personhood. Personhood state is reflected
+from the People chain to Asset Hub over XCM, and PolkaVM contracts read it there
+through the personhood precompile:
 
 ```solidity
 struct PersonhoodInfo { uint8 status; bytes32 contextAlias; }
@@ -101,38 +111,38 @@ function personhoodStatus(address account, bytes32 context)
     returns (PersonhoodInfo memory);
 ```
 
-The returned `contextAlias` is a per-application, privacy-preserving pseudonym:
-the same person yields a different alias in a different context, which prevents
-apps from linking a user's activity across applications.
+The returned `contextAlias` is a per-application pseudonym that protects the
+user's privacy. The same person gets a different alias in a different context,
+so apps cannot link a user's activity across applications.
 
-```mermaid
-flowchart LR
-    People["People chain<br/>personhood state"] -- XCM --> Sub["Asset Hub context state"]
-    Sub --> PC["personhood precompile"]
-    App["PolkaVM contract / app"] -- "personhoodStatus(account, context)" --> PC
-    PC -- "status 0=None/1=Lite/2=Full + contextAlias" --> App
-```
-
-Application front-ends that run inside the Polkadot app or the web gateway at [https://dev-dot.li](https://dev-dot.li) obtain identity and host information through the app's developer packages — [`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk) and [`@novasamatech/host-api`](https://www.npmjs.com/package/@novasamatech/host-api). The exact surface those packages expose for username and personhood status is defined in their own repositories.
+Front-ends that run inside the Polkadot app or the web gateway at
+[https://dev-dot.li](https://dev-dot.li) get identity and host information
+through the developer packages:
+[`@parity/product-sdk`](https://www.npmjs.com/package/@parity/product-sdk),
+which talks to the host over TrUAPI
+([`@parity/truapi`](https://www.npmjs.com/package/@parity/truapi)). Their own
+repositories define exactly what those packages expose for username and
+personhood status.
 
 ## General attestations
 
 Beyond personhood, the attestation protocol provides reusable claim and schema
-contracts for the PolkaVM Asset Hub. Use it when an app needs verifiable claims
-that are not the same thing as username or personhood status.
+contracts on the PolkaVM Asset Hub. Use it when an app needs verifiable claims
+that are something other than username or personhood status.
 
 ## Common blockers
 
-- **The device session is missing or expired.** The app must complete device
-  attestation before identity actions can proceed.
-- **The username is taken.** The backend allocates a suffixed available name.
-- **Full personhood is not available in a build.** Treat `None` or `Lite` as the
-  safe default unless the current Devnet flow exposes Full.
-- **An app needs identity in a contract.** Read personhood through the precompile
+- The device session is missing or expired: the app must complete device
+  attestation before identity actions can go ahead.
+- The username is taken: the backend allocates a suffixed name that is still
+  available.
+- Full personhood is not available in a build: treat `None` or `Lite` as the
+  safe default unless the current Devnet flow offers Full.
+- An app needs identity in a contract: read personhood through the precompile
   or SDK-supported helpers, not by calling the backend from a contract.
 
 ## Learn more
 
-- [identity-backend-community](https://github.com/paritytech/identity-backend-community) — the BFF, its routes, and `CONCEPTS.md`
-- [individuality-community](https://github.com/paritytech/individuality-community) — `people-lite`, `proof-of-ink`, and the `personhood` precompile
-- [attestation-protocol](https://github.com/paritytech/attestation-protocol) — `SchemaRegistry` and `AttestationService`
+- [identity-backend-community](https://github.com/paritytech/identity-backend-community): the BFF, its routes, and `CONCEPTS.md`
+- [individuality-community](https://github.com/paritytech/individuality-community): `people-lite`, `proof-of-ink`, and the `personhood` precompile
+- [attestation-protocol](https://github.com/paritytech/attestation-protocol): `SchemaRegistry` and `AttestationService`

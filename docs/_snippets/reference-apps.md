@@ -1,10 +1,8 @@
-| App | URL | What it shows |
-| --- | --- | --- |
-| Browse | <https://browse.dev-dot.li> | Directory of published Products |
-| DotNS UI | <https://dotns.dev-dot.li> | `.dot` domain registration and lookup |
-| CDM Frontend | <https://contracts.dev-dot.li> | Contract registry frontend |
-| Playground template | <https://playground-template.dev-dot.li> | Minimal fork-and-go scaffold |
-| Playground | <https://playground.dev-dot.li> | Guided environment to build a sample app |
-| Simple Survey | <https://survey.dev-dot.li> | Storage app indexed by a contract |
-| Mercado | <https://mercado.dev-dot.li> | Community marketplace |
-| localdot | <https://localmarket.dev-dot.li> | Local peer-to-peer marketplace |
+| App | Open | `.dot` name | What it does |
+| --- | --- | --- | --- |
+| Calculator | <https://calculator.dev-dot.li> | `calculator.dot` | A basic calculator |
+| Stopwatch | <https://stopwatch.dev-dot.li> | `stopwatch.dot` | A stopwatch |
+| Countdown Timer | <https://countdown-timer.dev-dot.li> | `countdown-timer.dot` | Counts down from a time you set |
+| Alarm Clock | <https://alarm-clock.dev-dot.li> | `alarm-clock.dot` | Rings at the time you set |
+| Chess Clock | <https://chess-clock.dev-dot.li> | `chess-clock.dot` | Two clocks for a two-player game; tap to pass the turn |
+| Unit Converter | <https://unit-converter.dev-dot.li> | `unit-converter.dot` | Converts units, such as metres to feet |
