@@ -58,7 +58,7 @@ targeting.
 DotNS records who owns a `.dot` domain and which app bundle it points to. The
 gateway reads that record to load the app.
 
-Devnet runs DotNS v1.0.0 (`protocolVersion()` on `DotnsProtocolRegistry`).
+Devnet runs DotNS v1.1.0 (`protocolVersion()` on `DotnsProtocolRegistry`).
 
 | Contract | Devnet address |
 | --- | --- |
